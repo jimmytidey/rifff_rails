@@ -1,0 +1,21 @@
+<h1>Listing sound_files</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Parent</th>
+    <th></th>
+  </tr>
+
+<% @sound_files.each do |sound_file| %>
+  <tr>
+    <td><%= sound_file.name %></td>
+    <td><%= sound_file.sound_url %></td>
+    <td> - <%= sound_file.project_id %> - </td>
+ </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= render 'form' %>
