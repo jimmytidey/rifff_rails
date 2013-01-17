@@ -12,3 +12,56 @@
  *= require_tree .
  */
 
+/* STRUCTURE */
+
+#controls { 
+
+	width:1000px;
+}
+
+#composer { 
+
+	height:800px;
+	width:1000px;
+}
+
+#settings { 
+	position:relative;
+	top:-30px;
+}
+
+.setting_field { 
+	width:90px;
+}
+
+/* COMPOSER */
+
+.bank_container { 
+	width:100%;
+}
+
+.bank_title { 
+	width:100%;
+	clear:both;
+}
+
+.bank_option_container { 
+	width:100%;
+	clear:both;
+}
+.bank_option_title { 
+	float:left;
+	width:100px;
+}
+
+.file_select { 
+	float:left;	
+}
+
+.step { 
+	width:10px;
+	height:10px;
+	margin-left:5px;
+	border:1px solid black;
+	float:left;
+}

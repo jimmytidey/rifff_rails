@@ -1,0 +1,16 @@
+{"soundfiles":
+    [
+    <% 
+    last = @sound_files.pop
+    @sound_files.each do |sound_file| %>
+     {
+        "name": "<%= sound_file.name %>",
+        "location": "<%= sound_file.sound_url %>"
+     },
+    <% end %>
+    {
+        "name": "<%= last.name %>",
+        "location": "<%= last.sound_url %>"       
+    }
+    ]
+}

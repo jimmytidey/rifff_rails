@@ -1,25 +1,65 @@
 <h1><%= @project.name %></h1>
+<p><%= link_to 'back to projects', project_path() %></p>
 
 <% if @project.json %>
-    <script>
-        <%=  @project.json %>
+    <script type="text/javascript">
+        var list_json = <%=raw @project.json %>
     </script>
-<% else %>
-    <%= javascript_include_tag "blank_list.js" %>
 <% end %>
 
+<div id='controlls' class='row'>
+    
+    
+    <div class="btn-group span3" >
+        <button id='play'      class='control btn'>Play</button>
+        <button id='stop'      class='control btn' value='stop'>Stop</button>
+        <button id='backwards' class='control btn' >&laquo;</button>
+        <button id='forward'   class='control btn' >&raquo;</button>
+        
+        <button id='rewind'    class='control btn' >&laquo;&laquo;</button>
+        
+    </div>
+    
+    <button id='randomise' class='control btn span2' >randomise</button>
+    
+    <form class="navbar-form pull-right" id='settings'>
+        
+        <div class='span2'>
+            <label for='bmp'>BPM</label>
+            <input type="text" id='bpm' class=" setting_field  pull-left">
+        </div>
+        
+        <div class='span2'>        
+            <label for='bmp'>Beats per loop</label>
+            <input type="text" id='bpm' class=" setting_field pull-left">
+        </div>
+        
+        <div class='span2'>        
+            <label for='bmp'>Steps</label>
+            <input type="text" id='bpm' class=" setting_field pull-left">
+        </div>
+    </form>
+    
+</div>    
 
-<table>
+<div id='composer'>
+    <!-- Javascript builds composer in here  -->
+</div>
 
-<% @sound_files.each do |sound_file| %>
-  <tr>
-    <td><%= sound_file.name %></td>
-    <td><%= sound_file.sound_url %></td>
-    <td> - <%= sound_file.project_id %> - </td>
- </tr>
-<% end %>
-</table>
 
-<br />
+<div id='file_controls'>
+    <table>
 
-<%= render 'sound_files/form' %>
+    <% @sound_files.each do |sound_file| %>
+      <tr>
+        <td><%= sound_file.name %></td>
+        <td><%= sound_file.sound_url %></td>
+        <td> - <%= sound_file.project_id %> - </td>
+     </tr>
+    <% end %>
+    </table>
+
+
+    <%= render 'sound_files/form' %>
+    
+</div>

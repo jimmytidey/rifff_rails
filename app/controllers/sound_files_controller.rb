@@ -44,7 +44,7 @@ class SoundFilesController < ApplicationController
   # POST /sound_files.json
   def create
     @sound_file = @project.sound_files.new(params[:sound_file])
-    
+
     respond_to do |format|
       if @sound_file.save
         format.html { redirect_to project_path(@project), notice: 'Sound file was successfully created.' }
