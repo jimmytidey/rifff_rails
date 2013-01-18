@@ -1,7 +1,85 @@
-worker.play = function() { 
+
+
+
+
+function Timer(settings)
+{
+    this.settings = settings;
+    this.timer = null;
+
+    this.fps = settings.fps || 30;
+    this.interval = Math.floor(1000/settings.fps);
+    this.timeInit = null;
+		
+    return this;
+}
+
+Timer.prototype = 
+{	
+    run: function()
+    {
+        var $this = this;
+		
+        this.settings.run();
+        this.timeInit += this.interval;
+
+        this.timer = setTimeout(
+            function(){$this.run()}, 
+            this.timeInit - (new Date).getTime()
+        );
+    },
 	
+    start: function()
+    {
+        if(this.timer == null)
+        {
+            this.timeInit = (new Date).getTime();
+            this.run();
+        }
+    },
+	
+    stop: function()
+    {
+        clearTimeout(this.timer);
+        this.timer = null;
+    }
 }
 
-worker.stop = function() { 
 
-}
+var rifff = {};
+
+
+
+self.onmessage = function(event){
+
+
+	postMessage(event.data.action);
+	if (event.data.action == 'play'){
+		
+		rifff.timer = new Timer({
+		    fps: parseFloat(event.data.data), //rifff.loop_trigger_interval
+		    run: function(){
+		       	postMessage();
+				//first_run = true; 
+		    }
+		});
+		
+		
+		rifff.timer.start();
+		rifff.timer.stop();
+	}
+	if (event.data.action == 'stop'){
+		postMessage('stopped!');
+		rifff.timer.stop();
+		
+	}
+
+	
+};
+
+
+
+
+
+
+

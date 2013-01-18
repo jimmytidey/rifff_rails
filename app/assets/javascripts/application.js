@@ -14,12 +14,16 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require jquery-fileupload/basic
+//= require audio.js
+//= require score.js
+//= require transport.js
+//= require knob.js
+//= require soundmanager2
 
-rifff = {};
+
 
 rifff.data = list_json;
 rifff.step = 0;
-rifff.number_of_steps = list_json.banks[0].bank_options[0].sequence.length;
 rifff.file_list = [] //list of the files available for this project.  
 
 
@@ -27,60 +31,28 @@ rifff.file_list = [] //list of the files available for this project.
 $(document).ready(function(){ 
 	//load the ajax list of sound locations 
 	rifff.loadSoundsLocations();
+	rifff.getProjectInfo();
 })
 
 rifff.loadSoundsLocations = function() {
 	$.get(window.location + '/list_files.json', function(data) { 
 		rifff.file_list = data.soundfiles;
 		rifff.renderBanks();
+		rifff.writeScore();
+		//rifff.loadSounds();
 	});
 }
 
 
 
 rifff.getProjectInfo = function() { 
-	rifff.bpl = rifff.json.project_info.bpl;
-	rifff.bpm = rifff.json.project_info.bpm;
-	rifff.number_of_steps = parseInt(rifff.json.project_info.steps);
+	rifff.bpl = rifff.data.project_info.bpl;
+	rifff.bpm = rifff.data.project_info.bpm;
+	rifff.number_of_steps = parseInt(rifff.data.project_info.steps);
 	rifff.loop_trigger_interval = rifff.bpm / 60 / rifff.bpl;
 }
 
-rifff.writeScore = function() { 
-	
-	var options_in_bank; 
-	var option_choice = []; 
-	
-	//declare the score array
-	rifff.score = [];
-	for (i = 0; i<rifff.number_of_steps; i++) { 
-		rifff.score[i] = [];
-	}
-	
-	//loop through an make the choices 
-	$.each(rifff.score, function(step_key, step_val) { 
-		$.each(rifff.data.banks, function(bank_key, value){ 
-			options_in_bank = rifff.json.banks[bank_key].bank_options.length - 2; 
-			
-			//check if there are any certain options 
-			$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val) { 
-				if (rifff.data.banks[bank_key].bank_options  == 3) { 
-				 	option_choice.push(bank_option_key); 
-				}
-			});
-			
 
-			$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val) { 
-				if ( rifff.data.banks[bank_key].bank_options[bank_option_key]  == 3 ) { 
-				 	option_choice.push(bank_option_key);
-				}
-			});
-			
-			option_choice = Math.floor(Math.random()*options_in_bank);
-			console.log("step:" + step_key + " Bank: " + bank_key + " choice " + option_choice);
-			rifff.score[step_key][bank_key] = option_choice;
-		});
-	});
-}
 
 rifff.renderBanks = function(){ //loop through each bank and render it 
 	
@@ -98,8 +70,8 @@ rifff.renderBanks = function(){ //loop through each bank and render it
 			bank_option_element = $("<div data-bank='"+bank_key+"' data-bank-option='"+bank_option_key+"' class='bank_option_container'></div>");
 			$(bank_element).append(bank_option_element);
 			$(bank_option_element).append("<p class='bank_option_title'>" +bank_option_val.bank_option_name +"</p>");			
-			rifff.renderDropDown(bank_option_element,bank_key, bank_option_key);
-			rifff.renderSteps(bank_option_element, bank_key, bank_option_key);			
+			rifff.renderControls(bank_option_element,bank_key, bank_option_key);
+						
 		});
 	});
 	
@@ -107,7 +79,7 @@ rifff.renderBanks = function(){ //loop through each bank and render it
 }
 
 
-rifff.renderDropDown = function(elem, bank_key, bank_option_key) {
+rifff.renderControls = function(elem, bank_key, bank_option_key) {
 	var drop_down = $("<select data-bank='"+bank_key+"' data-bank-option='"+bank_option_key+"' class='file_select'><option>None</option></select>");
 	var value = rifff.data.banks[bank_key].bank_options[bank_option_key].file_location;
 	
@@ -119,8 +91,24 @@ rifff.renderDropDown = function(elem, bank_key, bank_option_key) {
 				$(drop_down).append("<option value='"+val.location +"' data-id='"+key+"'>"+ val.name +"</option>");
 		}
 	}); 
-
+	
+	
 	$(elem).append(drop_down);	
+	$(elem).append('<div class="dial_container"><input type="text" data-displayInput=false value="50" class="dial"></div>');
+	$(elem).append('<input type="checkbox" data-bank="'+bank_key+'" data-bank-option="'+bank_option_key+'"  class="checkbox_control loop" name="loop" value="loop">');
+	$(elem).append('<input type="checkbox" data-bank="'+bank_key+'" data-bank-option="'+bank_option_key+'"  class="checkbox_control overplay" name="overplay" value="overplay">');
+	
+	if (rifff.data.banks[bank_key].bank_options[bank_option_key].overplay) { 
+		$(".overplay", elem).attr('checked', 'checked');
+	}	
+	
+	if (rifff.data.banks[bank_key].bank_options[bank_option_key].loop) { 
+		$(".loop", elem).attr('checked', 'checked');
+	}
+	
+	$(".dial",elem).knob({'min':0,'max':100, 'width':30, 'height':30});
+	
+	rifff.renderSteps(elem, bank_key, bank_option_key);
 }
 
 rifff.renderSteps = function(elem, bank_key, bank_option_key) {
@@ -173,17 +161,43 @@ rifff.attachClickEvents = function() {
 		
 		
 		rifff.data.banks[bank].bank_options[bank_option].sequence[step] = value;
-		//console.log(rifff.data.banks[bank].bank_options[bank_option].sequence);
 		rifff.saveJson();
 		
 	});
 	
+	//save the data if the selected file changes
 	$('.file_select').change(function() { 
 		var bank = $(this).attr('data-bank');
 		var bank_option = $(this).attr('data-bank-option');
 		rifff.data.banks[bank].bank_options[bank_option].file_location = $(this).val();
 		rifff.saveJson();
 	});
+	
+	//svae the data if the overplay setting changes 
+	$('.overplay').change(function() { 
+		var bank = $(this).attr('data-bank');
+		var bank_option = $(this).attr('data-bank-option');
+		if ($(this).is(':checked')) { 
+			rifff.data.banks[bank].bank_options[bank_option].overplay = true;
+		}
+		else { 
+			rifff.data.banks[bank].bank_options[bank_option].overplay = false;
+		}
+		rifff.saveJson();
+	});
+	
+	//save the data if the loop setting change
+	$('.loop').change(function() { 
+		var bank = $(this).attr('data-bank');
+		var bank_option = $(this).attr('data-bank-option');
+		if ($(this).is(':checked')) { 
+			rifff.data.banks[bank].bank_options[bank_option].loop = true;
+		}
+		else { 
+			rifff.data.banks[bank].bank_options[bank_option].loop = false;
+		}
+		rifff.saveJson();
+	});	
 }
 
 rifff.saveJson = function() { 
@@ -202,9 +216,6 @@ rifff.saveJson = function() {
 	});
 }
 
-rifff.renderScore = function() { 
-	
-}
 
 
 

@@ -23,7 +23,6 @@
     <button id='randomise' class='control btn span2' >randomise</button>
     
     <form class="navbar-form pull-right" id='settings'>
-        
         <div class='span2'>
             <label for='bmp'>BPM</label>
             <input type="text" id='bpm' class=" setting_field  pull-left">
@@ -43,6 +42,7 @@
 </div>    
 
 <div id='composer'>
+    <div id='playhead'></div>
     <!-- Javascript builds composer in here  -->
 </div>
 
@@ -50,13 +50,19 @@
 <div id='file_controls'>
     <table>
 
-    <% @sound_files.each do |sound_file| %>
-      <tr>
-        <td><%= sound_file.name %></td>
-        <td><%= sound_file.sound_url %></td>
-        <td> - <%= sound_file.project_id %> - </td>
-     </tr>
-    <% end %>
+    <% 
+    i=0
+    @sound_files.each do |sound_file| 
+    %>
+        <div class='row' data-id='<%= i.to_s %>'>
+            <div class='load_indicator span1'></div>
+            <div class='span4'><%= sound_file.name %></div>
+            <div class='span4'><%= sound_file.sound_url %></div>
+        </div>
+    <% 
+    i=i+1
+    end 
+    %>
     </table>
 
 

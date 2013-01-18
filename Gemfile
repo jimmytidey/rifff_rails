@@ -30,6 +30,7 @@ gem 'libv8', '~> 3.11.8'
 gem "twitter-bootstrap-rails", "~> 2.1.9"
 gem 'less'
 gem 'less-rails'
+gem 'soundmanager-rails'
 
 
 # To use ActiveModel has_secure_password

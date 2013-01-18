@@ -20,7 +20,7 @@
 }
 
 #composer { 
-
+	position:relative;
 	height:800px;
 	width:1000px;
 }
@@ -57,6 +57,16 @@
 .file_select { 
 	float:left;	
 }
+.dial_container{
+	float:left;
+
+}
+.checkbox_control { 
+	float:left;
+	position:relative;
+	top:6px;
+	left:2px;
+}
 
 .step { 
 	width:10px;
@@ -64,4 +74,15 @@
 	margin-left:5px;
 	border:1px solid black;
 	float:left;
+	margin-top:10px;
+}
+
+#playhead{ 
+	position:absolute;
+	top:10px;
+	bottom:10px;
+	width:12px;
+	left:379px;
+	background-color:#dcdcdc;
+	opacity:0.6;
 }
