@@ -52,13 +52,25 @@
 .bank_option_title { 
 	float:left;
 	width:100px;
+	margin-top:5px;
+}
+
+.play_indicator { 
+	width:10px;
+	height:10px;
+	border:1px solid black;
+	float:left;
+	position:relative;
+	top:10px;
 }
 
 .file_select { 
 	float:left;	
+	margin-left:5px;
 }
 .dial_container{
 	float:left;
+	margin-left:5px;
 
 }
 .checkbox_control { 
@@ -82,7 +94,7 @@
 	top:10px;
 	bottom:10px;
 	width:12px;
-	left:379px;
+	left:401px;
 	background-color:#dcdcdc;
 	opacity:0.6;
 }

@@ -53,23 +53,23 @@ var rifff = {};
 self.onmessage = function(event){
 
 
-	postMessage(event.data.action);
+	
 	if (event.data.action == 'play'){
-		
+		var not_first_run = false; 
 		rifff.timer = new Timer({
 		    fps: parseFloat(event.data.data), //rifff.loop_trigger_interval
 		    run: function(){
-		       	postMessage();
-				//first_run = true; 
+		       	postMessage(not_first_run);
+		 		not_first_run = true; 
 		    }
 		});
 		
 		
 		rifff.timer.start();
-		rifff.timer.stop();
+		
 	}
 	if (event.data.action == 'stop'){
-		postMessage('stopped!');
+
 		rifff.timer.stop();
 		
 	}

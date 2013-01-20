@@ -29,13 +29,13 @@
         </div>
         
         <div class='span2'>        
-            <label for='bmp'>Beats per loop</label>
-            <input type="text" id='bpm' class=" setting_field pull-left">
+            <label for='bml'>Beats per loop</label>
+            <input type="text" id='bpl' class=" setting_field pull-left">
         </div>
         
         <div class='span2'>        
-            <label for='bmp'>Steps</label>
-            <input type="text" id='bpm' class=" setting_field pull-left">
+            <label for='steps'>Steps</label>
+            <input type="text" id='steps' class=" setting_field pull-left">
         </div>
     </form>
     
@@ -54,7 +54,7 @@
     i=0
     @sound_files.each do |sound_file| 
     %>
-        <div class='row' data-id='<%= i.to_s %>'>
+        <div class='row audio_file' data-id='<%= i.to_s %>'>
             <div class='load_indicator span1'></div>
             <div class='span4'><%= sound_file.name %></div>
             <div class='span4'><%= sound_file.sound_url %></div>

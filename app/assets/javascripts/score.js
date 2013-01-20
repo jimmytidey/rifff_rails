@@ -12,7 +12,7 @@ rifff.writeScore = function() {
 	var certain_play; 
 	//declare the score array
 	rifff.score = [];
-	for (i = 0; i<rifff.number_of_steps; i++) { 
+	for (i = 0; i<rifff.data.project_info.steps; i++) { 
 		rifff.score[i] = [];
 	}
 	
@@ -64,8 +64,9 @@ rifff.writeScore = function() {
 			}
 		});
 	});
-	console.log('nearly');
+
 	rifff.renderScore(); 
+	
 	
 }
 
@@ -82,7 +83,7 @@ rifff.renderScore = function() {
 			if (rifff.score[step_key][bank_key] != '-') { 
 				selector = '.step[data-step-no='+step_key+'][data-bank='+bank_key+'][data-bank-option='+rifff.score[step_key][bank_key]+']';
 				
-				console.log(selector);
+				
 				$(selector).css('background-image','url(/assets/selected.png)');          
 			} 
 

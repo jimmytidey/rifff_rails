@@ -60,7 +60,6 @@ class SoundFilesController < ApplicationController
   # PUT /sound_files/1.json
   def update
     @sound_file = SoundFile.find(params[:id])
-
     respond_to do |format|
       if @sound_file.update_attributes(params[:sound_file])
         format.html { redirect_to @sound_file, notice: 'Sound file was successfully updated.' }
