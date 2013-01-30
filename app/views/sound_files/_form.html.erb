@@ -14,13 +14,10 @@
   <div class=''>
 
   
-  <div class="field">
-    <%= f.label :sound %><br />
-    <%= f.file_field :sound %>
+  <div class="field" id='upload_form'>
+   
+    <%= f.file_field :sound, multiple: true, name: "sound_file[sound]" %>
   </div>
-  
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+
   
 <% end %>

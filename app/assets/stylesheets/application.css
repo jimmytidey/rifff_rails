@@ -43,16 +43,23 @@
 .bank_title { 
 	width:100%;
 	clear:both;
+	z-index:1000;
+	background-color:white;
+	height:20px;
+	padding-top:10px;
+	margin-bottom:0px;
 }
 
 .bank_option_container { 
 	width:100%;
 	clear:both;
+
 }
 .bank_option_title { 
 	float:left;
 	width:100px;
 	margin-top:5px;
+	
 }
 
 .play_indicator { 
@@ -87,6 +94,7 @@
 	border:1px solid black;
 	float:left;
 	margin-top:10px;
+	z-index:10;
 }
 
 #playhead{ 
@@ -94,7 +102,17 @@
 	top:10px;
 	bottom:10px;
 	width:12px;
-	left:401px;
+	left:303px;
 	background-color:#dcdcdc;
 	opacity:0.6;
+	z-index:-4;
+}
+
+.show #playhead { 
+	left:5px;
+	bottom:350px;
+}
+
+.show .file_select { 
+	display:none;
 }

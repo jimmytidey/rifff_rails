@@ -34,7 +34,6 @@ rifff.writeScore = function() {
 			});
 			
 			
-			
 			//if there are things that are certain to play, eliminate everything else
 			if (certain_play) {
 				$.each(option_choice, function(key, val) { 
@@ -44,19 +43,16 @@ rifff.writeScore = function() {
 				});
 			}
 			
-			
-			
 			//now randomise values 
 			$.each(option_choice, function(key, val) { 
-					option_choice[key] = val * Math.random() * 10 ;
+					option_choice[key] = (val * Math.random() * 3) + val ;
 			});
-			
-			
+						
 			
 			//find highest value 			
 			bank_option_choice = option_choice.max();
 			
-			if (option_choice[bank_option_choice] > 4){
+			if (option_choice[bank_option_choice] > 3){
 				rifff.score[step_key][bank_key] = bank_option_choice ;
 			}
 			else { 

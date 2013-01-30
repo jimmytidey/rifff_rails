@@ -43,17 +43,7 @@ class SoundFilesController < ApplicationController
   # POST /sound_files
   # POST /sound_files.json
   def create
-    @sound_file = @project.sound_files.new(params[:sound_file])
-
-    respond_to do |format|
-      if @sound_file.save
-        format.html { redirect_to project_path(@project), notice: 'Sound file was successfully created.' }
-        format.json { render json: @sound_file, status: :created, location: @sound_file }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @sound_file.errors, status: :unprocessable_entity }
-      end
-    end
+    @sound_file = @project.sound_files.create(params[:sound_file])
   end
 
   # PUT /sound_files/1
@@ -71,15 +61,14 @@ class SoundFilesController < ApplicationController
     end
   end
 
-  # DELETE /sound_files/1
-  # DELETE /sound_files/1.json
+
   def destroy
     @sound_file = SoundFile.find(params[:id])
     @sound_file.destroy
 
     respond_to do |format|
-      format.html { redirect_to sound_files_url }
-      format.json { head :no_content }
+      format.html { redirect_to @project }
+      format.js { render 'destroy.js.erb' }
     end
   end
   

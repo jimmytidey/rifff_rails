@@ -1,0 +1,6 @@
+<% if @sound_file.new_record? %>
+  alert("Failed to upload painting: <%= j @sound_file.errors.full_messages.join(', ').html_safe %>");
+<% else %>
+
+  $("#file_list").append("<%= j render(@sound_file) %>");
+<% end %>

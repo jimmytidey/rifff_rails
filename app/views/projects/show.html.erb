@@ -1,3 +1,6 @@
+
+<input type='hidden' id='mode' value='false' />
+
 <h1><%= @project.name %></h1>
 <p><%= link_to 'back to projects', project_path() %></p>
 
@@ -15,57 +18,21 @@
         <button id='stop'      class='control btn' value='stop'>Stop</button>
         <button id='backwards' class='control btn' >&laquo;</button>
         <button id='forward'   class='control btn' >&raquo;</button>
-        
         <button id='rewind'    class='control btn' >&laquo;&laquo;</button>
-        
     </div>
     
     <button id='randomise' class='control btn span2' >randomise</button>
     
-    <form class="navbar-form pull-right" id='settings'>
-        <div class='span2'>
-            <label for='bmp'>BPM</label>
-            <input type="text" id='bpm' class=" setting_field  pull-left">
-        </div>
-        
-        <div class='span2'>        
-            <label for='bml'>Beats per loop</label>
-            <input type="text" id='bpl' class=" setting_field pull-left">
-        </div>
-        
-        <div class='span2'>        
-            <label for='steps'>Steps</label>
-            <input type="text" id='steps' class=" setting_field pull-left">
-        </div>
-    </form>
+
     
 </div>    
 
-<div id='composer'>
-    <div id='playhead'></div>
+<div id='composer' class='show'>
+    <div id='playhead' ></div>
     <!-- Javascript builds composer in here  -->
 </div>
 
 
-<div id='file_controls'>
-    <table>
 
-    <% 
-    i=0
-    @sound_files.each do |sound_file| 
-    %>
-        <div class='row audio_file' data-id='<%= i.to_s %>'>
-            <div class='load_indicator span1'></div>
-            <div class='span4'><%= sound_file.name %></div>
-            <div class='span4'><%= sound_file.sound_url %></div>
-        </div>
-    <% 
-    i=i+1
-    end 
-    %>
-    </table>
-
-
-    <%= render 'sound_files/form' %>
     
 </div>

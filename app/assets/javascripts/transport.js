@@ -1,7 +1,17 @@
 rifff.current_step = 0;
 
 rifff.updatePlayhead = function() { 
-	var left =  (rifff.current_step * 17) + 401;
+	
+	var playhead_offset; 
+	
+	if (rifff.mode == 'edit') { 
+		playhead_offset = 303;
+	}
+	
+	else { 
+		playhead_offset = 5; 
+	}
+	var left =  (rifff.current_step * 17) + playhead_offset;
 	$('#playhead').css('left', left);
 }
 

@@ -1,6 +1,5 @@
 <% @projects.each do |project| %>
-    <%= link_to project.name , project %> <br/>
-    
+    <%= link_to project.name , edit_project_path(project) %> <br/>
 <% end %>
 
 <%= render 'form' %>

@@ -1,6 +1,8 @@
 class ProjectsController < ApplicationController
   
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!,
+    :only => [:index, :edit,:save_json, :create, :new]
+  
   before_filter :create_user
   
   def index 
@@ -28,6 +30,12 @@ class ProjectsController < ApplicationController
     @sound_files = @project.sound_files
     @sound_file = SoundFile.new    
   end 
+  
+  def edit 
+    @project = Project.find(params[:id])
+    @sound_files = @project.sound_files
+    @sound_file = SoundFile.new    
+  end
   
   def save_json
     @project = Project.find(params[:id])
