@@ -1,10 +1,12 @@
 Rifff::Application.routes.draw do
   
+  devise_for :users
+  
   resources :projects do
      resources :sound_files
   end 
   
-  devise_for :users
+  
   root :to => "welcome#index"
   
   match 'projects/:id/save_json' => 'projects#save_json'
