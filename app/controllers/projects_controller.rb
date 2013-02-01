@@ -29,6 +29,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     @sound_files = @project.sound_files
     @sound_file = SoundFile.new    
+    render :layout => "bare"
   end 
   
   def edit 

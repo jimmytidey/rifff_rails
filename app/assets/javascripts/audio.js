@@ -2,29 +2,35 @@ rifff = {};
 rifff.buffers = [];
 rifff.players = [];
 
-
+console.log("AUDIO PAGE");
 //var context = new webkitAudioContext();
 var worker = new Worker('/assets/worker.js');
 
 $(document).ready(function(){ 
-	$('#play').click(function(){
-		rifff.play();
-	});
+  rifff.mode = $('#mode').val();
+  
+  //only init on audio pages
+  if (typeof rifff.mode != 'undefined') { 
+  	$('#play').click(function(){
+  	  console.log('playing');
+  		rifff.play();
+  	});
 	
-	$('#stop').click(function(){
-		rifff.stop();
-	});
+  	$('#stop').click(function(){
+  		rifff.stop();
+  	});
 	
-	soundManager.setup({
-		url: '/	assets/swf/soundmanager2.swf',
-		useHTML5Audio: true,
-		preferFlash: false,
-		useHighPerformance: true,
-		debugMode: false,
-	});
-	soundManager.onready(function() {
-		rifff.loadSounds();
-	});
+  	soundManager.setup({
+  		url: '/	assets/swf/soundmanager2.swf',
+  		useHTML5Audio: true,
+  		preferFlash: false,
+  		useHighPerformance: true,
+  		debugMode: false,
+  	});
+  	soundManager.onready(function() {
+  		rifff.loadSounds();
+  	});
+  }	
 });
 
 
@@ -167,5 +173,4 @@ rifff.playStep = function(){
 rifff.stop = function(){ 
 	worker.postMessage({'action':'stop'});
 	soundManager.stopAll();
-	
 }

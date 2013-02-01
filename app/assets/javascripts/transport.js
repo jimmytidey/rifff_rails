@@ -1,3 +1,5 @@
+console.log("TRANSPORT PAGE");
+
 rifff.current_step = 0;
 
 rifff.updatePlayhead = function() { 

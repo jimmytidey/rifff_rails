@@ -1,8 +1,7 @@
 
-<input type='hidden' id='mode' value='false' />
+<input type='hidden' id='mode' value='show' />
 
-<h1><%= @project.name %></h1>
-<p><%= link_to 'back to projects', project_path() %></p>
+<h3><%= @project.name %></h3>
 
 <% if @project.json %>
     <script type="text/javascript">
@@ -10,10 +9,9 @@
     </script>
 <% end %>
 
-<div id='controlls' class='row'>
-    
-    
-    <div class="btn-group span3" >
+<div class='row'>
+
+    <div class="btn-group span1 control_group" >
         <button id='play'      class='control btn'>Play</button>
         <button id='stop'      class='control btn' value='stop'>Stop</button>
         <button id='backwards' class='control btn' >&laquo;</button>

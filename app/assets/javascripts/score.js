@@ -1,12 +1,15 @@
 
+console.log("SCORE PAGE");
+
 $(document).ready(function(){ 
 	$('#randomise').click(function(){
 		rifff.writeScore();
 	});
 });
 
+
 rifff.writeScore = function() { 
-	
+	console.log("WRITE SCORE FUNCTION");
 	var options_in_bank; 
 	var option_choice = []; 
 	var certain_play; 
