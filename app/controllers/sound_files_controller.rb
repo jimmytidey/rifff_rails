@@ -43,7 +43,7 @@ class SoundFilesController < ApplicationController
   # POST /sound_files
   # POST /sound_files.json
   def create
-    @sound_file = @project.sound_files.create(params[:sound_file])
+    @sound_file = @ project.sound_files.create(params[:sound_file])
   end
 
   # PUT /sound_files/1
