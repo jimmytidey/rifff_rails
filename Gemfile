@@ -21,6 +21,8 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+gem "fog", "~> 1.3.1"
+
 
 
 gem 'jquery-rails'

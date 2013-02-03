@@ -36,9 +36,10 @@ $(document).ready(function(){
 	      progress = parseInt(data.loaded / data.total * 100, 10);
 	      return data.context.find('.bar').css('width', progress + '%');
 	    }
-	  }
+	  },
+	  forceIframeTransport: true
 	});
-
+  
 })
 
 rifff.loadSoundsLocations = function() {

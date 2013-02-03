@@ -6,7 +6,6 @@ Rifff::Application.routes.draw do
      resources :sound_files
   end 
   
-  
   root :to => "welcome#index"
   
   match 'projects/:id/save_json' => 'projects#save_json'

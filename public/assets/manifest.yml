@@ -13,8 +13,8 @@ selected.psd: selected-8829e43b7bff128caffeb7cb26358bbb.psd
 selected/index.psd: selected-8829e43b7bff128caffeb7cb26358bbb.psd
 template.psd: template-18a9f73733ad6909c0805cf912933960.psd
 template/index.psd: template-18a9f73733ad6909c0805cf912933960.psd
-application.js: application-8f7ac6d4d62addc7a66c1f016f6ab24f.js
-application/index.js: application-8f7ac6d4d62addc7a66c1f016f6ab24f.js
+application.js: application-b93f675bae374b8b5e8c2ef9926c5e9b.js
+application/index.js: application-b93f675bae374b8b5e8c2ef9926c5e9b.js
 list.json: list-4c816e747fc0b8bd0303c5a54ef227b2.json
 list/index.json: list-4c816e747fc0b8bd0303c5a54ef227b2.json
 application.css: application-a189f40a9ef3bd70547cd82cbe2b8081.css

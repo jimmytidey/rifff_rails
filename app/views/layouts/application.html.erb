@@ -46,7 +46,7 @@
                 <p id='auth_ident'>Signed in as <%= current_user.email %></p>
                 <div id='auth_links' class="btn-group">
                     <%= link_to "Sign out", destroy_user_session_path, :class => "btn", :method => :delete %>
-                    <%= link_to "View your projects", projects_path, :class => "btn", :method => :delete %>
+                    <%= link_to "View your projects", projects_path, :class => "btn" %>
                     
                 </div>
                 <% else %>
