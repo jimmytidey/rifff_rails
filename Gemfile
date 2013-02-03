@@ -23,6 +23,10 @@ end
 
 gem "fog", "~> 1.3.1"
 
+group :production do
+  # gems specifically for Heroku go here
+  gem "pg"
+end
 
 
 gem 'jquery-rails'
