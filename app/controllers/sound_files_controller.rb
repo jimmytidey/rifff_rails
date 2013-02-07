@@ -44,6 +44,14 @@ class SoundFilesController < ApplicationController
   # POST /sound_files.json
   def create
     @sound_file = @project.sound_files.create(params[:sound_file])
+    
+    respond_to do |format|
+      if @sound_file.save
+       format.json { render :json => [ @sound_file.to_jq_upload ].to_json }
+      else
+        format.json { render :json => [ @sound_file.to_jq_upload.merge({ :error => "custom_failure" }) ].to_json }
+      end
+    end    
   end
 
   # PUT /sound_files/1

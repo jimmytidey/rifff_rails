@@ -1,6 +1,7 @@
 Rifff::Application.routes.draw do
   
   devise_for :users
+  resources :uploads
   
   resources :projects do
      resources :sound_files
