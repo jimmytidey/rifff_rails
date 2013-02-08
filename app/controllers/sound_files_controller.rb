@@ -4,6 +4,8 @@ class SoundFilesController < ApplicationController
 
   before_filter :load_parent
   
+  
+  
   def index
     @sound_files = SoundFile.all
     @sound_file = SoundFile.new
@@ -43,15 +45,11 @@ class SoundFilesController < ApplicationController
   # POST /sound_files
   # POST /sound_files.json
   def create
-    @sound_file = @project.sound_files.create(params[:sound_file])
-    
-    respond_to do |format|
-      if @sound_file.save
-       format.json { render :json => [ @sound_file.to_jq_upload ].to_json }
-      else
-        format.json { render :json => [ @sound_file.to_jq_upload.merge({ :error => "custom_failure" }) ].to_json }
-      end
-    end    
+    @sound_file = @project.sound_files.new
+    @sound_file.name        = params[:filename]
+    @sound_file.url         = params[:url]  
+    @sound_file.project_id  = params[:project_id] 
+    @sound_file.save
   end
 
   # PUT /sound_files/1
@@ -86,4 +84,7 @@ class SoundFilesController < ApplicationController
     @project = Project.find(params[:project_id])
   end  
   
+  def clean_s3_data
+    self.sound = self.url
+  end 
 end

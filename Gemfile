@@ -16,8 +16,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platforms => :ruby
-  gem 'jquery-fileupload-rails'
+  # gem 'therubyracer', :platforms => :ruby'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -38,7 +37,10 @@ gem "twitter-bootstrap-rails", "~> 2.1.9"
 gem 'less'
 gem 'less-rails'
 gem 'soundmanager-rails'
+gem 'haml-rails'
+gem 's3_direct_upload'
 
+gem 'aws-s3', :require => 'aws/s3'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'

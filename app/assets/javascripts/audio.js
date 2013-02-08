@@ -36,7 +36,15 @@ $(document).ready(function(){
 
 rifff.loadSounds = function() { 
 	$.each(rifff.file_list, function(key, file){
-		rifff.loadSound(file.location, key)
+		rifff.loadSound(file.url, file.id)
+		
+		var append_string = "<div class='row audio_file' id='sound_"+file.id+">' >";
+    append_string +=    "<div class='load_indicator span1'></div>";
+    append_string +=    'div class="name span5">'+file.name+'</div>'
+    append_string +=    '<div class="actions name span3">'
+    append_string +=    '<a rel="nofollow" data-remote="true" data-method="delete" data-confirm="Are you sure?" href="/projects/11/sound_files/"'+file.id+'">remove</a>'
+    append_string +=    '</div>'
+    append_string +=    '</div>'
 	});
 }
 
@@ -48,17 +56,18 @@ rifff.loadSound=function(location, key) {
 		autoLoad: true,
 		autoPlay: false,
 		onload: function() {
-			$('.audio_file[data-id='+key+'] .load_indicator').css('background-color','green');
-			$('.audio_file[data-id='+key+'] .load_indicator').attr('data-loaded','1');
-			$('.audio_file[data-id='+key+'] .load_indicator').html("100%");
+			$('#sound_'+key+' .load_indicator').css('background-color','green');
+			$('#sound_'+key+' .load_indicator').attr('data-loaded','1');
+			$('#sound_'+key+' .load_indicator').html("100%");
+			
 			//test to see all items are loaded
 			if ($(".load_indicator[data-loaded='1']").length == $(".load_indicator").length) {
 			    rifff.buildSoundMatrix();
 			}
 		},
 		whileloading: function(){
-			var percent_loaded = this.bytesLoaded / this.bytesTotal * 100; 
-			$('.audio_file[data-id='+key+'] .load_indicator').html(percent_loaded + "%");
+			var percent_loaded = parseInt(this.bytesLoaded / this.bytesTotal * 100); 
+			$('#sound_'+key+' .load_indicator').html(percent_loaded + "%");
 		},
 		volume: 50
 	});	

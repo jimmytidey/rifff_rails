@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130201153635) do
+ActiveRecord::Schema.define(:version => 20130208132118) do
 
   create_table "project", :force => true do |t|
     t.string   "name"
@@ -34,16 +34,7 @@ ActiveRecord::Schema.define(:version => 20130201153635) do
     t.integer  "project_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "sound"
-  end
-
-  create_table "uploads", :force => true do |t|
-    t.string   "file_name"
-    t.string   "file_type"
-    t.string   "file_size"
-    t.string   "s3_key"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "url"
   end
 
   create_table "users", :force => true do |t|

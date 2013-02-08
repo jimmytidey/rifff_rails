@@ -15,47 +15,14 @@ $(document).ready(function(){
 	    rifff.loadSoundsLocations();
 	    rifff.getProjectInfo();
   }
-	
-	$('#upload_form').fileupload({
-	  dataType: "script",
-	  add: function(e, data) {
-	    var file, types;
-	    types = /(\.|\/)(mp3|wav|png)$/i;
-	    file = data.files[0];
-	    if (types.test(file.type) || types.test(file.name)) {
-	      data.context = $(tmpl("template-upload", file));
-	      $('#upload_form').append(data.context);
-	      return data.submit();
-	    } else {
-	      return alert("" + file.name + " is not a gif, jpeg, or png image file");
-	    }
-	  },
-	  progress: function(e, data) {
-	    var progress;
-	    if (data.context) {
-	      progress = parseInt(data.loaded / data.total * 100, 10);
-	      return data.context.find('.bar').css('width', progress + '%');
-	    }
-	  },
-	  forceIframeTransport: true
-	});
+
   
 })
 
 rifff.loadSoundsLocations = function() {
 	$.get(window.location + '/../list_files.json', function(data) { 
-		rifff.file_list = data.soundfiles;
 		
-		if (!$.isEmptyObject(rifff.file_list[0])) {
-  		$.each(rifff.file_list, function(key,val){
-
-    			var offset;
-    			val.name = val.location.split('/');
-    			offset = val.name.length;
-    			val.name = val.name[offset-1]
-  		
-  		});
-  	}	
+		rifff.file_list = data;
 		
 		rifff.renderBanks();
 		rifff.writeScore();

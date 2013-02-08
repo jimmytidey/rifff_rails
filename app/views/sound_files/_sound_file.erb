@@ -1,8 +1,7 @@
-<div class='row audio_file'  id='sound_<%= sound_file.id %>' >
+<div class='row audio_file' id='sound_<%= sound_file.id %>' >
     <div class='load_indicator span1'></div>
-    <div class="name span5"><%= sound_file.sound_url %></div>
+    <div class="name span5"><%= sound_file.name %></div>
     <div class="actions name span3">
-
-      <%= link_to "remove", url_for([@project, sound_file]), :remote=>true, :confirm => 'Are you sure?', :method => :delete %>
+        <%= link_to "remove", url_for([@project, sound_file]), :remote=>true, :confirm => 'Are you sure?', :method => :delete %>
     </div>
- </div>
+</div>

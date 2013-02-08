@@ -12,22 +12,22 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap 
-//= require jquery-fileupload/basic
-//= require jquery-fileupload/vendor/tmpl
+//= require twitter/bootstrap.js
 //= require knob.js
 //= require soundmanager2
 //= require audio.js
 //= require score.js
 //= require transport.js
 //= require projects.js
-
+//= require s3_direct_upload
 
 $(document).ready(function(){ 
 	
 	$('.btnlink').click(function(){ 
 	  window.location = $(this).attr('data-href');
 	});
+	
+	$("#myS3Uploader").S3Uploader();
 	
 });	
 

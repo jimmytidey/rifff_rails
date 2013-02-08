@@ -35,7 +35,8 @@ class ProjectsController < ApplicationController
   def edit 
     @project = Project.find(params[:id])
     @sound_files = @project.sound_files
-    @sound_file = SoundFile.new    
+    @sound_file = SoundFile.new   
+    render :layout => "audio" 
   end
   
   def save_json
@@ -56,7 +57,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     @sound_files = @project.sound_files
     respond_to do |format|
-      format.json { render "list_files" }
+      format.json { render :json => @sound_files}
     end
   end 
   

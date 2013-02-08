@@ -5,11 +5,11 @@
     if (last) 
         @sound_files.each do |sound_file| %>
          {
-            "location": "<%= sound_file.sound_url %>"
+            "location": "<%= sound_file.url %>"
          },
         <% end %>
         {
-            "location": "<%= last.sound_url %>"       
+            "location": "<%= last.url %>"       
         }
     <% else %> 
         {}

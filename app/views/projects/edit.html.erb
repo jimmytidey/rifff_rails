@@ -51,30 +51,18 @@
 <div id='file_controls'>
     
     <div id='file_list'>
-        <% 
-        i=0
-        @sound_files.each do |sound_file| 
-        %>  
-            <div class='row audio_file' data-id='<%= i.to_s %>' id='sound_<%= sound_file.id %>' >
-                <div class='load_indicator span1'></div>
-                <div class="name span5"><%= sound_file.sound_url %></div>
-                <div class="actions name span3">
-
-                  <%= link_to "remove", url_for([@project, sound_file]), :remote=>true, :confirm => 'Are you sure?', :method => :delete %>
-                </div>
-             </div>
-        <% 
-        i=i+1
-        end 
-        %>
+        <% @sound_files.each do |sound_file| %>
+            <%= render 'sound_files/sound_file', :sound_file => sound_file %>
+        <% end %> 
+    
     </div>    
- 
-
-
-    <%= render 'sound_files/form' %>
+    
+    <%= s3_uploader_form post: "#{project_path(@project)}/sound_files", as: "sound_files[sound]", id: "myS3Uploader" do %>
+      <%= file_field_tag :file, multiple: true %>
+    <% end %>
     
     <script id="template-upload" type="text/x-tmpl">
-    <div class="upload">
+    <div id="file-{%=o.unique_id%}" class="upload">
       {%=o.name%}
       <div class="progress"><div class="bar" style="width: 0%"></div></div>
     </div>
