@@ -7,15 +7,23 @@ console.log("PROJECTS PAGE");
 
 $(document).ready(function(){ 
 	
-	//discover if we are in edit mode 
+	//detect rifff mode
+	rifff.mode = $('#mode').val();
+
+	soundManager.setup({
+		url: '/assets/swf/soundmanager2.swf',
+		useHTML5Audio: false,
+		preferFlash: true,
+		useHighPerformance: true,
+		debugMode: true,
+	});
 	
-
-	//load the ajax list of sound locations	
-	if (typeof rifff.mode != 'undefined') { 
-	    rifff.loadSoundsLocations();
-	    rifff.getProjectInfo();
-  }
-
+	
+	soundManager.onready(function() {
+	  console.log('ready!');
+		rifff.loadSoundsLocations();
+    rifff.getProjectInfo();
+	});
   
 })
 
@@ -24,6 +32,15 @@ rifff.loadSoundsLocations = function() {
 		
 		rifff.file_list = data;
 		
+		rifff.file_list.sort(alphabetise)
+
+    function alphabetise(a, b){
+      if(a.name<b.name) return -1;
+      if(a.name>b.name) return 1;
+      return 0;
+    }
+		
+		rifff.loadSounds();
 		rifff.renderBanks();
 		rifff.writeScore();
 		rifff.initSettings(); 
@@ -51,7 +68,7 @@ rifff.renderBanks = function(){ //loop through each bank and render it
 		$('#composer').append(bank_element);
 		
 		//add the title to the bank
-		$(bank_element).append("<h4 class='bank_title'>" +bank_val.bank_name +"</h4>");
+		$(bank_element).append("<div class='bank_header'><h4 class='bank_title'>" +bank_val.bank_name +"</h4><span class='remove_bank'>[DELETE]</span></div>");
 		
 		//add the bank options to the bank 
 		$.each(bank_val.bank_options, function(bank_option_key, bank_option_val){ 
@@ -61,49 +78,59 @@ rifff.renderBanks = function(){ //loop through each bank and render it
 			rifff.renderControls(bank_option_element,bank_key, bank_option_key);
 						
 		});
+		
+		//append the button to add more options 
+		$(bank_element).append("<input type='button' class='btn add_bank_option' value='Add another option' />");
 	});
+	
+	//append the button to add more options 
+	$('#composer').append("<br/><input type='button' class='btn add_bank' value='Add a new bank' />");
+	
 	
 	rifff.attachClickEvents();
 }
 
 
 rifff.renderControls = function(elem, bank_key, bank_option_key) {
-	var drop_down = $("<select data-bank='"+bank_key+"' data-bank-option='"+bank_option_key+"' class='file_select'><option>None</option></select>");
-	var value = rifff.data.banks[bank_key].bank_options[bank_option_key].file_location;
-	var volume = parseInt(rifff.data.banks[bank_key].bank_options[bank_option_key].volume);
+	var drop_down = $("<select name='file_select-"+bank_key+"-"+bank_option_key+"' data-bank='"+bank_key+"' data-bank-option='"+bank_option_key+"' class='file_select'><option>None</option></select>");
+	if(rifff.data.banks[bank_key].bank_options[bank_option_key]) {
+  	var value = rifff.data.banks[bank_key].bank_options[bank_option_key].file_location;
+  	var volume = parseInt(rifff.data.banks[bank_key].bank_options[bank_option_key].volume);
 	
-	$.each(rifff.file_list, function(key, val){ 
-		if (val.location === value) {
-			$(drop_down).append("<option selected data-id='"+key+"'>"+ val.name +"</option>");
-		}
-		else { 
-				$(drop_down).append("<option value='"+val.location +"' data-id='"+key+"'>"+ val.name +"</option>");
-		}
-	}); 
+  	$.each(rifff.file_list, function(key, val){ 
+  		if (val.url === value) {
+  			$(drop_down).append("<option value='"+val.url +"' selected data-id='"+key+"'>"+ val.name +"</option>");
+  		}
+  		else { 
+  				$(drop_down).append("<option value='"+val.url +"' data-id='"+key+"'>"+ val.name +"</option>");
+  		}
+  	}); 
+  	
 	
-	if (rifff.mode == 'edit') { 
-		$(elem).append("<div class='play_indicator'></div>");
-	}	
-		$(elem).append(drop_down);
+  	if (rifff.mode == 'edit') { 
+  		$(elem).append("<div class='play_indicator'></div>");
+  	}	
+  		$(elem).append(drop_down);
 		
-	if 	(rifff.mode == 'edit') { 	
-		$(elem).append('<div class="dial_container"><input type="text" data-bank="'+bank_key+'" data-bank-option="'+bank_option_key+'" data-displayInput=false value="'+volume+'" class="dial"></div>');
-		$(elem).append('<input type="checkbox" data-bank="'+bank_key+'" data-bank-option="'+bank_option_key+'"  class="checkbox_control loop" name="loop" value="loop">');
-		$(elem).append('<input type="checkbox" data-bank="'+bank_key+'" data-bank-option="'+bank_option_key+'"  class="checkbox_control overplay" name="overplay" value="overplay">');
+  	if 	(rifff.mode == 'edit') { 	
+  		$(elem).append('<div class="dial_container"><input type="text" data-bank="'+bank_key+'" data-bank-option="'+bank_option_key+'" data-displayInput=false value="'+volume+'" class="dial"></div>');
+  		$(elem).append('<input type="checkbox" data-bank="'+bank_key+'" data-bank-option="'+bank_option_key+'"  class="checkbox_control loop" name="loop" value="loop">');
+  		$(elem).append('<input type="checkbox" data-bank="'+bank_key+'" data-bank-option="'+bank_option_key+'"  class="checkbox_control overplay" name="overplay" value="overplay">');
 
 	
-		if (rifff.data.banks[bank_key].bank_options[bank_option_key].overplay) { 
-			$(".overplay", elem).attr('checked', 'checked');
-		}	
+  		if (rifff.data.banks[bank_key].bank_options[bank_option_key].overplay) { 
+  			$(".overplay", elem).attr('checked', 'checked');
+  		}	
 	
-		if (rifff.data.banks[bank_key].bank_options[bank_option_key].loop) { 
-			$(".loop", elem).attr('checked', 'checked');
-		}
+  		if (rifff.data.banks[bank_key].bank_options[bank_option_key].loop) { 
+  			$(".loop", elem).attr('checked', 'checked');
+  		}
 	
-		$(".dial", elem).knob({'min':0,'max':100, 'width':30, 'height':30});
-	}
-	rifff.renderSteps(elem, bank_key, bank_option_key);
-	
+  		$(".dial", elem).knob({'min':0,'max':100, 'width':30, 'height':30});
+  	}
+  	rifff.renderSteps(elem, bank_key, bank_option_key);
+  	$(elem).append("<i class='icon-remove-circle remove_bank_option'></i>");
+  }	
 }
 
 rifff.renderSteps = function(elem, bank_key, bank_option_key) {
@@ -134,100 +161,8 @@ rifff.initSettings = function() {
 	if (rifff.mode == 'edit') { 
 		$('#bpm').val(bpm);
 		$('#bpl').val(bpl);
-		$('#steps').val(steps);	
-	
-		$('#bpm').change(function(){
-			rifff.data.project_info.bpm = $(this).val();
-			rifff.saveJson();
-		
-		});
-
-		$('#bpl').change(function(){
-			rifff.data.project_info.bpl = $(this).val();
-			rifff.saveJson();
-		});
-	
-		$('#steps').change(function(){
-			rifff.data.project_info.steps = $(this).val();
-			rifff.saveJson();
-		
-			//need to change the json to represent this... 
-			$.each(rifff.data.banks, function(bank_key, bank_val){
-				$.each(bank_val.bank_options, function(bank_option_key, bank_option_val){
-					rifff.data.banks[bank_key].bank_options[bank_option_key].sequence.length = rifff.data.project_info.steps +1 ;
-				});
-			});
-		});
+		$('#steps').val(steps);
 	}		
-	
-}
-
-rifff.attachClickEvents = function() {
-		 
-	$('.step').click(function(){
-
-		var value = parseInt($(this).attr('data-value'));
-		var bank = $(this).attr('data-bank');
-		var bank_option = $(this).attr('data-bank-option');
-		var step = $(this).attr('data-step-no');
-		
-		
-		value = value+1;
-		
-		if (value == 1) { 
-			$(this).css('background-color', '#ccc');
-		}  
-		if (value == 2) { 
-			$(this).css('background-color', '#999');
-		}
-		if (value == 3) { 
-			$(this).css('background-color', '#222');
-		}
-		if (value > 3) { 
-			value = 0;
-			$(this).css('background-color', '#fff');
-		}		
-		
-		$(this).attr('data-value', value);
-		
-		rifff.data.banks[bank].bank_options[bank_option].sequence[step] = value;
-		rifff.saveJson();
-		
-	});
-	
-	//save the data if the selected file changes
-	$('.file_select').change(function() { 
-		var bank = $(this).attr('data-bank');
-		var bank_option = $(this).attr('data-bank-option');
-		rifff.data.banks[bank].bank_options[bank_option].file_location = $(this).val();
-		rifff.saveJson();
-	});
-	
-	//save the data if the overplay setting changes 
-	$('.overplay').change(function() { 
-		var bank = $(this).attr('data-bank');
-		var bank_option = $(this).attr('data-bank-option');
-		if ($(this).is(':checked')) { 
-			rifff.data.banks[bank].bank_options[bank_option].overplay = true;
-		}
-		else { 
-			rifff.data.banks[bank].bank_options[bank_option].overplay = false;
-		}
-		rifff.saveJson();
-	});
-	
-	//save the data if the loop setting change
-	$('.loop').change(function() { 
-		var bank = $(this).attr('data-bank');
-		var bank_option = $(this).attr('data-bank-option');
-		if ($(this).is(':checked')) { 
-			rifff.data.banks[bank].bank_options[bank_option].loop = true;
-		}
-		else { 
-			rifff.data.banks[bank].bank_options[bank_option].loop = false;
-		}
-		rifff.saveJson();
-	});	
 }
 
 rifff.saveJson = function() { 
@@ -248,6 +183,13 @@ rifff.saveJson = function() {
 	rifff.getProjectInfo();
 }
 
+
+// Array Remove - By John Resig (MIT Licensed)
+Array.prototype.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
+};
 
 
 

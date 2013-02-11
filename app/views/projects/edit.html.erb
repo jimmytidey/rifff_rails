@@ -2,15 +2,16 @@
 <input type='hidden' id='mode' value='edit' />
 
 <h1><%= @project.name %></h1>
-<p><%= link_to 'back to projects', project_path() %></p>
+<p><%= link_to 'back to projects', projects_path() %></p>
 
 <% if @project.json %>
     <script type="text/javascript">
         var list_json = <%=raw @project.json %>
+        var project_id = <%= @project.id %>
     </script>
 <% end %>
 
-<div id='controlls' class='row'>
+<div id='controls' class='row'>
     
     
     <div class="btn-group span3" >
@@ -24,48 +25,53 @@
     <button id='randomise' class='control btn span2' >randomise</button>
     
     <form class="navbar-form pull-right" id='settings'>
-        <div class='span2'>
-            <label for='bmp'>BPM</label>
-            <input type="text" id='bpm' class=" setting_field  pull-left">
+        <div class='span1'>
+            <label for='bpm'>BPM</label>
+            <input type="text" id='bpm' class="setting_field  pull-left">
         </div>
         
-        <div class='span2'>        
-            <label for='bml'>Beats per loop</label>
-            <input type="text" id='bpl' class=" setting_field pull-left">
+        <div class='span1'>        
+            <label for='bpl'>Beats/loop</label>
+            <input type="text" id='bpl' class="setting_field pull-left">
         </div>
         
-        <div class='span2'>        
+        <div class='span1'>        
             <label for='steps'>Steps</label>
-            <input type="text" id='steps' class=" setting_field pull-left">
+            <input type="text" id='steps' class="setting_field pull-left">
+        </div>
+        
+        <div class='span1'>        
+            
+            <input type="button" id='save_settings' value='Save' class=" setting_field pull-left">
         </div>
     </form>
     
 </div>    
 
-<div id='composer'>
-    <div id='playhead'></div>
-    <!-- Javascript builds composer in here  -->
-</div>
-
-
-<div id='file_controls'>
-    
-    <div id='file_list'>
-        <% @sound_files.each do |sound_file| %>
-            <%= render 'sound_files/sound_file', :sound_file => sound_file %>
-        <% end %> 
-    
-    </div>    
-    
-    <%= s3_uploader_form post: "#{project_path(@project)}/sound_files", as: "sound_files[sound]", id: "myS3Uploader" do %>
-      <%= file_field_tag :file, multiple: true %>
-    <% end %>
-    
-    <script id="template-upload" type="text/x-tmpl">
-    <div id="file-{%=o.unique_id%}" class="upload">
-      {%=o.name%}
-      <div class="progress"><div class="bar" style="width: 0%"></div></div>
+<div class='row'>
+    <div id='composer' class='span12'>
+        <div id='playhead'></div>
+        <!-- Javascript builds composer in here  -->
     </div>
-    </script>
-    
 </div>
+
+<div class='row'>
+    <div id='file_controls' class='span12'>
+    
+        <div id='file_list'>
+            <!--Javascript puts files in here -->
+        </div>    
+    
+        <%= s3_uploader_form post: "#{project_path(@project)}/sound_files", as: "sound_files[sound]", id: "myS3Uploader" do %>
+          <%= file_field_tag :file, multiple: true %>
+        <% end %>
+    
+        <script id="template-upload" type="text/x-tmpl">
+        <div id="file-{%=o.unique_id%}" class="upload">
+          {%=o.name%}
+          <div class="progress"><div class="bar" style="width: 0%"></div></div>
+        </div>
+        </script>
+    
+    </div>
+</div>    

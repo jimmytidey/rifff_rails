@@ -19,6 +19,7 @@
 //= require score.js
 //= require transport.js
 //= require projects.js
+//= require click_events.js
 //= require s3_direct_upload
 
 $(document).ready(function(){ 

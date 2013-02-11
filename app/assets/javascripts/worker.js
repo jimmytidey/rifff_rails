@@ -1,7 +1,3 @@
-
-
-
-
 function Timer(settings)
 {
     this.settings = settings;
@@ -49,11 +45,8 @@ Timer.prototype =
 var rifff = {};
 
 
-
 self.onmessage = function(event){
 
-
-	
 	if (event.data.action == 'play'){
 		var not_first_run = false; 
 		rifff.timer = new Timer({

@@ -79,6 +79,21 @@ footer a, footer a:visited{
   color:#fdfdfd;
 } 
 
+.highlight_box { 
+  border:1px solid black;
+  padding:15px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  margin-top:20px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.133) inset;
+  transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+
+.highlight_box  label { 
+  margin-bottom:-20px;
+}
+
 /* STRUCTURE */
 
 #controls { 
@@ -88,8 +103,9 @@ footer a, footer a:visited{
 
 #composer { 
 	position:relative;
-	height:800px;
+	
 	width:1000px;
+	margin-bottom:40px;
 }
 
 #settings { 
@@ -98,7 +114,16 @@ footer a, footer a:visited{
 }
 
 .setting_field { 
-	width:90px;
+	width:60px;
+}
+
+#file_controls { 
+  margin-top:40px;
+}
+
+#save_settings { 
+  margin-top:30px;
+  height:30px;
 }
 
 /* COMPOSER */
@@ -111,10 +136,23 @@ footer a, footer a:visited{
 	width:100%;
 	clear:both;
 	z-index:1000;
-	background-color:white;
 	height:20px;
-	padding-top:10px;
-	margin-bottom:0px;
+	padding-top:20px;
+	margin-bottom:4px;
+	margin-left:6px;
+	display:inline;
+}
+
+.bank_header { 
+  clear: left;
+  float: left;
+  margin-bottom: 10px;
+  margin-top: 24px;
+}
+
+.title_rename { 
+  margin-top:-10px;
+  margin-left:10px;
 }
 
 .bank_option_container { 
@@ -154,6 +192,28 @@ footer a, footer a:visited{
 	left:2px;
 }
 
+.add_bank_option, .add_bank { 
+  float:left;
+  clear:both;
+  margin-top:4px;
+}
+
+.remove_bank_option, .remove_bank { 
+  color:red;
+  margin-left:10px;
+  cursor:pointer;
+}
+
+.remove_bank {
+  font-size:10px;
+}  
+
+.remove_bank_option  { 
+  position: relative;
+  top: 6px;
+
+}
+
 .step { 
 	width:10px;
 	height:10px;
@@ -165,15 +225,17 @@ footer a, footer a:visited{
 }
 
 #playhead{ 
-	position:absolute;
-	top:10px;
-	bottom:10px;
-	width:12px;
-	left:303px;
-	background-color:#dcdcdc;
-	opacity:0.6;
-	z-index:-4;
+  background-color: #DCDCDC;
+  bottom: 30px;
+  left: 303px;
+  opacity: 0.6;
+  position: absolute;
+  top: 10px;
+  width: 12px;
+  z-index: -4;
 }
+
+/* When it's in show mode */
 
 .show #playhead { 
 	left:5px;
@@ -208,3 +270,8 @@ iframe {
   float:left;
 }
  
+/* Projects index page */ 
+
+.project_listing { 
+  margin-bottom:30px;
+}

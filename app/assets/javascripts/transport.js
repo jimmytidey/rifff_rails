@@ -1,5 +1,4 @@
-console.log("TRANSPORT PAGE");
-
+//MOVE THE PLAYHEAD AROUND 
 rifff.current_step = 0;
 
 rifff.updatePlayhead = function() { 

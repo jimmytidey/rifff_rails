@@ -1,5 +1,13 @@
-<% @projects.each do |project| %>
-    <%= link_to project.name , edit_project_path(project) %> <br/>
-<% end %>
+<div class='row'>
+    <div class='span4 offset4 highlight_box '>
+        <h4>Your Projects</h4>
+        <div class='project_listing'>
+            <% @projects.each do |project| %>
+                <%= link_to project.name , edit_project_path(project) %> <br/>
+            <% end %>
+        </div>
+    
+        <%= render 'form' %>
+    </div>
+</div>    
 
-<%= render 'form' %>
