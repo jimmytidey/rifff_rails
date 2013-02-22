@@ -3,6 +3,9 @@ rifff = {};
 rifff.playstate = '';
 rifff.matrix_load_monitor = 0;
 rifff.matrix_load_target = 0;
+rifff.total_percent_loaded_array = [];
+rifff.aggregate_percent_loaded=0;
+rifff.total_percent_loaded=0;
 var worker = new Worker('/assets/worker.js');
 
 
@@ -50,12 +53,17 @@ rifff.loadSound=function(location, key) {
 		  soundManager.mute("preload_"+key);
 			var percent_loaded = parseInt(this.bytesLoaded / this.bytesTotal * 100); 
 			$('#sound_'+key+' .load_indicator').html(percent_loaded + "%");
+			
+			rifff.total_percent_loaded_array[key] = parseInt(percent_loaded); 
+			rifff.updateTotalPercent()
 		},
 		volume: 0
 	});	
   
 	
 }
+
+
 
 rifff.buildSoundMatrix = function(){ 
 	
@@ -76,6 +84,10 @@ rifff.buildSoundMatrix = function(){
                         rifff.matrix_load_monitor ++;
                         if (rifff.matrix_load_monitor == rifff.matrix_load_target ) {
                             rifff.writeScore();
+                            
+                            //pretend we've loaded all the sounds up finally
+                            rifff.total_percent_loaded_array.push(10000); 
+                            rifff.updateTotalPercent();
                         }
                         
             		}
@@ -225,4 +237,33 @@ rifff.stop = function(){
   rifff.playstate = 'stopped';
 	worker.postMessage({'action':'stop'});
 	soundManager.stopAll();
+}
+
+rifff.updateTotalPercent = function() {
+    
+    if ($('#composer #total_percent_loaded').length ==0) { 
+        var html ="<div class='progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
+        $('#composer').prepend(html);
+    }
+    
+    rifff.aggregate_percent_loaded = 0; 
+    rifff.no_of_files = 0; 
+    
+    $.each(rifff.total_percent_loaded_array, function(key,val) {
+        if(typeof val !== 'undefined') {
+            console.log(parseInt(val) + " KEY: " + key);
+            rifff.aggregate_percent_loaded += parseInt(val);
+            rifff.no_of_files++; 
+        }    
+    });
+    
+    //little hack so the final bit of loading only happens when it's built the sound matrix 
+    rifff.total_percent_loaded = (rifff.aggregate_percent_loaded/rifff.no_of_files) - 10 ;
+   
+    $('#total_percent_loaded .bar').css('width', rifff.total_percent_loaded + "%");
+    
+    if(rifff.total_percent_loaded >= 100) { 
+        $('#composer #total_percent_loaded').remove();
+    }
+  
 }

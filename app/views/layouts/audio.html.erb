@@ -18,35 +18,39 @@
   </head>
   <body>
 
-    <header>
-        <div class="container">
-            
-            <h1 id='main_title'><a href='/'>RIFFF</a></h1>
-            
-            <div id='authentication' >
-                <% if user_signed_in? %>
-                <p id='auth_ident'>Signed in as <%= current_user.email %></p>
-                <div id='auth_links' class="btn-group">
-                    <%= link_to "Sign out", destroy_user_session_path, :class => "btn", :method => :delete %>
-                    <%= link_to "View your projects", projects_path, :class => "btn" %>
-                    
-                </div>
-                <% else %>
-                <div id='auth_links' class="btn-group">
-                    <%= link_to "Sign up",  new_user_registration_path, :class => "btn" %>
-                    <%= link_to "sign in",  new_user_session_path, :class => "btn" %>
-                </div>
-                <% end %>
-            </div>
+    <div id='wrap'>
+        <header>
         
-        </div>
-    </header>
+            <div class="container">
+            
+                <h1 id='main_title'><a href='/'><img src='/assets/title.png'></a></h1>
+            
+                <div id='authentication' >
+                    <% if user_signed_in? %>
+                    <p id='auth_ident'>Signed in as <%= current_user.email %></p>
+                    <div id='auth_links' class="btn-group">
+                        <%= link_to "Sign out", destroy_user_session_path, :class => "btn", :method => :delete %>
+                        <%= link_to "View your projects", projects_path, :class => "btn" %>
+                    
+                    </div>
+                    <% else %>
+                    <div id='auth_links' class="btn-group">
+                        <%= link_to "Sign up",  new_user_registration_path, :class => "btn" %>
+                        <%= link_to "sign in",  new_user_session_path, :class => "btn" %>
+                    </div>
+                    <% end %>
+                </div>
+        
+            </div>
+        </header>
 
-    <div class="container main_container">
-  
-        <%= yield %>
-    
-    </div>
+        <div class="container main_container">
+            <%= yield %>
+        </div>
+        
+        <div id="push"></div>
+        
+    </div>    
 
     <footer>
         <div class="container">
