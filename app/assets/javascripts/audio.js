@@ -1,22 +1,9 @@
 //HANDLES AUDIO PLAYBACK 
 rifff = {};
-
-console.log("AUDIO PAGE");
+rifff.playstate = '';
+rifff.matrix_load_monitor = 0;
+rifff.matrix_load_target = 0;
 var worker = new Worker('/assets/worker.js');
-
-$(document).ready(function(){ 
-
-  //attach click events 
-	$('#play').click(function(){
-	  console.log('playing');
-		rifff.play();
-	});
-
-	$('#stop').click(function(){
-		rifff.stop();
-	});
-
-});
 
 
 rifff.loadSounds = function() { 
@@ -24,7 +11,7 @@ rifff.loadSounds = function() {
 	$.each(rifff.file_list, function(key, file){
 	  //test to see if this file is already loaded
 
-	  if ($('#sound_'+file.id+' .load_indicator').attr('data-loaded') != 1) {
+	  if (!$('#sound_'+file.id).is('*')) {
 	    
   		rifff.loadSound(file.url, file.id)
 		
@@ -56,6 +43,7 @@ rifff.loadSound=function(location, key) {
 			//test to see all items are loaded
 			if ($(".load_indicator[data-loaded='1']").length == $(".load_indicator").length) {
 			    rifff.buildSoundMatrix();
+			    
 			}
 		},
 		whileloading: function(){
@@ -77,12 +65,20 @@ rifff.buildSoundMatrix = function(){
 			var location = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"']").val()
 			
 			if(typeof location != 'undefined' && location != 'None') {
-			
+			    rifff.matrix_load_target++;
 				soundManager.createSound({
 					id: "sound_"+bank_key + '_'+bank_option_key,
 					url: location,
 					autoLoad: true,
 					autoPlay: false,
+					loops:100,
+					onload: function() { //when has every sound loaded into the matrix
+                        rifff.matrix_load_monitor ++;
+                        if (rifff.matrix_load_monitor == rifff.matrix_load_target ) {
+                            rifff.writeScore();
+                        }
+                        
+            		}
 				}); 
 				
 				$(".dial[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"']").parent().mouseup(function(){
@@ -96,25 +92,32 @@ rifff.buildSoundMatrix = function(){
 
 	});
 	
+	
 	//this to destory the sounds created from the file list, however, they will be cached 
 	$.each(rifff.file_list, function(key, file){
 		soundManager.destroySound('preload_'+key);
 	});
+	
+	
 }
 
 
 rifff.play = function(){ 
-	worker.postMessage({'action':'play', 'data': rifff.loop_trigger_interval});
-	rifff.loop_trigger_interval
-	worker.onmessage = function(event){
-		if(event.data) { //only move a step forward after the first iteration
-			rifff.current_step++;
-		}
+   
+  if (rifff.playstate != 'playing' && rifff.playstate != 'first_step' ) { 
+    rifff.playstate = 'first_step';
+  	worker.postMessage({'action':'play', 'data': rifff.loop_trigger_interval});
+  	
+  	worker.onmessage = function(event){
+  	    console.log('workeder message');
+  		if(event.data) { //only move a step forward after the first iteration
+  			rifff.current_step++;
+  		}
 		
-		rifff.playStep();
-		rifff.updatePlayhead();
-	};
-	
+  		rifff.playStep();
+  		rifff.updatePlayhead();
+  	};
+  }
 }
 
 rifff.playStep = function(){ 
@@ -122,48 +125,40 @@ rifff.playStep = function(){
 	var play_array = rifff.score[rifff.current_step];
 	
 	$.each(play_array, function(bank_key,bank_value){
-			
-		if(bank_value !== '-') {
+		console.log(bank_value);
 		
+		//if there is a value in the score stop allsounds and play it ...
+	    
+		if(typeof bank_value['bank_option'] != undefined) {
+		    
+		    //this is in the middle of playback and this is not a run on 
+		    if(bank_value['time']==0 && rifff.playstate=='playing') {
+
+    			//stop all other sounds in this bank
+    			$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val){
+    				soundManager.stop("sound_"+bank_key + '_'+bank_option_key);
+    			});
 			
-			//stop all other sounds in this bank
-			$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val){
-				soundManager.stop("sound_"+bank_key + '_'+bank_option_key);
-			});
+    			rifff.play_sound(bank_key, bank_value['bank_option'], bank_value['time']);
+    		}
+    		
+    		//this is the first step, so play everything 
+    		else if (rifff.playstate=='first_step'){ 
+
+    			//stop all other sounds in this bank
+    			$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val){
+    				soundManager.stop("sound_"+bank_key + '_'+bank_option_key);
+    			});
 			
-			var indicator = $(".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+bank_value+"'] .play_indicator");
-			var loop = $(".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+bank_value+"'] .loop").is(':checked');
-			
-			
-			function play_sound() { 
-			
-				soundManager.play("sound_"+bank_key + '_'+bank_value,{
-					onplay: function() {
-				    	$(indicator).css('background-color', 'red');
-				  	},
-					onfinish: function() {
-				    	$(indicator).css('background-color', 'white');
-					
-						if(loop) { 
-							 play_sound();
-						}
-				  	},
-					onstop: function() {
-				    	$(indicator).css('background-color', 'white');
-				  	},
-					bufferTime: 0
-				});
-			}	
-			
-			play_sound();
-			
+    			rifff.play_sound(bank_key, bank_value['bank_option'], bank_value['time']);
+    		}
 			
 		} else {
 			
 			$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val){
 				
 				var overplay = $(".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"'] .overplay").is(':checked');
-				console.log("overplay! '"+bank_key+"'][data-bank-option='"+bank_option_key+"' -->" + overplay);
+			
 				if(!overplay) {
 					soundManager.stop("sound_"+bank_key + '_'+bank_option_key);
 				}
@@ -171,9 +166,63 @@ rifff.playStep = function(){
 				
 		}	
 	});
+	
+	if (rifff.playstate == 'first_step') { 
+	    rifff.playstate == 'playing'; 
+	}
+}
+
+
+rifff.play_sound = function(bank_key, bank_option, time) { 
+
+    console.log('PLAY: bank_key:' + bank_key + 'bank_option' + bank_option);
+
+    var indicator = $(".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+bank_option+"'] .play_indicator");
+    var loop = $(".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+bank_option+"'] .loop").is(':checked');
+	
+	
+
+    if(loop) {
+        console.log('lloooooppininh');
+    	soundManager.play("sound_"+bank_key + '_'+bank_option,{
+    		onplay: function() {
+    	    	$(indicator).css('background-color', 'red');
+    	  	},
+    		onfinish: function() {
+    	    	$(indicator).css('background-color', 'white');
+    	  	},
+    		onstop: function() {
+    	    	$(indicator).css('background-color', 'white');
+    	  	},
+    		bufferTime: 0,
+    		position: time,
+    		loops:100,
+    		autoLoad:true
+    	});
+    }
+    
+    else {
+        console.log('not looping');
+    	soundManager.play("sound_"+bank_key + '_'+bank_option,{
+    		onplay: function() {
+    	    	$(indicator).css('background-color', 'red');
+    	  	},
+    		onfinish: function() {
+    	    	$(indicator).css('background-color', 'white');
+    	  	},
+    		onstop: function() {
+    	    	$(indicator).css('background-color', 'white');
+    	  	},
+    		bufferTime: 0,
+    		position: time,
+    		loops:0,
+    		autoLoad:true
+    	});
+    }
 }
 
 rifff.stop = function(){ 
+  rifff.playstate = 'stopped';
 	worker.postMessage({'action':'stop'});
 	soundManager.stopAll();
 }

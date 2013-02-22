@@ -39,7 +39,7 @@ gem 'less-rails'
 gem 'soundmanager-rails'
 gem 'haml-rails'
 gem 's3_direct_upload'
-
+gem 'underscore-rails'
 gem 'aws-s3', :require => 'aws/s3'
 
 # To use ActiveModel has_secure_password

@@ -5,6 +5,11 @@ rifff.step = 0;
 rifff.file_list = [] //list of the files available for this project.  
 console.log("PROJECTS PAGE");
 
+//these for when the user wants to add banks 
+rifff.defaults={};
+rifff.defaults.blank_bank        = {"bank_options":[{"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":50,"loop":false,"overplay":false,"file_location":"","bank_option_name":"1option"},{"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":49,"loop":false,"overplay":false,"file_location":"","bank_option_name":"3option"},{"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":50,"loop":false,"overplay":false,"file_location":"","bank_option_name":"2option"},{"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":49,"loop":false,"overplay":false,"file_location":"","bank_option_name":"4option"}],"bank_name":"new"};
+rifff.defaults.blank_bank_option = {"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":50,"loop":false,"overplay":false,"file_location":"","bank_option_name":"1option"};
+
 $(document).ready(function(){ 
 	
 	//detect rifff mode
@@ -15,7 +20,7 @@ $(document).ready(function(){
 		useHTML5Audio: false,
 		preferFlash: true,
 		useHighPerformance: true,
-		debugMode: true,
+		debugMode: false,
 	});
 	
 	
@@ -42,7 +47,6 @@ rifff.loadSoundsLocations = function() {
 		
 		rifff.loadSounds();
 		rifff.renderBanks();
-		rifff.writeScore();
 		rifff.initSettings(); 
 	});
 }
@@ -126,7 +130,7 @@ rifff.renderControls = function(elem, bank_key, bank_option_key) {
   			$(".loop", elem).attr('checked', 'checked');
   		}
 	
-  		$(".dial", elem).knob({'min':0,'max':100, 'width':30, 'height':30});
+  		$(".dial", elem).knob({'min':0,'max':70, 'width':30, 'height':30});
   	}
   	rifff.renderSteps(elem, bank_key, bank_option_key);
   	$(elem).append("<i class='icon-remove-circle remove_bank_option'></i>");
@@ -182,14 +186,6 @@ rifff.saveJson = function() {
 	
 	rifff.getProjectInfo();
 }
-
-
-// Array Remove - By John Resig (MIT Licensed)
-Array.prototype.remove = function(from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
-};
 
 
 

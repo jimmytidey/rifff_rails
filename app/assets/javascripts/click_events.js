@@ -1,5 +1,39 @@
 
 rifff.attachClickEvents = function() {
+  
+  //attach click events 
+  	$('#play').unbind('click');
+	$('#play').click(function(){
+	  console.log('playing');
+		rifff.play();
+	});
+    
+    $('#stop').unbind('click');
+	$('#stop').click(function(){
+		rifff.stop();
+	});
+	
+	$('#forward').unbind('click');
+	$('#forward').click(function(){
+		if (rifff.current_step < rifff.data.project_info.steps-1) {
+			rifff.current_step ++;
+			rifff.updatePlayhead();
+		}
+	});
+    
+    $('#backwards').unbind('click');
+	$('#backwards').click(function(){
+		if (rifff.current_step > 0) {
+			rifff.current_step--;
+			rifff.updatePlayhead();	
+		}		
+	});
+	
+	$('#rewind').unbind('click');
+	$('#rewind').click(function(){
+		rifff.current_step = 0;
+		rifff.updatePlayhead();		
+	});
 		 
 	$('.step').click(function(){
 
@@ -54,7 +88,6 @@ rifff.attachClickEvents = function() {
 	
 	//save the data if the selected file changes
 	$('.file_select').change(function() { 
-	  
 		var bank = $(this).attr('data-bank');
 		var bank_option = $(this).attr('data-bank-option');
 		rifff.data.banks[bank].bank_options[bank_option].file_location = $(this).val();
@@ -64,6 +97,7 @@ rifff.attachClickEvents = function() {
 	});
 	
 	//save the data if the overplay setting changes 
+	$('.overplay').unbind('click');
 	$('.overplay').change(function() { 
 		var bank = $(this).attr('data-bank');
 		var bank_option = $(this).attr('data-bank-option');
@@ -77,6 +111,7 @@ rifff.attachClickEvents = function() {
 	});
 	
 	//save the data if the loop setting change
+	$('.loop').unbind('click');
 	$('.loop').change(function() { 
 		var bank = $(this).attr('data-bank');
 		var bank_option = $(this).attr('data-bank-option');
@@ -93,9 +128,7 @@ rifff.attachClickEvents = function() {
 	$('.add_bank_option').unbind('click');
 	$('.add_bank_option').click(function(){ 
 	  var bank = $(this).parent().attr('data-bank');
-	  var last_bank_option = rifff.data.banks[bank].bank_options.length;
-	  var duplicate = rifff.data.banks[bank].bank_options[last_bank_option-1];
-	  rifff.data.banks[bank].bank_options.push(duplicate);
+	  rifff.data.banks[bank].bank_options.push(rifff.defaults.blank_bank_option);
 	  rifff.saveJson();
 	  rifff.renderBanks();
 	});
@@ -103,9 +136,8 @@ rifff.attachClickEvents = function() {
 	//add another bank  
 	$('.add_bank').unbind('click');
 	$('.add_bank').click(function(){ 
-	  var last_bank = rifff.data.banks.length;
-	  var duplicate = rifff.data.banks[last_bank-1];
-  	rifff.data.banks.push(duplicate);
+
+  	rifff.data.banks.push(rifff.defaults.blank_bank);
 	  rifff.saveJson();
 	  rifff.renderBanks();
 	});
@@ -117,9 +149,9 @@ rifff.attachClickEvents = function() {
 	$('.remove_bank_option').click(function(){
 	  var bank          = $(this).parent().parent().attr('data-bank');
 	  var bank_option   = $(this).parent().attr('data-bank-option');
-	  console.log(bank_option);
+	  console.log("removing " + bank + " " + bank_option);
 	  if (bank_option != 0) { 
-      rifff.data.banks[bank].bank_options.remove(bank_option);
+      rifff.data.banks[bank].bank_options.splice(bank_option,1);
   	  rifff.saveJson();
   	  rifff.renderBanks();
   	}
@@ -133,7 +165,7 @@ rifff.attachClickEvents = function() {
 	$('.remove_bank').click(function(){ 
 	  var bank = $(this).parents('.bank_container').attr('data-bank');
     if (bank != 0) {
-      rifff.data.banks.remove(bank);
+      rifff.data.banks.splice(bank,1);
   	  rifff.saveJson();
   	  rifff.renderBanks();
   	}
