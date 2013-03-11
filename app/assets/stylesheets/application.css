@@ -84,25 +84,27 @@ footer {
   background-image:url('/assets/footer-bkg.png');
   width:100%;
   padding:20px 0px;
-  color:#fdfdfd;
+  color:#000;
 }
 
 #push, #footer {
     height:87px;
+    margin-top:100px;
 }
 
 footer a, footer a:visited{
-  color:#fdfdfd;
+  color:#000;
+  text-decoration:underline;
 } 
 
 .highlight_box { 
   border:1px solid black;
   padding:15px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
   margin-top:20px;
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.133) inset;
+  background-color:rgba(200,200,200,0.1);
   transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 }
 

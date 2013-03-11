@@ -20,7 +20,7 @@ $(document).ready(function(){
 		useHTML5Audio: false,
 		preferFlash: true,
 		useHighPerformance: true,
-		debugMode: false,
+		debugMode: true,
 	});
 	
 	
@@ -130,7 +130,7 @@ rifff.renderControls = function(elem, bank_key, bank_option_key) {
   			$(".loop", elem).attr('checked', 'checked');
   		}
 	
-  		$(".dial", elem).knob({'min':0,'max':70, 'width':30, 'height':30});
+  		//$(".dial", elem).knob({'min':0,'max':70, 'width':30, 'height':30});
   	}
   	rifff.renderSteps(elem, bank_key, bank_option_key);
   	$(elem).append("<i class='icon-remove-circle remove_bank_option'></i>");
