@@ -154,6 +154,8 @@ footer a, footer a:visited{
 	width:100%;
 }
 
+
+
 .bank_title { 
 	width:100%;
 	clear:both;
@@ -255,6 +257,11 @@ footer a, footer a:visited{
   top: 10px;
   width: 12px;
   z-index: -4;
+}
+
+
+#file_controls  { 
+    margin-bottom:200px;
 }
 
 /* When it's in show mode */

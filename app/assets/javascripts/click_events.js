@@ -18,6 +18,7 @@ rifff.attachClickEvents = function() {
 		if (rifff.current_step < rifff.data.project_info.steps-1) {
 			rifff.current_step ++;
 			rifff.updatePlayhead();
+			rifff.stop();
 		}
 	});
     
@@ -26,13 +27,15 @@ rifff.attachClickEvents = function() {
 		if (rifff.current_step > 0) {
 			rifff.current_step--;
 			rifff.updatePlayhead();	
+			rifff.stop();
 		}		
 	});
 	
 	$('#rewind').unbind('click');
 	$('#rewind').click(function(){
 		rifff.current_step = 0;
-		rifff.updatePlayhead();		
+		rifff.updatePlayhead();	
+		rifff.stop();	
 	});
 		 
 	$('.step').click(function(){
@@ -135,11 +138,10 @@ rifff.attachClickEvents = function() {
 	
 	//add another bank  
 	$('.add_bank').unbind('click');
-	$('.add_bank').click(function(){ 
-
-  	rifff.data.banks.push(rifff.defaults.blank_bank);
-	  rifff.saveJson();
-	  rifff.renderBanks();
+	$('.add_bank').click(function(){
+  	    rifff.data.banks.push(rifff.defaults.blank_bank);
+	    rifff.saveJson();
+	    rifff.renderBanks();
 	});
 	
 
@@ -200,6 +202,8 @@ rifff.attachClickEvents = function() {
 		
 		
 		rifff.saveJson();
-		rifff.renderBanks();	
+		rifff.renderBanks();
+		rifff.writeScore();
+		rifff.current_step = 0;	
 	});
 }

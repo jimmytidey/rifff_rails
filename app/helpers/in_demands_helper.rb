@@ -1,0 +1,2 @@
+module InDemandsHelper
+end

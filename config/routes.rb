@@ -1,5 +1,8 @@
 Rifff::Application.routes.draw do
   
+  resources :in_demands
+
+
   devise_for :users
   
   resources :projects do

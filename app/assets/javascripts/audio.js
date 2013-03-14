@@ -10,7 +10,7 @@ var worker = new Worker('/assets/worker.js');
 
 
 rifff.loadSounds = function() { 
-  
+    
 	$.each(rifff.file_list, function(key, file){
 	  //test to see if this file is already loaded
 
@@ -29,7 +29,7 @@ rifff.loadSounds = function() {
       $('#file_list').append(append_string); 
     }   
 	});
-
+    
 }
 
 rifff.loadSound=function(location, key) {
@@ -45,21 +45,21 @@ rifff.loadSound=function(location, key) {
 			soundManager.mute("preload_"+key);
 			//test to see all items are loaded
 			if ($(".load_indicator[data-loaded='1']").length == $(".load_indicator").length) {
-			    rifff.buildSoundMatrix();
 			    
+                window.setTimeout("rifff.buildSoundMatrix()",1000);
 			}
 		},
 		whileloading: function(){
-		  soundManager.mute("preload_"+key);
-			var percent_loaded = parseInt(this.bytesLoaded / this.bytesTotal * 100); 
-			$('#sound_'+key+' .load_indicator').html(percent_loaded + "%");
-			
-			rifff.total_percent_loaded_array[key] = parseInt(percent_loaded); 
-			rifff.updateTotalPercent()
+            soundManager.mute("preload_"+key);
+            var percent_loaded = parseInt(this.bytesLoaded / this.bytesTotal * 100); 
+            $('#sound_'+key+' .load_indicator').html(percent_loaded + "%");
+
+            rifff.total_percent_loaded_array[key] = parseInt(percent_loaded); 
+            rifff.updateTotalPercent();
 		},
 		volume: 0
 	});	
-  
+    
 	
 }
 
@@ -74,6 +74,7 @@ rifff.buildSoundMatrix = function(){
 			
 			if(typeof location != 'undefined' && location != 'None') {
 			    rifff.matrix_load_target++;
+			    //console.log('=====================loading  '+ location);
 				soundManager.createSound({
 					id: "sound_"+bank_key + '_'+bank_option_key,
 					url: location,
@@ -81,8 +82,10 @@ rifff.buildSoundMatrix = function(){
 					autoPlay: false,
 					loops:100,
 					onload: function() { //when has every sound loaded into the matrix
+                        console.log('loaded');
                         rifff.matrix_load_monitor ++;
                         if (rifff.matrix_load_monitor == rifff.matrix_load_target ) {
+                            
                             rifff.writeScore();
                             
                             //pretend we've loaded all the sounds up finally
@@ -94,8 +97,8 @@ rifff.buildSoundMatrix = function(){
 				}); 
 				
 				$(".dial[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"']").parent().mouseup(function(){
-					var volume = parseInt($(".dial",this).val());
-					soundManager.setVolume("sound_"+bank_key + '_'+bank_option_key, volume);
+					//var volume = parseInt($(".dial",this).val());
+					//soundManager.setVolume("sound_"+bank_key + '_'+bank_option_key, volume);
 					rifff.saveJson();
 				});
 				
@@ -109,6 +112,7 @@ rifff.buildSoundMatrix = function(){
 	$.each(rifff.file_list, function(key, file){
 		soundManager.destroySound('preload_'+key);
 	});
+	
 	
 	
 }
@@ -251,19 +255,20 @@ rifff.updateTotalPercent = function() {
     
     $.each(rifff.total_percent_loaded_array, function(key,val) {
         if(typeof val !== 'undefined') {
-            console.log(parseInt(val) + " KEY: " + key);
+            //console.log(parseInt(val) + " KEY: " + key);
             rifff.aggregate_percent_loaded += parseInt(val);
             rifff.no_of_files++; 
         }    
     });
     
     //little hack so the final bit of loading only happens when it's built the sound matrix 
-    rifff.total_percent_loaded = (rifff.aggregate_percent_loaded/rifff.no_of_files) - 10 ;
+    rifff.total_percent_loaded = (rifff.aggregate_percent_loaded/rifff.no_of_files)-10 ;
    
     $('#total_percent_loaded .bar').css('width', rifff.total_percent_loaded + "%");
     
     if(rifff.total_percent_loaded >= 100) { 
         $('#composer #total_percent_loaded').remove();
+         
     }
   
 }

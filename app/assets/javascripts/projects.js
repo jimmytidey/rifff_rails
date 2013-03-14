@@ -106,7 +106,7 @@ rifff.renderControls = function(elem, bank_key, bank_option_key) {
   			$(drop_down).append("<option value='"+val.url +"' selected data-id='"+key+"'>"+ val.name +"</option>");
   		}
   		else { 
-  				$(drop_down).append("<option value='"+val.url +"' data-id='"+key+"'>"+ val.name +"</option>");
+  			$(drop_down).append("<option value='"+val.url +"' data-id='"+key+"'>"+ val.name +"</option>");
   		}
   	}); 
   	

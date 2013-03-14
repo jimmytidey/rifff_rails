@@ -29,7 +29,7 @@ rifff.writeScore = function() {
 	
 	//loop through an make the choices 
 	$.each(rifff.score, function(step_key, step_val) { 
-	    console.log('step---' + step_key);
+	    //console.log('step---' + step_key);
 		$.each(rifff.data.banks, function(bank_key, value){ 
 			
 			option_choice = []; //reset array
@@ -50,14 +50,14 @@ rifff.writeScore = function() {
 			
 			//if there is a high above 3, this must be the sound to play in this bank
 			if (option_choice[bank_option_choice] > 3){
-			    console.log('setting bank ' + bank_key + "to " + bank_option_choice);
+			    //console.log('setting bank ' + bank_key + "to " + bank_option_choice);
 				rifff.score[step_key][bank_key]['bank_option'] = bank_option_choice;
 				rifff.score[step_key][bank_key]['time'] = 0;
 			}
 			
 			//else, need to checkbackwards to see if there is an overplay
 			else {
-			    console.log('testing for overplay');
+			    //console.log('testing for overplay');
                 for (test_step = step_key-1; test_step>=0; test_step--) {
                     if (rifff.score[test_step][bank_key]['bank_option'] != '-') { 
                         overplay_selector = ".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+rifff.score[test_step][bank_key]['bank_option']+"'] .overplay";
@@ -66,8 +66,8 @@ rifff.writeScore = function() {
                         if (overplay && rifff.score[test_step][bank_key]['time'] ==0) {
                             sound_duration = parseInt(soundManager.getSoundById("sound_"+bank_key + '_'+rifff.score[test_step][bank_key]['bank_option']).duration);
                             time_offset    = (60/rifff.bpm) * rifff.bpl * (step_key-test_step)*1000;
-                            console.log('overplay detected, sound duration ' + sound_duration + " time in for this step " + time_offset);
-                             console.log('Test step ' + test_step + "step_key" + step_key);
+                            //console.log('overplay detected, sound duration ' + sound_duration + " time in for this step " + time_offset);
+                             //console.log('Test step ' + test_step + "step_key" + step_key);
                             if (time_offset < sound_duration-100) {
                                 rifff.score[step_key][bank_key]['bank_option'] = rifff.score[test_step][bank_key]['bank_option'];
                                 rifff.score[step_key][bank_key]['time'] = time_offset;
