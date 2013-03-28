@@ -17,6 +17,7 @@
 //= require soundmanager2
 //= require audio.js
 //= require score.js
+//= require worker.js
 //= require transport.js
 //= require projects.js
 //= require click_events.js
