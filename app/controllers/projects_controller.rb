@@ -25,12 +25,19 @@ class ProjectsController < ApplicationController
     end   
   end
   
-  def show 
+  def iframe 
     @project = Project.find(params[:id])
     @sound_files = @project.sound_files
     @sound_file = SoundFile.new    
     render :layout => "bare"
   end 
+  
+  def show 
+    @project = Project.find(params[:id])
+    @sound_files = @project.sound_files
+    @sound_file = SoundFile.new    
+    render :layout => "audio"
+  end
   
   def edit 
     @project = Project.find(params[:id])

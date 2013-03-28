@@ -3,22 +3,24 @@ rifff = {};
 rifff.playstate = '';
 rifff.matrix_load_monitor = 0;
 rifff.matrix_load_target = 0;
-rifff.total_percent_loaded_array = [];
-rifff.aggregate_percent_loaded=0;
-rifff.total_percent_loaded=0;
+
+rifff.files_loaded = 0
+
+rifff.build_sound_matrix_test = true;
 var worker = new Worker('/assets/worker.js');
 
 
 rifff.loadSounds = function() { 
+
     
 	$.each(rifff.file_list, function(key, file){
 	  //test to see if this file is already loaded
 
 	  if (!$('#sound_'+file.id).is('*')) {
 	    
-  		rifff.loadSound(file.url, file.id)
+      rifff.loadSound(file.url, file.id)
 		
-  		var append_string = "<div class='row audio_file' id='sound_"+file.id+"' data-loaded='1' >";
+  	  var append_string = "<div class='row audio_file' id='sound_"+file.id+"' data-loaded='1' >";
       append_string +=    "<div class='load_indicator span1'></div>";
       append_string +=    '<div class="name span5">'+file.name+'</div>'
       append_string +=    '<div class="actions name span3">'
@@ -33,6 +35,8 @@ rifff.loadSounds = function() {
 }
 
 rifff.loadSound=function(location, key) {
+    
+    
 	soundManager.createSound({
 		id: "preload_"+key,
 		url: location,
@@ -43,10 +47,14 @@ rifff.loadSound=function(location, key) {
 			$('#sound_'+key+' .load_indicator').attr('data-loaded','1');
 			$('#sound_'+key+' .load_indicator').html("100%");
 			soundManager.mute("preload_"+key);
+			
+			rifff.files_loaded++;
+			rifff.updateTotalPercent();
+			
 			//test to see all items are loaded
-			if ($(".load_indicator[data-loaded='1']").length == $(".load_indicator").length) {
-			    
+			if ($(".load_indicator[data-loaded='1']").length == $(".load_indicator").length && rifff.build_sound_matrix_test) {
                 window.setTimeout("rifff.buildSoundMatrix()",1000);
+                rifff.build_sound_matrix_test = false
 			}
 		},
 		whileloading: function(){
@@ -54,16 +62,10 @@ rifff.loadSound=function(location, key) {
             var percent_loaded = parseInt(this.bytesLoaded / this.bytesTotal * 100); 
             $('#sound_'+key+' .load_indicator').html(percent_loaded + "%");
 
-            rifff.total_percent_loaded_array[key] = parseInt(percent_loaded); 
-            rifff.updateTotalPercent();
 		},
 		volume: 0
 	});	
-    
-	
 }
-
-
 
 rifff.buildSoundMatrix = function(){ 
 	
@@ -74,7 +76,7 @@ rifff.buildSoundMatrix = function(){
 			
 			if(typeof location != 'undefined' && location != 'None') {
 			    rifff.matrix_load_target++;
-			    //console.log('=====================loading  '+ location);
+			    
 				soundManager.createSound({
 					id: "sound_"+bank_key + '_'+bank_option_key,
 					url: location,
@@ -84,27 +86,24 @@ rifff.buildSoundMatrix = function(){
 					onload: function() { //when has every sound loaded into the matrix
                         console.log('loaded');
                         rifff.matrix_load_monitor ++;
-                        if (rifff.matrix_load_monitor == rifff.matrix_load_target ) {
+                        if (rifff.matrix_load_monitor >= rifff.matrix_load_target ) {
                             
                             rifff.writeScore();
                             
                             //pretend we've loaded all the sounds up finally
-                            rifff.total_percent_loaded_array.push(10000); 
+                            rifff.files_loaded++;
                             rifff.updateTotalPercent();
                         }
-                        
             		}
 				}); 
 				
 				$(".dial[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"']").parent().mouseup(function(){
-					//var volume = parseInt($(".dial",this).val());
-					//soundManager.setVolume("sound_"+bank_key + '_'+bank_option_key, volume);
+					var volume = parseInt($(".dial",this).val());
+					soundManager.setVolume("sound_"+bank_key + '_'+bank_option_key, volume);
 					rifff.saveJson();
 				});
-				
 			}	
 		});
-
 	});
 	
 	
@@ -120,20 +119,24 @@ rifff.buildSoundMatrix = function(){
 
 rifff.play = function(){ 
    
-  if (rifff.playstate != 'playing' && rifff.playstate != 'first_step' ) { 
+    if (rifff.playstate != 'playing' && rifff.playstate != 'first_step' ) { 
     rifff.playstate = 'first_step';
-  	worker.postMessage({'action':'play', 'data': rifff.loop_trigger_interval});
-  	
-  	worker.onmessage = function(event){
-  	    console.log('workeder message');
-  		if(event.data) { //only move a step forward after the first iteration
-  			rifff.current_step++;
-  		}
-		
-  		rifff.playStep();
-  		rifff.updatePlayhead();
-  	};
-  }
+    	worker.postMessage({'action':'play', 'data': rifff.loop_trigger_interval});
+	
+    	worker.onmessage = function(event){
+    	    console.log('workeder message');
+    		if(event.data) { //only move a step forward after the first iteration
+    			rifff.current_step++;
+    		}
+	
+    		rifff.playStep();
+    		rifff.updatePlayhead();
+    	};
+    }
+  
+  	if (rifff.playstate == 'first_step') { 
+	    rifff.playstate = 'playing'; 
+	}
 }
 
 rifff.playStep = function(){ 
@@ -183,9 +186,7 @@ rifff.playStep = function(){
 		}	
 	});
 	
-	if (rifff.playstate == 'first_step') { 
-	    rifff.playstate == 'playing'; 
-	}
+
 }
 
 
@@ -245,30 +246,18 @@ rifff.stop = function(){
 
 rifff.updateTotalPercent = function() {
     
-    if ($('#composer #total_percent_loaded').length ==0) { 
-        var html ="<div class='progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
-        $('#composer').prepend(html);
+    if($('#total_percent_loaded').length == 0) {
+        $(document).ready(function(){
+            var html ="<div class='progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
+            $('#composer').prepend(html);
+        });
+    }    
+    
+    var percent_loaded = ((rifff.files_loaded-1) / rifff.file_list.length) * 100;
+    
+    $('#total_percent_loaded .bar').css('width', percent_loaded + "%");
+    
+    if(percent_loaded >= 100) { 
+        $('#composer #total_percent_loaded').remove();     
     }
-    
-    rifff.aggregate_percent_loaded = 0; 
-    rifff.no_of_files = 0; 
-    
-    $.each(rifff.total_percent_loaded_array, function(key,val) {
-        if(typeof val !== 'undefined') {
-            //console.log(parseInt(val) + " KEY: " + key);
-            rifff.aggregate_percent_loaded += parseInt(val);
-            rifff.no_of_files++; 
-        }    
-    });
-    
-    //little hack so the final bit of loading only happens when it's built the sound matrix 
-    rifff.total_percent_loaded = (rifff.aggregate_percent_loaded/rifff.no_of_files)-10 ;
-   
-    $('#total_percent_loaded .bar').css('width', rifff.total_percent_loaded + "%");
-    
-    if(rifff.total_percent_loaded >= 100) { 
-        $('#composer #total_percent_loaded').remove();
-         
-    }
-  
 }

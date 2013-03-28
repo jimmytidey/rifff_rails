@@ -15,7 +15,9 @@
 
 /* Typography */
 
-
+a { 
+    text-decoration:underline;
+}
 
 /* Main Layout */ 
 
@@ -85,10 +87,11 @@ footer {
   width:100%;
   padding:20px 0px;
   color:#fdfdfd;
+  height:83px;
 }
 
 #push, #footer {
-    height:87px;
+    height:150px
 }
 
 footer a, footer a:visited{
@@ -108,6 +111,10 @@ footer a, footer a:visited{
 
 .highlight_box  label { 
   margin-bottom:-20px;
+}
+
+#total_percent_loaded {
+    margin-top:5px;
 }
 
 /* STRUCTURE */
@@ -260,6 +267,7 @@ footer a, footer a:visited{
 }
 
 
+
 #file_controls  { 
     margin-bottom:200px;
 }
@@ -268,27 +276,52 @@ footer a, footer a:visited{
 
 .show #playhead { 
 	left:5px;
-	bottom:350px;
+	bottom:10px;
 }
+
 
 .show .file_select { 
 	display:none;
 }
 
+.iframe_content #total_percent_loaded { 
+    width:350px;
+}
+
+.show .step {
+    border:none;
+    width:10px;
+    margin-left:7px;
+}
+
+.show .bank_option_container {
+    height:6px;
+}
+
 /* Welcome page */
+
+.welcome .main_container { 
+    margin-top:10px;
+}
 
 iframe { 
   border:none;
   overflow:hidden;
   width:100%;
-  height:600px;
+  height:900px;
 }
 
 /* Iframe / show project page */
 
 .iframe_content {
-  
+    width:500px;
 }
+
+.iframe_content #composer {
+    width:500px;
+}
+
+
 
 .iframe_content #randomise { 
   width:100px;

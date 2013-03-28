@@ -4,12 +4,7 @@
 <h1><%= @project.name %></h1>
 <p><%= link_to 'back to projects', projects_path() %></p>
 
-<% if @project.json %>
-    <script type="text/javascript">
-        var list_json = <%=raw @project.json %>
-        var project_id = <%= @project.id %>
-    </script>
-<% end %>
+
 
 
 

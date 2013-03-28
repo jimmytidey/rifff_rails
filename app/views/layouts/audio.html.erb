@@ -17,6 +17,13 @@
 
   </head>
   <body>
+      
+      <% if @project.json %>
+          <script type="text/javascript">
+              var list_json = <%=raw @project.json %>
+              var project_id = <%= @project.id %>
+          </script>
+      <% end %>
 
     <div id='wrap'>
         <header>
@@ -61,7 +68,7 @@
     <!-- Javascripts
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag :application %>
 
   </body>
 </html>

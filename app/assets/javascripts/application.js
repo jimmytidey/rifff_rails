@@ -22,6 +22,7 @@
 //= require click_events.js
 //= require s3_direct_upload
 
+
 $(document).ready(function(){ 
 	
 	$("#myS3Uploader").S3Uploader();

@@ -27,7 +27,7 @@ group :production do
   gem "pg"
 end
 
-
+gem 'deep_cloneable', '~> 1.5.0'
 gem 'jquery-rails'
 gem 'devise'
 gem 'carrierwave'

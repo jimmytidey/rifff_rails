@@ -72,7 +72,12 @@ rifff.renderBanks = function(){ //loop through each bank and render it
 		$('#composer').append(bank_element);
 		
 		//add the title to the bank
-		$(bank_element).append("<div class='bank_header'><h4 class='bank_title'>" +bank_val.bank_name +"</h4><span class='remove_bank'>[DELETE]</span></div>");
+		if (rifff.mode == 'edit') {
+		    $(bank_element).append("<div class='bank_header'><h4 class='bank_title'>" +bank_val.bank_name +"</h4><span class='remove_bank'>[DELETE]</span></div>");
+		}
+		else { 
+		    $(bank_element).append("<div class='bank_header'><h4 class='bank_title'>" +bank_val.bank_name +"</h4></div>");
+		}
 		
 		//add the bank options to the bank 
 		$.each(bank_val.bank_options, function(bank_option_key, bank_option_val){ 
@@ -82,14 +87,16 @@ rifff.renderBanks = function(){ //loop through each bank and render it
 			rifff.renderControls(bank_option_element,bank_key, bank_option_key);
 						
 		});
-		
-		//append the button to add more options 
-		$(bank_element).append("<input type='button' class='btn add_bank_option' value='Add another option' />");
+		if (rifff.mode == 'edit') {
+		    //append the button to add more options 
+		    $(bank_element).append("<input type='button' class='btn add_bank_option' value='Add another option' />");
+	    }
 	});
 	
 	//append the button to add more options 
-	$('#composer').append("<br/><input type='button' class='btn add_bank' value='Add a new bank' />");
-	
+	if (rifff.mode == 'edit') {
+	    $('#composer').append("<br/><input type='button' class='btn add_bank' value='Add a new bank' />");
+	}
 	
 	rifff.attachClickEvents();
 }
@@ -133,7 +140,9 @@ rifff.renderControls = function(elem, bank_key, bank_option_key) {
   		$(".dial", elem).knob({'min':0,'max':70, 'width':30, 'height':30});
   	}
   	rifff.renderSteps(elem, bank_key, bank_option_key);
-  	$(elem).append("<i class='icon-remove-circle remove_bank_option'></i>");
+  	if (rifff.mode == 'edit') { 
+  	    $(elem).append("<i class='icon-remove-circle remove_bank_option'></i>");
+    }
   }	
 }
 
@@ -145,15 +154,17 @@ rifff.renderSteps = function(elem, bank_key, bank_option_key) {
   	value = rifff.data.banks[bank_key].bank_options[bank_option_key].sequence[i];
   	step_html = $("<div data-bank='"+bank_key+"' data-value='"+value+"' data-bank-option='"+bank_option_key+"' data-step-no='"+i+"' class='step'  ></div>'");
   	$(elem).append(step_html);
-  	if (value == 1) { 
-  		$(step_html).css('background-color', '#ccc');
-  	}  
-  	if (value == 2) { 
-  		$(step_html).css('background-color', '#999');
-  	}
-  	if (value == 3) { 
-  		$(step_html).css('background-color', '#222');
-  	}
+      	if (rifff.mode == 'edit') { 
+      	if (value == 1) { 
+      		$(step_html).css('background-color', '#ccc');
+      	}  
+      	if (value == 2) { 
+      		$(step_html).css('background-color', '#999');
+      	}
+      	if (value == 3) { 
+      		$(step_html).css('background-color', '#222');
+      	}
+     } 	
   }
 }
 
