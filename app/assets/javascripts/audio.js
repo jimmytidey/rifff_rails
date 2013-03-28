@@ -1,43 +1,36 @@
 //HANDLES AUDIO PLAYBACK 
+console.log("AUDIO PAGE");
 rifff = {};
 rifff.playstate = '';
 rifff.matrix_load_monitor = 0;
 rifff.matrix_load_target = 0;
 
-rifff.files_loaded = 0
+rifff.files_loaded = 0;
 
 rifff.build_sound_matrix_test = true;
 var worker = new Worker('/assets/worker.js');
 
-
-rifff.loadSounds = function() { 
-
-    
+rifff.loadSounds = function() {     
 	$.each(rifff.file_list, function(key, file){
 	  //test to see if this file is already loaded
+        if (!$('#sound_'+file.id).is('*')) {
 
-    if (!$('#sound_'+file.id).is('*')) {
+            rifff.loadSound(file.url, file.id)
 
-        rifff.loadSound(file.url, file.id)
+            var append_string = "<div class='row audio_file' id='sound_"+file.id+"' data-loaded='1' >";
+            append_string +=    "<div class='load_indicator span1'></div>";
+            append_string +=    '<div class="name span5">'+file.name+'</div>'
+            append_string +=    '<div class="actions name span3">'
+            append_string +=    '<a rel="nofollow" data-remote="true" data-method="delete" data-confirm="Are you sure?" href="/projects/'+project_id+'/sound_files/'+file.id+'">remove</a>'
+            append_string +=    '</div>'
+            append_string +=    '</div>'
 
-        var append_string = "<div class='row audio_file' id='sound_"+file.id+"' data-loaded='1' >";
-        append_string +=    "<div class='load_indicator span1'></div>";
-        append_string +=    '<div class="name span5">'+file.name+'</div>'
-        append_string +=    '<div class="actions name span3">'
-        append_string +=    '<a rel="nofollow" data-remote="true" data-method="delete" data-confirm="Are you sure?" href="/projects/'+project_id+'/sound_files/'+file.id+'">remove</a>'
-        append_string +=    '</div>'
-        append_string +=    '</div>'
-
-        $('#file_list').append(append_string); 
-    }   
-
+            $('#file_list').append(append_string); 
+        }   
 	});
-    
 }
 
-rifff.loadSound=function(location, key) {
-    
-    
+rifff.loadSound = function(location, key) {
 	soundManager.createSound({
 		id: "preload_"+key,
 		url: location,
@@ -55,7 +48,7 @@ rifff.loadSound=function(location, key) {
 			rifff.updateTotalPercent();
 			
 			//test to see all items are loaded
-			if ($(".load_indicator[data-loaded='1']").length == $(".load_indicator").length && rifff.build_sound_matrix_test) {
+			if ($(".load_indicator[data-loaded='1']").length === $(".load_indicator").length && rifff.build_sound_matrix_test) {
                 window.setTimeout("rifff.buildSoundMatrix()",1000);
                 rifff.build_sound_matrix_test = false
 			}
@@ -141,7 +134,7 @@ rifff.play = function(){
     	};
     }
   
-  	if (rifff.playstate == 'first_step') { 
+  	if (rifff.playstate === 'first_step') { 
 	    rifff.playstate = 'playing'; 
 	}
 

@@ -12,16 +12,16 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require audio.js
 //= require twitter/bootstrap.js
 //= require knob.js
 //= require soundmanager2
-//= require audio.js
 //= require score.js
-//= require worker.js
 //= require transport.js
-//= require projects.js
 //= require click_events.js
 //= require s3_direct_upload
+//= require projects.js
+
 
 
 $(document).ready(function(){ 

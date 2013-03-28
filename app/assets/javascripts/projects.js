@@ -39,15 +39,15 @@ rifff.loadSoundsLocations = function() {
 		
 		rifff.file_list.sort(alphabetise)
 
-    function alphabetise(a, b){
-      if(a.name<b.name) return -1;
-      if(a.name>b.name) return 1;
-      return 0;
-    }
+        function alphabetise(a, b){
+            if(a.name<b.name) return -1;
+            if(a.name>b.name) return 1;
+            return 0;
+        }
 		
-		rifff.loadSounds();
-		rifff.renderBanks();
-		rifff.initSettings(); 
+    	rifff.loadSounds();
+    	rifff.renderBanks();
+    	rifff.initSettings(); 
 	});
 }
 
