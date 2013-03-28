@@ -16,20 +16,21 @@ rifff.loadSounds = function() {
 	$.each(rifff.file_list, function(key, file){
 	  //test to see if this file is already loaded
 
-	  if (!$('#sound_'+file.id).is('*')) {
-	    
-      rifff.loadSound(file.url, file.id)
-		
-  	  var append_string = "<div class='row audio_file' id='sound_"+file.id+"' data-loaded='1' >";
-      append_string +=    "<div class='load_indicator span1'></div>";
-      append_string +=    '<div class="name span5">'+file.name+'</div>'
-      append_string +=    '<div class="actions name span3">'
-      append_string +=    '<a rel="nofollow" data-remote="true" data-method="delete" data-confirm="Are you sure?" href="/projects/'+project_id+'/sound_files/'+file.id+'">remove</a>'
-      append_string +=    '</div>'
-      append_string +=    '</div>'
-    
-      $('#file_list').append(append_string); 
+    if (!$('#sound_'+file.id).is('*')) {
+
+        rifff.loadSound(file.url, file.id)
+
+        var append_string = "<div class='row audio_file' id='sound_"+file.id+"' data-loaded='1' >";
+        append_string +=    "<div class='load_indicator span1'></div>";
+        append_string +=    '<div class="name span5">'+file.name+'</div>'
+        append_string +=    '<div class="actions name span3">'
+        append_string +=    '<a rel="nofollow" data-remote="true" data-method="delete" data-confirm="Are you sure?" href="/projects/'+project_id+'/sound_files/'+file.id+'">remove</a>'
+        append_string +=    '</div>'
+        append_string +=    '</div>'
+
+        $('#file_list').append(append_string); 
     }   
+
 	});
     
 }
@@ -43,9 +44,11 @@ rifff.loadSound=function(location, key) {
 		autoLoad: true,
 		autoPlay: false,
 		onload: function() {
+		    console.log('LOADED------------>URL: ' +  location + " ID: " + key );
 			$('#sound_'+key+' .load_indicator').css('background-color','green');
 			$('#sound_'+key+' .load_indicator').attr('data-loaded','1');
 			$('#sound_'+key+' .load_indicator').html("100%");
+<<<<<<< HEAD
 			soundManager.mute("preload_"+key);
 			
 			rifff.files_loaded++;
@@ -62,13 +65,29 @@ rifff.loadSound=function(location, key) {
             var percent_loaded = parseInt(this.bytesLoaded / this.bytesTotal * 100); 
             $('#sound_'+key+' .load_indicator').html(percent_loaded + "%");
 
+=======
+			//  soundManager.mute("preload_"+key);
+			//test to see all items are loaded
+			if ($(".load_indicator[data-loaded='1']").length == $(".load_indicator").length) {
+			    rifff.buildSoundMatrix();
+                rifff.writeScore();
+			}
+		},
+		whileloading: function(){
+		    //soundManager.mute("preload_"+key);
+			var percent_loaded = parseInt(this.bytesLoaded / this.bytesTotal * 100); 
+			$('#sound_'+key+' .load_indicator').html(percent_loaded + "%");
+			
+			rifff.total_percent_loaded_array[key] = parseInt(percent_loaded); 
+			rifff.updateTotalPercent()
+>>>>>>> b6a100e2d1cf53f8ef56e361fbc2c2652949678b
 		},
 		volume: 0
 	});	
 }
 
 rifff.buildSoundMatrix = function(){ 
-	
+	console.log('sound matrix being writen');
 	$.each(rifff.data.banks, function(bank_key, bank_val){	
 		$.each(bank_val.bank_options, function(bank_option_key, bank_option_val){
 			
@@ -76,13 +95,18 @@ rifff.buildSoundMatrix = function(){
 			
 			if(typeof location != 'undefined' && location != 'None') {
 			    rifff.matrix_load_target++;
+<<<<<<< HEAD
 			    
+=======
+			    console.log('loading...');
+>>>>>>> b6a100e2d1cf53f8ef56e361fbc2c2652949678b
 				soundManager.createSound({
 					id: "sound_"+bank_key + '_'+bank_option_key,
 					url: location,
 					autoLoad: true,
 					autoPlay: false,
 					loops:100,
+<<<<<<< HEAD
 					onload: function() { //when has every sound loaded into the matrix
                         console.log('loaded');
                         rifff.matrix_load_monitor ++;
@@ -94,6 +118,11 @@ rifff.buildSoundMatrix = function(){
                             rifff.files_loaded++;
                             rifff.updateTotalPercent();
                         }
+=======
+					onload: function() { //when has every sound loaded into the matrix?
+                        console.log('loaded...');
+                        
+>>>>>>> b6a100e2d1cf53f8ef56e361fbc2c2652949678b
             		}
 				}); 
 				
@@ -109,7 +138,7 @@ rifff.buildSoundMatrix = function(){
 	
 	//this to destory the sounds created from the file list, however, they will be cached 
 	$.each(rifff.file_list, function(key, file){
-		soundManager.destroySound('preload_'+key);
+		//soundManager.destroySound('preload_'+key);
 	});
 	
 	
@@ -121,6 +150,7 @@ rifff.play = function(){
    
     if (rifff.playstate != 'playing' && rifff.playstate != 'first_step' ) { 
     rifff.playstate = 'first_step';
+<<<<<<< HEAD
     	worker.postMessage({'action':'play', 'data': rifff.loop_trigger_interval});
 	
     	worker.onmessage = function(event){
@@ -137,6 +167,20 @@ rifff.play = function(){
   	if (rifff.playstate == 'first_step') { 
 	    rifff.playstate = 'playing'; 
 	}
+=======
+  	worker.postMessage({'action':'play', 'data': rifff.loop_trigger_interval});
+  	
+  	worker.onmessage = function(event){
+  	    
+  		if(event.data) { //only move a step forward after the first iteration
+  			rifff.current_step++;
+  		}
+		
+  		rifff.playStep();
+  		rifff.updatePlayhead();
+  	};
+  }
+>>>>>>> b6a100e2d1cf53f8ef56e361fbc2c2652949678b
 }
 
 rifff.playStep = function(){ 
@@ -144,7 +188,6 @@ rifff.playStep = function(){
 	var play_array = rifff.score[rifff.current_step];
 	
 	$.each(play_array, function(bank_key,bank_value){
-		console.log(bank_value);
 		
 		//if there is a value in the score stop allsounds and play it ...
 	    
@@ -200,7 +243,7 @@ rifff.play_sound = function(bank_key, bank_option, time) {
 	
 
     if(loop) {
-        console.log('lloooooppininh');
+        
     	soundManager.play("sound_"+bank_key + '_'+bank_option,{
     		onplay: function() {
     	    	$(indicator).css('background-color', 'red');
@@ -253,9 +296,24 @@ rifff.updateTotalPercent = function() {
         });
     }    
     
+<<<<<<< HEAD
     var percent_loaded = ((rifff.files_loaded-1) / rifff.file_list.length) * 100;
     
     $('#total_percent_loaded .bar').css('width', percent_loaded + "%");
+=======
+    $.each(rifff.total_percent_loaded_array, function(key,val) {
+        if(typeof val !== 'undefined') {
+         
+            rifff.aggregate_percent_loaded += parseInt(val);
+            rifff.no_of_files++; 
+        }    
+    });
+    
+    //little hack so the final bit of loading only happens when it's built the sound matrix 
+    rifff.total_percent_loaded = (rifff.aggregate_percent_loaded/rifff.no_of_files);
+   
+    $('#total_percent_loaded .bar').css('width', rifff.total_percent_loaded + "%");
+>>>>>>> b6a100e2d1cf53f8ef56e361fbc2c2652949678b
     
     if(percent_loaded >= 100) { 
         $('#composer #total_percent_loaded').remove();     
