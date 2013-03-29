@@ -30,6 +30,7 @@ rifff.writeScore = function() {
 	$.each(rifff.score, function(step_key, step_val) { 
 
 		$.each(rifff.data.banks, function(bank_key, value){ 
+			console.log("writing score for  step" + step_key + " Bank" + bank_key );
 			
 			option_choice = []; //reset array
 			
@@ -46,11 +47,14 @@ rifff.writeScore = function() {
 			//find highest value 			
 			bank_option_choice = option_choice.max();
 			
+			
+			
 			//if there is a high above 3, this must be the sound to play in this bank
 			if (option_choice[bank_option_choice] > 3){
 			    //console.log('setting bank ' + bank_key + "to " + bank_option_choice);
 				rifff.score[step_key][bank_key]['bank_option'] = bank_option_choice;
 				rifff.score[step_key][bank_key]['time'] = 0;
+				
 			}
 			
 			//else, need to checkbackwards to see if there is an overplay
@@ -58,9 +62,8 @@ rifff.writeScore = function() {
 			    //console.log('testing for overplay');
                 for (test_step = step_key-1; test_step>=0; test_step--) {
                     if (rifff.score[test_step][bank_key]['bank_option'] != '-') { 
-                        overplay_selector = ".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+rifff.score[test_step][bank_key]['bank_option']+"'] .overplay";
-                        overplay = $(overplay_selector).is(':checked');	  
-                       
+                        var overplay = rifff.data.banks[bank_key].bank_options[bank_option_choice].overplay;
+                        
                         if (overplay && rifff.score[test_step][bank_key]['time'] ==0) {
                             sound_duration = parseInt(soundManager.getSoundById("sound_"+bank_key + '_'+rifff.score[test_step][bank_key]['bank_option']).duration);
                             time_offset    = (60/rifff.bpm) * rifff.bpl * (step_key-test_step)*1000;
@@ -70,22 +73,23 @@ rifff.writeScore = function() {
                                 rifff.score[step_key][bank_key]['time'] = time_offset;
                             }
                         }
-                        else { 
-                            //rifff.score[step_key][bank_key]['bank_option'] = '-';
-                            //this step has no value
-                        }
-                    
                     }
                 }  
 			}
+			if(step_key == parseInt(rifff.data.project_info.steps)-1 &&  rifff.data.banks[bank_key].bank_options.length == bank_key) { 
+    	        rifff.renderScore();
+    	    }
 			
 		});
+
 	});
 
-	rifff.renderScore(); 
-}
+    
+};
 
 rifff.renderScore = function() { 
+	console.log('Render Score');
+	
 	
 	var selector;
 	
@@ -102,7 +106,7 @@ rifff.renderScore = function() {
 
 		});
 	});
-}
+};
 
 
 

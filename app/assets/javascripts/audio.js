@@ -10,7 +10,20 @@ rifff.files_loaded = 0;
 rifff.build_sound_matrix_test = true;
 var worker = new Worker('/assets/worker.js');
 
-rifff.loadSounds = function() {     
+rifff.loadSounds = function() {    
+    
+    console.log('loading sounds...');
+    
+    $(document).ready(function(){
+        
+        if($('#total_percent_loaded').length == 0) {    
+            var html ="<div class='progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
+            console.log('no comp?' + $('#composer'));
+            $('#composer').before(html);
+        }
+    });
+
+     
 	$.each(rifff.file_list, function(key, file){
 	  //test to see if this file is already loaded
         if (!$('#sound_'+file.id).is('*')) {
@@ -37,7 +50,7 @@ rifff.loadSound = function(location, key) {
 		autoLoad: true,
 		autoPlay: false,
 		onload: function() {
-		    console.log('LOADED------------>URL: ' +  location + " ID: " + key );
+		    //console.log('LOADED------------>URL: ' +  location + " ID: " + key );
 			$('#sound_'+key+' .load_indicator').css('background-color','green');
 			$('#sound_'+key+' .load_indicator').attr('data-loaded','1');
 			$('#sound_'+key+' .load_indicator').html("100%");
@@ -63,7 +76,7 @@ rifff.loadSound = function(location, key) {
 }
 
 rifff.buildSoundMatrix = function(){ 
-	console.log('sound matrix being writen');
+	///console.log('sound matrix being writen');
 	$.each(rifff.data.banks, function(bank_key, bank_val){	
 		$.each(bank_val.bank_options, function(bank_option_key, bank_option_val){
 			
@@ -80,15 +93,17 @@ rifff.buildSoundMatrix = function(){
 					loops:100,
 
 					onload: function() { //when has every sound loaded into the matrix
-                        console.log('loaded');
+                        
                         rifff.matrix_load_monitor ++;
+                        console.log('loaded' + rifff.matrix_load_monitor + 'of' + rifff.matrix_load_target);
                         if (rifff.matrix_load_monitor >= rifff.matrix_load_target ) {
                             
-                            rifff.writeScore();
+                            
                             
                             //pretend we've loaded all the sounds up finally
-                            rifff.files_loaded++;
+                            rifff.files_loaded = rifff.files_loaded+1;
                             rifff.updateTotalPercent();
+                            rifff.writeScore();
                         }
 
             		}
@@ -122,7 +137,7 @@ rifff.play = function(){
     	worker.postMessage({'action':'play', 'data': rifff.loop_trigger_interval});
 	
     	worker.onmessage = function(event){
-    	    console.log('workeder message');
+    	    //console.log('workeder message');
     		if(event.data) { //only move a step forward after the first iteration
     			rifff.current_step++;
     		}
@@ -142,9 +157,13 @@ rifff.playStep = function(){
 	
 	var play_array = rifff.score[rifff.current_step];
 	
+
+	
 	$.each(play_array, function(bank_key,bank_value){
 		
 		//if there is a value in the score stop allsounds and play it ...
+		
+		
 		if(typeof bank_value['bank_option'] != undefined) {
 		    
     		//stop all other sounds in this bank
@@ -158,9 +177,9 @@ rifff.playStep = function(){
 			
 			$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val){
 				
-				var overplay = $(".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"'] .overplay").is(':checked');
+				var overplay = rifff.data.banks[bank_key].bank_options[bank_option_key].overplay;
 			
-				if(!overplay) {
+				if(overplay) {
 					soundManager.stop("sound_"+bank_key + '_'+bank_option_key);
 				}
 			});	
@@ -226,19 +245,12 @@ rifff.stop = function(){
 
 rifff.updateTotalPercent = function() {
     
-    if($('#total_percent_loaded').length == 0) {
-        $(document).ready(function(){
-            var html ="<div class='progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
-            $('#composer').prepend(html);
-        });
-    }    
-    
     var percent_loaded = ((rifff.files_loaded-1) / rifff.file_list.length) * 100;
     
     $('#total_percent_loaded .bar').css('width', percent_loaded + "%");
 
     
     if(percent_loaded >= 100) { 
-        $('#composer #total_percent_loaded').remove();     
+        $('#total_percent_loaded').remove();     
     }
 }
