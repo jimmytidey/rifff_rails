@@ -2,8 +2,7 @@
 console.log("AUDIO PAGE");
 rifff = {};
 rifff.playstate = '';
-rifff.matrix_load_monitor = 0;
-rifff.matrix_load_target = 0;
+
 
 rifff.files_loaded = 0;
 
@@ -76,11 +75,16 @@ rifff.loadSound = function(location, key) {
 }
 
 rifff.buildSoundMatrix = function(){ 
-	///console.log('sound matrix being writen');
+    rifff.matrix_load_monitor = 0;
+    rifff.matrix_load_target = 0;
+	console.log('sound matrix being writen');
 	$.each(rifff.data.banks, function(bank_key, bank_val){	
 		$.each(bank_val.bank_options, function(bank_option_key, bank_option_val){
 			
+			soundManager.destroySound("sound_"+bank_key + '_'+bank_option_key);
+			
 			var location = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"']").val()
+			 
 			
 			if(typeof location != 'undefined' && location != 'None') {
 			    rifff.matrix_load_target++;
@@ -91,21 +95,15 @@ rifff.buildSoundMatrix = function(){
 					autoLoad: true,
 					autoPlay: false,
 					loops:100,
-
 					onload: function() { //when has every sound loaded into the matrix
-                        
                         rifff.matrix_load_monitor ++;
                         console.log('loaded' + rifff.matrix_load_monitor + 'of' + rifff.matrix_load_target);
                         if (rifff.matrix_load_monitor >= rifff.matrix_load_target ) {
-                            
-                            
-                            
                             //pretend we've loaded all the sounds up finally
                             rifff.files_loaded = rifff.files_loaded+1;
                             rifff.updateTotalPercent();
                             rifff.writeScore();
                         }
-
             		}
 				}); 
 				
