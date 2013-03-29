@@ -17,6 +17,7 @@
 //= require knob.js
 //= require soundmanager2
 //= require score.js
+//= require worker.js
 //= require transport.js
 //= require click_events.js
 //= require s3_direct_upload
