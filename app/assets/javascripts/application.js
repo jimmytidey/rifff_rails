@@ -17,7 +17,6 @@
 //= require knob.js
 //= require soundmanager2
 //= require score.js
-//= require worker.js
 //= require transport.js
 //= require click_events.js
 //= require s3_direct_upload
@@ -26,8 +25,6 @@
 
 
 $(document).ready(function(){ 
-	
 	$("#myS3Uploader").S3Uploader();
-
 });	
 
