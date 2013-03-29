@@ -12,7 +12,6 @@ rifff.writeScore = function() {
     console.log('writing score');
 	var options_in_bank; 
 	var option_choice = []; 
-	var certain_play; 
 	var overplay;
 	var sound_duration;
 	var time_offset;
@@ -33,7 +32,6 @@ rifff.writeScore = function() {
 		$.each(rifff.data.banks, function(bank_key, value){ 
 			
 			option_choice = []; //reset array
-			certain_play = false; 
 			
 			//move values into fresh array & note if this step is certain to play
 			$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val) { 
@@ -85,7 +83,6 @@ rifff.writeScore = function() {
 	});
 
 	rifff.renderScore(); 
-	
 }
 
 rifff.renderScore = function() { 

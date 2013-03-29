@@ -57,8 +57,6 @@ rifff.loadSound = function(location, key) {
             soundManager.mute("preload_"+key);
             var percent_loaded = parseInt(this.bytesLoaded / this.bytesTotal * 100); 
             $('#sound_'+key+' .load_indicator').html(percent_loaded + "%");
-
-
 		},
 		volume: 0
 	});	
@@ -108,7 +106,7 @@ rifff.buildSoundMatrix = function(){
 	
 	//this to destory the sounds created from the file list, however, they will be cached 
 	$.each(rifff.file_list, function(key, file){
-		//soundManager.destroySound('preload_'+key);
+		soundManager.destroySound('preload_'+key);
 	});
 	
 	
@@ -147,30 +145,14 @@ rifff.playStep = function(){
 	$.each(play_array, function(bank_key,bank_value){
 		
 		//if there is a value in the score stop allsounds and play it ...
-	    
 		if(typeof bank_value['bank_option'] != undefined) {
 		    
-		    //this is in the middle of playback and this is not a run on 
-		    if(bank_value['time']==0 && rifff.playstate=='playing') {
-
-    			//stop all other sounds in this bank
-    			$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val){
-    				soundManager.stop("sound_"+bank_key + '_'+bank_option_key);
-    			});
-			
-    			rifff.play_sound(bank_key, bank_value['bank_option'], bank_value['time']);
-    		}
-    		
-    		//this is the first step, so play everything 
-    		else if (rifff.playstate=='first_step'){ 
-
-    			//stop all other sounds in this bank
-    			$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val){
-    				soundManager.stop("sound_"+bank_key + '_'+bank_option_key);
-    			});
-			
-    			rifff.play_sound(bank_key, bank_value['bank_option'], bank_value['time']);
-    		}
+    		//stop all other sounds in this bank
+    		$.each(rifff.data.banks[bank_key].bank_options, function(bank_option_key, bank_option_val){
+    			soundManager.stop("sound_"+bank_key + '_'+bank_option_key);
+    		});
+	
+    		rifff.play_sound(bank_key, bank_value['bank_option'], bank_value['time']);
 			
 		} else {
 			
@@ -185,8 +167,6 @@ rifff.playStep = function(){
 				
 		}	
 	});
-	
-
 }
 
 

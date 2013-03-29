@@ -20,7 +20,7 @@ $(document).ready(function(){
 		useHTML5Audio: false,
 		preferFlash: true,
 		useHighPerformance: true,
-		debugMode: true,
+		debugMode: false,
 	});
 	
 	
