@@ -61,7 +61,9 @@ rifff.writeScore = function() {
 			else {
 			    //console.log('testing for overplay');
                 for (test_step = step_key-1; test_step>=0; test_step--) {
-                    if (rifff.score[test_step][bank_key]['bank_option'] != '-') { 
+                    if (rifff.score[test_step][bank_key]['bank_option'] != '-' && typeof rifff.score[test_step][bank_key]['bank_option'] != 'undefined') {
+                        bank_option_choice = rifff.score[test_step][bank_key]['bank_option']
+                        console.log(bank_key + " - " + bank_option_choice);
                         var overplay = rifff.data.banks[bank_key].bank_options[bank_option_choice].overplay;
                         
                         if (overplay && rifff.score[test_step][bank_key]['time'] ==0) {
