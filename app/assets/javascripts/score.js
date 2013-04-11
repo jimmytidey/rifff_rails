@@ -78,7 +78,7 @@ rifff.writeScore = function() {
                     }
                 }  
 			}
-			if(step_key == parseInt(rifff.data.project_info.steps)-1 &&  rifff.data.banks[bank_key].bank_options.length == bank_key) { 
+			if(step_key == parseInt(rifff.data.project_info.steps)-1 &&  (rifff.data.banks.length-1) == bank_key) { 
     	        rifff.renderScore();
     	    }
 			

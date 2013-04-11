@@ -85,7 +85,6 @@ rifff.buildSoundMatrix = function(){
 			
 			var location = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"']").val()
 			 
-			
 			if(typeof location != 'undefined' && location != 'None') {
 			    rifff.matrix_load_target++;
 
@@ -95,6 +94,7 @@ rifff.buildSoundMatrix = function(){
 					autoLoad: true,
 					autoPlay: false,
 					loops:100,
+					volume: rifff.data.banks[bank_key].bank_options[bank_option_key].volume,
 					onload: function() { //when has every sound loaded into the matrix
                         rifff.matrix_load_monitor ++;
                         console.log('loaded' + rifff.matrix_load_monitor + 'of' + rifff.matrix_load_target);
@@ -109,7 +109,9 @@ rifff.buildSoundMatrix = function(){
 				
 				$(".dial[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"']").parent().mouseup(function(){
 					var volume = parseInt($(".dial",this).val());
-					soundManager.setVolume("sound_"+bank_key + '_'+bank_option_key, volume);
+					console.log(volume);
+					soundManager.getSoundById('sound_'+bank_key+'_'+bank_option_key).setVolume(volume);
+					rifff.data.banks[bank_key].bank_options[bank_option_key].volume = volume;
 					rifff.saveJson();
 				});
 			}	

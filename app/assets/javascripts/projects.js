@@ -17,8 +17,8 @@ $(document).ready(function(){
 
 	soundManager.setup({
 		url: '/assets/swf/soundmanager2.swf',
-		useHTML5Audio: false,
-		preferFlash: true,
+		useHTML5Audio: true,
+		preferFlash: false,
 		useHighPerformance: true,
 		debugMode: false,
 	});
@@ -139,7 +139,9 @@ rifff.renderControls = function(elem, bank_key, bank_option_key) {
 	
   		$(".dial", elem).knob({'min':0,'max':70, 'width':30, 'height':30});
   	}
+  	
   	rifff.renderSteps(elem, bank_key, bank_option_key);
+  	
   	if (rifff.mode == 'edit') { 
   	    $(elem).append("<i class='icon-remove-circle remove_bank_option'></i>");
     }
