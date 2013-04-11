@@ -107,13 +107,7 @@ rifff.buildSoundMatrix = function(){
             		}
 				}); 
 				
-				$(".dial[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"']").parent().mouseup(function(){
-					var volume = parseInt($(".dial",this).val());
-					console.log(volume);
-					soundManager.getSoundById('sound_'+bank_key+'_'+bank_option_key).setVolume(volume);
-					rifff.data.banks[bank_key].bank_options[bank_option_key].volume = volume;
-					rifff.saveJson();
-				});
+				
 			}	
 		});
 	});
