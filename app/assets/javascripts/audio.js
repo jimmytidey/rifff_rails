@@ -106,8 +106,6 @@ rifff.buildSoundMatrix = function(){
                         }
             		}
 				}); 
-				
-				
 			}	
 		});
 	});

@@ -150,7 +150,7 @@ rifff.renderControls = function(elem, bank_key, bank_option_key) {
 
 rifff.renderSteps = function(elem, bank_key, bank_option_key) {
 	
-	var value, step_html;
+    var value, step_html;
 	
   for(i=0; i<rifff.data.project_info.steps; i++) {  
   	value = rifff.data.banks[bank_key].bank_options[bank_option_key].sequence[i];
