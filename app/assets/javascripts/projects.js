@@ -17,8 +17,8 @@ $(document).ready(function(){
 
 	soundManager.setup({
 		url: '/assets/swf/soundmanager2.swf',
-		useHTML5Audio: true,
-		preferFlash: false,
+		useHTML5Audio: false,
+		preferFlash: true,
 		useHighPerformance: true,
 		debugMode: false,
 	});

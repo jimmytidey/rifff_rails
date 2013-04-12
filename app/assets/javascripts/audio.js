@@ -17,7 +17,7 @@ rifff.loadSounds = function() {
         
         if($('#total_percent_loaded').length == 0) {    
             var html ="<div class='progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
-            console.log('no comp?' + $('#composer'));
+            
             $('#composer').before(html);
         }
     });
@@ -60,7 +60,7 @@ rifff.loadSound = function(location, key) {
 			rifff.updateTotalPercent();
 			
 			//test to see all items are loaded
-			if ($(".load_indicator[data-loaded='1']").length === $(".load_indicator").length && rifff.build_sound_matrix_test) {
+			if (rifff.files_loaded == rifff.file_list.length) {
                 window.setTimeout("rifff.buildSoundMatrix()",1000);
                 rifff.build_sound_matrix_test = false
 			}
@@ -77,13 +77,14 @@ rifff.loadSound = function(location, key) {
 rifff.buildSoundMatrix = function(){ 
     rifff.matrix_load_monitor = 0;
     rifff.matrix_load_target = 0;
-	console.log('sound matrix being writen');
+	console.log('sound matrix being writen  ---- ');
 	$.each(rifff.data.banks, function(bank_key, bank_val){	
 		$.each(bank_val.bank_options, function(bank_option_key, bank_option_val){
-			
-			soundManager.destroySound("sound_"+bank_key + '_'+bank_option_key);
+		
+			console.log(bank_key + "- " + bank_option_key);
 			
 			var location = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_key+"']").val()
+			soundManager.destroySound("sound_"+bank_key + '_'+bank_option_key);
 			 
 			if(typeof location != 'undefined' && location != 'None') {
 			    rifff.matrix_load_target++;
@@ -106,7 +107,13 @@ rifff.buildSoundMatrix = function(){
                         }
             		}
 				}); 
+				
+				rifff.files_loaded = rifff.files_loaded+0.05;
+    			rifff.updateTotalPercent();
 			}	
+			
+			
+
 		});
 	});
 	
