@@ -15,7 +15,6 @@
 //= require audio.js
 //= require twitter/bootstrap.js
 //= require knob.js
-//= require soundmanager2
 //= require score.js
 //= require transport.js
 //= require click_events.js

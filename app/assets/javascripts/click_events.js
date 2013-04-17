@@ -182,10 +182,8 @@ rifff.attachClickEvents = function() {
 		var volume = parseInt($(".dial",this).val());
 		var bank_option_key = $(".dial",this).attr('data-bank-option');
 		var bank_key = $(".dial",this).attr('data-bank'); 
-		
-		console.log(volume);
-		soundManager.getSoundById('sound_'+bank_key+'_'+bank_option_key).setVolume(volume);
-		rifff.data.banks[bank_key].bank_options[bank_option_key].volume = volume;
+
+
 		rifff.saveJson();
 	});	
 	

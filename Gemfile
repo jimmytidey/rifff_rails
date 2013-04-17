@@ -36,7 +36,6 @@ gem 'libv8', '~> 3.11.8'
 gem "twitter-bootstrap-rails", "~> 2.1.9"
 gem 'less'
 gem 'less-rails'
-gem 'soundmanager-rails'
 gem 'haml-rails'
 gem 's3_direct_upload'
 gem 'underscore-rails'

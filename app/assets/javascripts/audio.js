@@ -5,6 +5,7 @@ rifff.playstate = '';
 rifff.audioBuffers = [];
 var context = new webkitAudioContext();
 rifff.sounds=[];
+rifff.gains=[];
 rifff.current_step=0;
 
 rifff.lookahead = -1;
@@ -103,14 +104,9 @@ rifff.play = function(){
     
     rifff.loop_trigger_interval =  (rifff.bpl / (rifff.bpm / 60));
     rifff.audio_context_offset = context.currentTime;
+    rifff.audio_context_offset_step = rifff.current_step;
     console.log('Audio context offset ' + rifff.audio_context_offset);
-    
-    if(rifff.current_step == 0 ) { 
-        rifff.programmeStep(rifff.current_step);
-    }
-    else { 
-         rifff.programmeStep(rifff.current_step-1);
-    }
+    rifff.programmeStep(rifff.current_step);
     rifff.shedule_timer = setInterval("rifff.shedule()", 100);
     rifff.step_timer = setInterval("rifff.stepUpdater()", rifff.loop_trigger_interval*1000);
     
@@ -147,7 +143,7 @@ rifff.programmeStep =function(step) {
 
         //if there is a value in the score stop allsounds and play it ...
         if(typeof bank_value['bank_option'] !== 'undefined') {
-             rifff.playSound(bank_key, bank_value['bank_option'], (step * rifff.loop_trigger_interval)+rifff.audio_context_offset, bank_value['time']);
+             rifff.playSound(bank_key, bank_value['bank_option'], ((step-rifff.audio_context_offset_step) * rifff.loop_trigger_interval)+rifff.audio_context_offset, bank_value['time']);
         }        
             
     });    
@@ -161,12 +157,23 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
     var sound_location =  rifff.sounds.push(context.createBufferSource())-1;
     
 	rifff.sounds[sound_location].buffer = rifff.audioBuffers[id];
-    rifff.sounds[sound_location].connect(context.destination);  
+	if(rifff.data.banks[bank_key].bank_options[bank_option].loop == true) {
+	    rifff.sounds[sound_location].loop = true;
+	    console.log('looping' + bank_key + " - " + bank_option);
+	}
+	
+	rifff.gains[sound_location] = context.createGainNode();
+    rifff.sounds[sound_location].connect(rifff.gains[sound_location]);
+    rifff.gains[sound_location].gain.value = rifff.data.banks[bank_key].bank_options[bank_option].volume /100;
+    //console.log("vol set to" + rifff.data.banks[bank_key].bank_options[bank_option].volume /100); 
+    rifff.gains[sound_location].connect(context.destination);
+
     
-    console.log('PLAY: bank_key:' + bank_key + 'bank_option' + bank_option + " at " + time + " with offset " + offset + " and turn off at"+ offtime);
+    //console.log('PLAY: bank_key:' + bank_key + 'bank_option' + bank_option + " at " + time + " with offset " + offset + " and turn off at"+ offtime);
 
     var indicator = $(".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+bank_option+"'] .play_indicator");
     var loop = $(".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+bank_option+"'] .loop").is(':checked');
+    rifff.sounds[sound_location].start(time, offset, 1000);
     rifff.sounds[sound_location].start(time, offset, 1000);
     rifff.sounds[sound_location].noteOff(time+rifff.loop_trigger_interval);
 }
