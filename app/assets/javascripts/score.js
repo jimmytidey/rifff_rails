@@ -30,8 +30,7 @@ rifff.writeScore = function() {
 	$.each(rifff.score, function(step_key, step_val) { 
 
 		$.each(rifff.data.banks, function(bank_key, value){ 
-			console.log("writing score for  step" + step_key + " Bank" + bank_key );
-			
+						
 			option_choice = []; //reset array
 			
 			//move values into fresh array & note if this step is certain to play
@@ -63,15 +62,24 @@ rifff.writeScore = function() {
                 for (test_step = step_key-1; test_step>=0; test_step--) {
                     if (rifff.score[test_step][bank_key]['bank_option'] != '-' && typeof rifff.score[test_step][bank_key]['bank_option'] != 'undefined') {
                         bank_option_choice = rifff.score[test_step][bank_key]['bank_option']
-                        console.log(bank_key + " - " + bank_option_choice);
+                        
                         var overplay = rifff.data.banks[bank_key].bank_options[bank_option_choice].overplay;
                         
-                        if (overplay && rifff.score[test_step][bank_key]['time'] ==0) {
-                            sound_duration = parseInt(soundManager.getSoundById("sound_"+bank_key + '_'+rifff.score[test_step][bank_key]['bank_option']).duration);
-                            time_offset    = (60/rifff.bpm) * rifff.bpl * (step_key-test_step)*1000;
-
-                            if (time_offset < sound_duration-100) {
+                        if (overplay && rifff.score[test_step][bank_key]['time']==0) {
+                            
+                            var id = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_choice+"']").val()
+                            
+                            
+                            var temp_sound = context.createBufferSource();
+                        	temp_sound.buffer = rifff.audioBuffers[id];
+                        	
+                            sound_duration = temp_sound.buffer.duration ;
+                            
+                            time_offset    = (60/rifff.bpm) * rifff.bpl * (step_key-test_step);
+                            //console.log("test duration for " + bank_key  + " - " + bank_option_choice + ' duration ' + sound_duration + " time offset " + time_offset)
+                            if (time_offset < sound_duration) {
                                 rifff.score[step_key][bank_key]['bank_option'] = rifff.score[test_step][bank_key]['bank_option'];
+                                
                                 rifff.score[step_key][bank_key]['time'] = time_offset;
                             }
                         }

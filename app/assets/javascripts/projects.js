@@ -15,20 +15,8 @@ $(document).ready(function(){
 	//detect rifff mode
 	rifff.mode = $('#mode').val();
 
-	soundManager.setup({
-		url: '/assets/swf/soundmanager2.swf',
-		useHTML5Audio: false,
-		preferFlash: true,
-		useHighPerformance: true,
-		debugMode: false,
-	});
-	
-	
-	soundManager.onready(function() {
-	  console.log('ready!');
-		rifff.loadSoundsLocations();
+    rifff.loadSoundsLocations();
     rifff.getProjectInfo();
-	});
   
 })
 
@@ -54,8 +42,8 @@ rifff.loadSoundsLocations = function() {
 
 
 rifff.getProjectInfo = function() { 
-	rifff.bpl = rifff.data.project_info.bpl;
-	rifff.bpm = rifff.data.project_info.bpm;
+	rifff.bpl = parseInt(rifff.data.project_info.bpl);
+	rifff.bpm = parseInt(rifff.data.project_info.bpm);
 	rifff.loop_trigger_interval = rifff.bpm / 60 / rifff.bpl;
 }
 
@@ -110,10 +98,10 @@ rifff.renderControls = function(elem, bank_key, bank_option_key) {
 	
   	$.each(rifff.file_list, function(key, val){ 
   		if (val.url === value) {
-  			$(drop_down).append("<option value='"+val.url +"' selected data-id='"+key+"'>"+ val.name +"</option>");
+  			$(drop_down).append("<option value='"+val.id +"' selected data-id='"+key+"'>"+ val.name +"</option>");
   		}
   		else { 
-  			$(drop_down).append("<option value='"+val.url +"' data-id='"+key+"'>"+ val.name +"</option>");
+  			$(drop_down).append("<option value='"+val.id +"' data-id='"+key+"'>"+ val.name +"</option>");
   		}
   	}); 
   	
