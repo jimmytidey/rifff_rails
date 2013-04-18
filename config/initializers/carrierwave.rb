@@ -8,3 +8,5 @@ CarrierWave.configure do |config|
   config.fog_directory  = ENV['S3_BUCKET']                # required
   
 end
+
+# THESE ARE IN ~/profile

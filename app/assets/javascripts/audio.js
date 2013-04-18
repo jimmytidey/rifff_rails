@@ -158,7 +158,14 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
     
 	rifff.sounds[sound_location].buffer = rifff.audioBuffers[id];
 	if(rifff.data.banks[bank_key].bank_options[bank_option].loop == true) {
+	    var sample_rate = rifff.sounds[sound_location].buffer.sampleRate;
+	    var duration = rifff.sounds[sound_location].buffer.duration;
+	    var delay_amount = (1/sample_rate) *1024;
+	    
 	    rifff.sounds[sound_location].loop = true;
+	    rifff.sounds[sound_location].loopStart= delay_amount;
+	    rifff.sounds[sound_location].loopEnd= duration-delay_amount;
+	    
 	    console.log('looping' + bank_key + " - " + bank_option);
 	}
 	
@@ -171,10 +178,8 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
     
     //console.log('PLAY: bank_key:' + bank_key + 'bank_option' + bank_option + " at " + time + " with offset " + offset + " and turn off at"+ offtime);
 
-    var indicator = $(".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+bank_option+"'] .play_indicator");
-    var loop = $(".bank_option_container[data-bank='"+bank_key+"'][data-bank-option='"+bank_option+"'] .loop").is(':checked');
-    rifff.sounds[sound_location].start(time, offset, 1000);
-    rifff.sounds[sound_location].start(time, offset, 1000);
+    rifff.sounds[sound_location].noteOn(time, offset, 1000);
+    rifff.sounds[sound_location].noteOn(time, offset, 1000);
     rifff.sounds[sound_location].noteOff(time+rifff.loop_trigger_interval);
 }
 
