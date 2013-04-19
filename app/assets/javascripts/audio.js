@@ -155,7 +155,6 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
     var id = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option+"']").val()
 
     var sound_location =  rifff.sounds.push(context.createBufferSource())-1;
-    
     rifff.sounds[sound_location].buffer = rifff.audioBuffers[id];
     
     var sample_rate = rifff.sounds[sound_location].buffer.sampleRate;
