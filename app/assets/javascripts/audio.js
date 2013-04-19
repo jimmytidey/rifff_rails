@@ -156,12 +156,12 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
 
     var sound_location =  rifff.sounds.push(context.createBufferSource())-1;
     
+    rifff.sounds[sound_location].buffer = rifff.audioBuffers[id];
     
     var sample_rate = rifff.sounds[sound_location].buffer.sampleRate;
     var duration = rifff.sounds[sound_location].buffer.duration;
     var delay_amount = (1/sample_rate) *1024;
     
-	rifff.sounds[sound_location].buffer = rifff.audioBuffers[id];
 	if(rifff.data.banks[bank_key].bank_options[bank_option].loop == true) {
 
 	    
