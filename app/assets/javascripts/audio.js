@@ -107,6 +107,7 @@ rifff.play = function(){
     rifff.audio_context_offset_step = rifff.current_step;
     console.log('Audio context offset ' + rifff.audio_context_offset);
     rifff.programmeStep(rifff.current_step);
+    rifff.first_step = true;
     rifff.shedule_timer = setInterval("rifff.shedule()", 100);
     rifff.step_timer = setInterval("rifff.stepUpdater()", rifff.loop_trigger_interval*1000);
     
@@ -114,7 +115,8 @@ rifff.play = function(){
 }
 
 
-rifff.stepUpdater = function() { 
+rifff.stepUpdater = function() {
+    rifff.first_step = false; 
     rifff.current_step++;   
     rifff.updatePlayhead();
     console.log("MOVED TO STEP:" + rifff.current_step + " at time " + context.currentTime);
@@ -159,14 +161,17 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
     
     var sample_rate = rifff.sounds[sound_location].buffer.sampleRate;
     var duration = rifff.sounds[sound_location].buffer.duration;
-    var delay_amount = (1/sample_rate) *1024;
+    var delay_amount = (1/sample_rate) *512;
     
 	if(rifff.data.banks[bank_key].bank_options[bank_option].loop == true) {
 
 	    
 	    rifff.sounds[sound_location].loop = true;
 	    rifff.sounds[sound_location].loopStart= delay_amount;
-	    rifff.sounds[sound_location].loopEnd= duration-delay_amount;
+	    
+	   
+	    rifff.sounds[sound_location].loopEnd= duration-(delay_amount *2);
+	    
 	    
 	    console.log('looping' + bank_key + " - " + bank_option);
 	}
@@ -180,10 +185,20 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
 
     
     //console.log('PLAY: bank_key:' + bank_key + 'bank_option' + bank_option + " at " + time + " with offset " + offset + " and turn off at"+ offtime);
-
-    rifff.sounds[sound_location].noteGrainOn(time, offset, 1000);
-    rifff.sounds[sound_location].noteOn(time, offset, 1000);
-    rifff.sounds[sound_location].noteOff(time+rifff.loop_trigger_interval);
+    
+    //only start the note if it's the first step, or if it's the first time the note is played - don't retrigger
+    if(rifff.first_step || offset <= delay_amount) { 
+        rifff.sounds[sound_location].noteGrainOn(time, offset, 1000);
+        console.log("no run on" + bank_key + " - " + bank_option);
+    }
+    else { 
+        console.log("runon " + bank_key + " - " + bank_option);
+    }
+    
+    //only turn the note off if it isn't an overplay
+    if (!rifff.data.banks[bank_key].bank_options[bank_option].overplay) {
+        rifff.sounds[sound_location].noteOff(time+rifff.loop_trigger_interval);
+    }
 }
 
 rifff.stop = function(){ 
@@ -191,7 +206,7 @@ rifff.stop = function(){
     clearInterval(rifff.step_timer);
     rifff.lookahead = -1;
     $.each(rifff.sounds, function(key, val){	
-            val.stop(0);
+            val.noteOff(0);
     });
 }
 
