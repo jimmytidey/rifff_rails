@@ -156,11 +156,14 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
 
     var sound_location =  rifff.sounds.push(context.createBufferSource())-1;
     
+    
+    var sample_rate = rifff.sounds[sound_location].buffer.sampleRate;
+    var duration = rifff.sounds[sound_location].buffer.duration;
+    var delay_amount = (1/sample_rate) *1024;
+    
 	rifff.sounds[sound_location].buffer = rifff.audioBuffers[id];
 	if(rifff.data.banks[bank_key].bank_options[bank_option].loop == true) {
-	    var sample_rate = rifff.sounds[sound_location].buffer.sampleRate;
-	    var duration = rifff.sounds[sound_location].buffer.duration;
-	    var delay_amount = (1/sample_rate) *1024;
+
 	    
 	    rifff.sounds[sound_location].loop = true;
 	    rifff.sounds[sound_location].loopStart= delay_amount;
@@ -169,6 +172,7 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
 	    console.log('looping' + bank_key + " - " + bank_option);
 	}
 	
+	offset = offset + delay_amount; 
 	rifff.gains[sound_location] = context.createGainNode();
     rifff.sounds[sound_location].connect(rifff.gains[sound_location]);
     rifff.gains[sound_location].gain.value = rifff.data.banks[bank_key].bank_options[bank_option].volume /100;
@@ -178,7 +182,7 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
     
     //console.log('PLAY: bank_key:' + bank_key + 'bank_option' + bank_option + " at " + time + " with offset " + offset + " and turn off at"+ offtime);
 
-    rifff.sounds[sound_location].noteOn(time, offset, 1000);
+    rifff.sounds[sound_location].noteGrainOn(time, offset, 1000);
     rifff.sounds[sound_location].noteOn(time, offset, 1000);
     rifff.sounds[sound_location].noteOff(time+rifff.loop_trigger_interval);
 }
