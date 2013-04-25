@@ -188,8 +188,12 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
     
     //only start the note if it's the first step, or if it's the first time the note is played - don't retrigger
     if(rifff.first_step || offset <= delay_amount) { 
-        rifff.sounds[sound_location].noteGrainOn(time, offset, 1000);
+        time = parseFloat(time); 
+        offset = parseFloat(offset);
+        rifff.sounds[sound_location].noteGrainOn(time, offset, parseFloat(100000));
         console.log("no run on" + bank_key + " - " + bank_option);
+        console.log("time" + time + " offset " + offset);
+        console.log("time type" + typeof time + " offset type " + typeof offset);
     }
     else { 
         console.log("runon " + bank_key + " - " + bank_option);
@@ -197,6 +201,7 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
     
     //only turn the note off if it isn't an overplay
     if (!rifff.data.banks[bank_key].bank_options[bank_option].overplay) {
+        console.log('note off' + bank_key + " - " + bank_option);
         rifff.sounds[sound_location].noteOff(time+rifff.loop_trigger_interval);
     }
 }
@@ -205,7 +210,8 @@ rifff.stop = function(){
     clearInterval(rifff.shedule_timer);
     clearInterval(rifff.step_timer);
     rifff.lookahead = -1;
-    $.each(rifff.sounds, function(key, val){	
+    $.each(rifff.sounds, function(key, val){
+        	console.log('note off' + key);
             val.noteOff(0);
     });
 }
