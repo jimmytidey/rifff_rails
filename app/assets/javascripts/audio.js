@@ -21,7 +21,7 @@ rifff.loadSounds = function() {
     
     $(document).ready(function(){
         
-        if($('#total_percent_loaded').length == 0) {    
+        if($('#total_percent_loaded').length === 0) {    
             var html ="<div class='progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
             
             $('#composer').before(html);
@@ -33,20 +33,20 @@ rifff.loadSounds = function() {
 	  //test to see if this file is already loaded
         if (!$('#sound_'+file.id).is('*')) {
 
-            rifff.loadSound(file.url, file.id)
+            rifff.loadSound(file.url, file.id);
 
             var append_string = "<div class='row audio_file' id='sound_"+file.id+"' data-loaded='1' >";
             append_string +=    "<div class='load_indicator span1'></div>";
-            append_string +=    '<div class="name span5">'+file.name+'</div>'
-            append_string +=    '<div class="actions name span3">'
-            append_string +=    '<a rel="nofollow" data-remote="true" data-method="delete" data-confirm="Are you sure?" href="/projects/'+project_id+'/sound_files/'+file.id+'">remove</a>'
-            append_string +=    '</div>'
-            append_string +=    '</div>'
+            append_string +=    '<div class="name span5">'+file.name+'</div>';
+            append_string +=    '<div class="actions name span3">';
+            append_string +=    '<a rel="nofollow" data-remote="true" data-method="delete" data-confirm="Are you sure?" href="/projects/'+project_id+'/sound_files/'+file.id+'">remove</a>';
+            append_string +=    '</div>';
+            append_string +=    '</div>';
 
             $('#file_list').append(append_string); 
         }   
 	});
-}
+};
 
 rifff.loadSound = function(location, key) {
 	var request = new XMLHttpRequest();
@@ -163,7 +163,7 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
     var duration = rifff.sounds[sound_location].buffer.duration;
     var delay_amount = (1/sample_rate) *512;
     
-	if(rifff.data.banks[bank_key].bank_options[bank_option].loop == true) {
+	if(rifff.data.banks[bank_key].bank_options[bank_option].loop === true) {
 
 	    
 	    rifff.sounds[sound_location].loop = true;
@@ -190,7 +190,7 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
     if(rifff.first_step || offset <= delay_amount) { 
         time = parseFloat(time); 
         offset = parseFloat(offset);
-        rifff.sounds[sound_location].noteGrainOn(time, offset, parseFloat(100000));
+        rifff.sounds[sound_location].noteGrainOn(time, offset, parseFloat(duration));
         console.log("no run on" + bank_key + " - " + bank_option);
         console.log("time" + time + " offset " + offset);
         console.log("time type" + typeof time + " offset type " + typeof offset);
