@@ -28,7 +28,7 @@ rifff.writeScore = function() {
 	
 	//loop through an make the choices 
 	$.each(rifff.score, function(step_key, step_val) { 
-
+        console.log('____ step ____' + step_key);
 		$.each(rifff.data.banks, function(bank_key, value){ 
 						
 			option_choice = []; //reset array
@@ -54,38 +54,31 @@ rifff.writeScore = function() {
 				rifff.score[step_key][bank_key]['bank_option'] = bank_option_choice;
 				rifff.score[step_key][bank_key]['time'] = 0;
 				
+				//programme forward looking overplay
+				if(rifff.data.banks[bank_key].bank_options[bank_option_choice].overplay) {
+				    var id = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_choice+"']").val()
+				    var temp_sound = context.createBufferSource();
+                    temp_sound.buffer = rifff.audioBuffers[id];
+                       
+                    var sound_duration  = temp_sound.buffer.duration ;
+                    var length_of_step = (60/rifff.bpm) * rifff.bpl;
+				    var number_of_forward_steps = (sound_duration/length_of_step)-1;
+				    console.log("nofs" + number_of_forward_steps);
+				 
+    				for (test_step = 0; test_step<number_of_forward_steps; test_step++) {
+    				    if(step_key+test_step < parseInt(rifff.data.project_info.steps)){
+    				       console.log("test step" + test_step);
+        				    console.log("step key" + step_key);
+    				        var time_offset = test_step * length_of_step;
+    				        rifff.score[step_key+test_step][bank_key]['bank_option'] = bank_option_choice;
+                            rifff.score[step_key+test_step][bank_key]['time'] = time_offset;
+                        }    
+    				}
+    			}	
+				
 			}
 			
-			//else, need to checkbackwards to see if there is an overplay
-			else {
-			    //console.log('testing for overplay');
-                for (test_step = step_key-1; test_step>=0; test_step--) {
-                    if (rifff.score[test_step][bank_key]['bank_option'] != '-' && typeof rifff.score[test_step][bank_key]['bank_option'] != 'undefined') {
-                        bank_option_choice = rifff.score[test_step][bank_key]['bank_option']
-                        
-                        var overplay = rifff.data.banks[bank_key].bank_options[bank_option_choice].overplay;
-                        
-                        if (overplay && rifff.score[test_step][bank_key]['time']==0) {
-                            
-                            var id = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_choice+"']").val()
-                            
-                            
-                            var temp_sound = context.createBufferSource();
-                        	temp_sound.buffer = rifff.audioBuffers[id];
-                        	
-                            sound_duration = temp_sound.buffer.duration ;
-                            
-                            time_offset    = (60/rifff.bpm) * rifff.bpl * (step_key-test_step);
-                            //console.log("test duration for " + bank_key  + " - " + bank_option_choice + ' duration ' + sound_duration + " time offset " + time_offset)
-                            if (time_offset < sound_duration) {
-                                rifff.score[step_key][bank_key]['bank_option'] = rifff.score[test_step][bank_key]['bank_option'];
-                                
-                                rifff.score[step_key][bank_key]['time'] = time_offset;
-                            }
-                        }
-                    }
-                }  
-			}
+            //detect end of loop
 			if(step_key == parseInt(rifff.data.project_info.steps)-1 && (rifff.data.banks.length-1) == bank_key) { 
     	        rifff.renderScore();
     	    }
@@ -102,15 +95,16 @@ rifff.renderScore = function() {
 	
 	
 	var selector;
+	$('.step').css('background-image','none'); 
 	
 	$.each(rifff.score, function(step_key, step_val) { 
 		$.each(rifff.data.banks, function(bank_key, value){
 			
-			selector = '.step[data-step-no='+step_key+'][data-bank='+bank_key+']';
-			$(selector).css('background-image','none'); 
-
+		 
 			if (rifff.score[step_key][bank_key]['bank_option'] != '-') { 
-				selector = '.step[data-step-no='+step_key+'][data-bank='+bank_key+'][data-bank-option='+rifff.score[step_key][bank_key]['bank_option']+']';
+			    console.log("step key " + step_key + " bank kye " +  bank_key);
+			    //selector = '.step[data-step-no='+step_key+'][data-bank='+bank_key+'][data-bank-option='+rifff.score[step_key][bank_key]['bank_option']+']';
+				selector = '#step_'+bank_key+'_'+rifff.score[step_key][bank_key]['bank_option']+'_'+step_key;
 				$(selector).css('background-image','url(/assets/selected.png)');          
 			} 
 

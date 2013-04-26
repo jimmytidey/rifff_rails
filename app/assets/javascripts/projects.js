@@ -145,7 +145,7 @@ rifff.renderSteps = function(elem, bank_key, bank_option_key) {
 	
   for(i=0; i<rifff.data.project_info.steps; i++) {  
   	value = rifff.data.banks[bank_key].bank_options[bank_option_key].sequence[i];
-  	step_html = $("<div data-bank='"+bank_key+"' data-value='"+value+"' data-bank-option='"+bank_option_key+"' data-step-no='"+i+"' class='step'  ></div>'");
+  	step_html = $("<div id='step_"+bank_key+"_"+bank_option_key+"_"+i+"' data-bank='"+bank_key+"' data-value='"+value+"' data-bank-option='"+bank_option_key+"' data-step-no='"+i+"'  class='step'  ></div>'");
   	$(elem).append(step_html);
       	if (rifff.mode == 'edit') { 
       	if (value == 1) { 
