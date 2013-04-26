@@ -20,7 +20,6 @@ rifff.loadSounds = function() {
     console.log('loading sounds...');
     
     $(document).ready(function(){
-        
         if($('#total_percent_loaded').length === 0) {    
             var html ="<div class='progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
             
@@ -80,44 +79,23 @@ rifff.loadSound = function(location, key) {
 		});
 	}
 	request.send();
-	
-    /*
-		whileloading: function(){
-            soundManager.mute("preload_"+key);
-            var percent_loaded = parseInt(this.bytesLoaded / this.bytesTotal * 100); 
-            $('#sound_'+key+' .load_indicator').html(percent_loaded + "%");
-		},
-	*/	
-
 }
 
 rifff.buildSoundMatrix = function(){ 
-
-	
     rifff.files_loaded = rifff.files_loaded+1;
     rifff.updateTotalPercent();
     rifff.writeScore();
 }
 
 
-rifff.play = function(){
-    
+rifff.play = function(){ 
     rifff.loop_trigger_interval =  (rifff.bpl / (rifff.bpm / 60));
-    rifff.audio_context_offset = context.currentTime;
-    rifff.audio_context_offset_step = rifff.current_step;
-    console.log('Audio context offset ' + rifff.audio_context_offset);
-   rifff.first_step = true;
-    rifff.programmeStep(rifff.current_step);
-    rifff.first_step = false;
-    rifff.shedule_timer = setInterval("rifff.shedule()", 100);
+    rifff.shedule();
     rifff.step_timer = setInterval("rifff.stepUpdater()", rifff.loop_trigger_interval*1000);
-    
-    
 }
 
 
 rifff.stepUpdater = function() {
-    
     rifff.current_step++;   
     rifff.updatePlayhead();
     console.log("MOVED TO STEP:" + rifff.current_step + " at time " + context.currentTime);
@@ -126,103 +104,97 @@ rifff.stepUpdater = function() {
 
 
 
-rifff.shedule = function() { 
-    if (rifff.current_step+1 != rifff.lookahead) {//lookahead to the next step and programme in when it should play
+rifff.shedule = function() {
+    var steps_into_future = 0;
+    var bank_option_to_play;
+    var time_to_play;
+    var sample_offset;
+    
+    
+    rifff.timeOffset = context.currentTime; 
+    
+    for(step_key=rifff.current_step; step_key< rifff.score.length; step_key++) {
+      
+        time_to_play = (steps_into_future * rifff.loop_trigger_interval) + rifff.timeOffset; 
+        console.log('writing schedule for ' + step_key);
         
-        shedule_step = parseInt(rifff.current_step)+1; 
+        for(bank_key=0; bank_key<rifff.data.banks.length; bank_key++) {
             
-    	console.log('sheduling next step ' + shedule_step);
-    	
-        rifff.programmeStep(shedule_step)
-        rifff.lookahead=shedule_step;
-    }	
+            if(typeof rifff.score[step_key][bank_key]['bank_option'] !== 'undefined' && (rifff.score[step_key][bank_key]['time']===0 || steps_into_future===0 )){
+                bank_option_to_play = rifff.score[step_key][bank_key]['bank_option'];
+                sample_offset       = rifff.score[step_key][bank_key]['time'];
+                rifff.playSound(bank_key, bank_option_to_play, time_to_play, sample_offset);
+            }    
+        }
+        steps_into_future++;
+    }
 }
 
 
-rifff.programmeStep =function(step) { 
-	var play_array = rifff.score[step];
-    console.log('programming step:' + step + "for time" + (step * rifff.loop_trigger_interval)+rifff.audio_context_offset  );
-    $.each(play_array, function(bank_key,bank_value){
-
-        //if there is a value in the score stop allsounds and play it ...
-        if(typeof bank_value['bank_option'] !== 'undefined') {
-             rifff.playSound(bank_key, bank_value['bank_option'], ((step-rifff.audio_context_offset_step) * rifff.loop_trigger_interval)+rifff.audio_context_offset, bank_value['time']);
-        }        
-            
-    });    
-}
 
 rifff.playSound = function(bank_key, bank_option, time, offset) {
     
-    var offtime = time+rifff.loop_trigger_interval; 
-    var id = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option+"']").val()
-
+    //make source node
+    var selector =".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option+"']"; 
+    var id = $(selector).val();
     var sound_location =  rifff.sounds.push(context.createBufferSource())-1;
     rifff.sounds[sound_location].buffer = rifff.audioBuffers[id];
     
+    //calculate MP3 delay
     var sample_rate = rifff.sounds[sound_location].buffer.sampleRate;
     var duration = rifff.sounds[sound_location].buffer.duration;
     var delay_amount = (1/sample_rate) *512;
+    offset = parseFloat(offset + delay_amount);
     
-    
-	if(rifff.data.banks[bank_key].bank_options[bank_option].loop === true) {
 
-	    
-	    rifff.sounds[sound_location].loop = true;
-	    rifff.sounds[sound_location].loopStart= delay_amount;
-	    
-	   
-	    rifff.sounds[sound_location].loopEnd= duration-(delay_amount *2);
-	    
-	    
-	    console.log('looping' + bank_key + " - " + bank_option);
-	}
 	
-	offset = offset + delay_amount; 
+	 	
+	//set the gain of this node 
 	rifff.gains[sound_location] = context.createGainNode();
     rifff.sounds[sound_location].connect(rifff.gains[sound_location]);
     rifff.gains[sound_location].gain.value = rifff.data.banks[bank_key].bank_options[bank_option].volume /100;
     //console.log("vol set to" + rifff.data.banks[bank_key].bank_options[bank_option].volume /100); 
     rifff.gains[sound_location].connect(context.destination);
 
-    
-    //console.log('PLAY: bank_key:' + bank_key + 'bank_option' + bank_option + " at " + time + " with offset " + offset + " and turn off at"+ offtime);
-    
-    //only start the note if it's the first step, or if it's the first time the note is played - don't retrigger
-    console.log('first step ' + rifff.first_step + " offesttest " + offset <= delay_amount);
-    if(rifff.first_step || offset <= delay_amount) { 
-
-        time = parseFloat(time); 
-        offset = parseFloat(offset);
-        if(rifff.data.banks[bank_key].bank_options[bank_option].overplay){    
-            var offtime = parseFloat(duration);
-        }
-        else {
-            var offtime = parseFloat(rifff.loop_trigger_interval);
-        }
-        
-        
-        console.log("no run on " + bank_key + " - " + bank_option + " location " + sound_location);
-        console.log("time " + time + " offset " + offset + " duration " + offtime);
-        var result = rifff.sounds[sound_location].noteGrainOn(time, offset, offtime);
-        console.log("RESULT: " + result);
-       
+    //set the duration
+    var duration
+    if(rifff.loop_trigger_interval- offset < rifff.sounds[sound_location]['buffer']['duration']) {
+        duration = rifff.loop_trigger_interval - offset; 
     }
     else { 
-        console.log("runon " + bank_key + " - " + bank_option);
+        duration = rifff.sounds[sound_location]['buffer']['duration'] - offset;
     }
     
-
+    //if overplay is on 
+    if(rifff.data.banks[bank_key].bank_options[bank_option].overplay) {
+        duration = parseFloat(rifff.sounds[sound_location]['buffer']['duration'] - offset);
+        
+        //check forward to see if voice steeling should happen 
+        
+        
+    }
+    
+    //add looping to this sample, if it's turned on
+	if(rifff.data.banks[bank_key].bank_options[bank_option].loop) {
+	    rifff.sounds[sound_location].loop = true;
+	    rifff.sounds[sound_location].loopStart= delay_amount;
+	    rifff.sounds[sound_location].loopEnd= rifff.sounds[sound_location]['buffer']['duration']-(delay_amount *2);
+	    offset=0;
+	    rifff.sounds[sound_location].noteOn(time);
+	    rifff.sounds[sound_location].noteOff(parseFloat(rifff.loop_trigger_interval + time));
+	}
+	else {
+        console.log('PLAY: bank_key:' + bank_key + 'bank_option' + bank_option + " at " + time + " with offset " + offset + " with duration "+ duration);
+        rifff.sounds[sound_location].noteGrainOn(time, offset, duration);
+    }
 }
 
 rifff.stop = function(){ 
-    clearInterval(rifff.shedule_timer);
     clearInterval(rifff.step_timer);
-    rifff.lookahead = -1;
     $.each(rifff.sounds, function(key, val){
-        	
             val.noteOff(0);
     });
+    rifff.sounds = [];
 }
 
 rifff.updateTotalPercent = function() {
@@ -230,7 +202,6 @@ rifff.updateTotalPercent = function() {
     var percent_loaded = ((rifff.files_loaded-1) / rifff.file_list.length) * 100;
     
     $('#total_percent_loaded .bar').css('width', percent_loaded + "%");
-
     
     if(percent_loaded >= 100) { 
         $('#total_percent_loaded').remove();     
