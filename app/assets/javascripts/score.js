@@ -63,12 +63,11 @@ rifff.writeScore = function() {
                     var sound_duration  = temp_sound.buffer.duration ;
                     var length_of_step = (60/rifff.bpm) * rifff.bpl;
 				    var number_of_forward_steps = (sound_duration/length_of_step)-1;
-				    console.log("nofs" + number_of_forward_steps);
+				   
 				 
     				for (test_step = 0; test_step<number_of_forward_steps; test_step++) {
     				    if(step_key+test_step < parseInt(rifff.data.project_info.steps)){
-    				       console.log("test step" + test_step);
-        				    console.log("step key" + step_key);
+    	
     				        var time_offset = test_step * length_of_step;
     				        rifff.score[step_key+test_step][bank_key]['bank_option'] = bank_option_choice;
                             rifff.score[step_key+test_step][bank_key]['time'] = time_offset;
@@ -102,7 +101,7 @@ rifff.renderScore = function() {
 			
 		 
 			if (rifff.score[step_key][bank_key]['bank_option'] != '-') { 
-			    console.log("step key " + step_key + " bank kye " +  bank_key);
+			    
 			    //selector = '.step[data-step-no='+step_key+'][data-bank='+bank_key+'][data-bank-option='+rifff.score[step_key][bank_key]['bank_option']+']';
 				selector = '#step_'+bank_key+'_'+rifff.score[step_key][bank_key]['bank_option']+'_'+step_key;
 				$(selector).css('background-image','url(/assets/selected.png)');          

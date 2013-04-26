@@ -184,7 +184,9 @@ rifff.attachClickEvents = function() {
 		var bank_key = $(".dial",this).attr('data-bank');
 		rifff.data.banks[bank_key].bank_options[bank_option_key].volume = volume;
         console.log('new volueme = ' + volume);
-
+        for (step = 0; step < parseInt(rifff.data.project_info.steps); step++) {
+            rifff.gains[bank_key][bank_option_key][step].gain.value = volume/100;
+		}
 		rifff.saveJson();
 	});	
 	
