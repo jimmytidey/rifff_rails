@@ -181,8 +181,9 @@ rifff.attachClickEvents = function() {
     $(".dial").parent().mouseup(function(){
 		var volume = parseInt($(".dial",this).val());
 		var bank_option_key = $(".dial",this).attr('data-bank-option');
-		var bank_key = $(".dial",this).attr('data-bank'); 
-
+		var bank_key = $(".dial",this).attr('data-bank');
+		rifff.data.banks[bank_key].bank_options[bank_option_key].volume = volume;
+        console.log('new volueme = ' + volume);
 
 		rifff.saveJson();
 	});	

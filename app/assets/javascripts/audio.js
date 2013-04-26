@@ -152,8 +152,8 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
 	//set the gain of this node 
 	rifff.gains[sound_location] = context.createGainNode();
     rifff.sounds[sound_location].connect(rifff.gains[sound_location]);
-    rifff.gains[sound_location].gain.value = rifff.data.banks[bank_key].bank_options[bank_option].volume /100;
-    //console.log("vol set to" + rifff.data.banks[bank_key].bank_options[bank_option].volume /100); 
+    rifff.gains[sound_location].gain.value = parseFloat(rifff.data.banks[bank_key].bank_options[bank_option].volume /100);
+     
     rifff.gains[sound_location].connect(context.destination);
 
     //set the duration
@@ -185,6 +185,7 @@ rifff.playSound = function(bank_key, bank_option, time, offset) {
 	}
 	else {
         console.log('PLAY: bank_key:' + bank_key + 'bank_option' + bank_option + " at " + time + " with offset " + offset + " with duration "+ duration);
+        console.log("vol set to" + rifff.gains[sound_location].gain.value);
         rifff.sounds[sound_location].noteGrainOn(time, offset, duration);
     }
 }
