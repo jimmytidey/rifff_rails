@@ -25,5 +25,17 @@
 
 $(document).ready(function(){ 
 	$("#myS3Uploader").S3Uploader();
+
+    $.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase()); 
+
+    if($.browser.chrome){
+        
+    }
+    else { 
+        alert('You must use chrome for this website - it uses the HTML5 audio API');
+    }
+
+
 });	
+
 
