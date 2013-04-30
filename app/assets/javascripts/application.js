@@ -21,19 +21,21 @@
 //= require s3_direct_upload
 //= require projects.js
 
+$.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase()); 
 
+if($.browser.chrome){
+    
+}
+else { 
+    alert('You must use Chrome for this website - it uses the HTML5 Audio API.');
+}
 
 $(document).ready(function(){ 
+    
+
 	$("#myS3Uploader").S3Uploader();
 
-    $.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase()); 
 
-    if($.browser.chrome){
-        
-    }
-    else { 
-        alert('You must use chrome for this website - it uses the HTML5 audio API');
-    }
 
 
 });	
