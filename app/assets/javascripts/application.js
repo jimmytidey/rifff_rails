@@ -23,21 +23,13 @@
 
 $.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase()); 
 
-if($.browser.chrome){
-    
-}
+if($.browser.chrome){}
 else { 
     alert('You must use Chrome for this website - it uses the HTML5 Audio API.');
 }
 
 $(document).ready(function(){ 
-    
-
-	$("#myS3Uploader").S3Uploader();
-
-
-
-
+    $("#myS3Uploader").S3Uploader();
 });	
 
 
