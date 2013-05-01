@@ -10,8 +10,16 @@ rifff.defaults={};
 rifff.defaults.blank_bank        = {"bank_options":[{"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":50,"loop":false,"overplay":false,"file_location":"","bank_option_name":"1option"},{"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":49,"loop":false,"overplay":false,"file_location":"","bank_option_name":"3option"},{"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":50,"loop":false,"overplay":false,"file_location":"","bank_option_name":"2option"},{"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":49,"loop":false,"overplay":false,"file_location":"","bank_option_name":"4option"}],"bank_name":"new"};
 rifff.defaults.blank_bank_option = {"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":50,"loop":false,"overplay":false,"file_location":"","bank_option_name":"1option"};
 
+$.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase()); 
+
+if(isChrome = !!window.chrome){}
+else { 
+    alert('You must use Chrome for this website - it uses the HTML5 Audio API.');
+}
+
+
 $(document).ready(function(){ 
-	
+	$("#myS3Uploader").S3Uploader();
 	//detect rifff mode
 	rifff.mode = $('#mode').val();
 
