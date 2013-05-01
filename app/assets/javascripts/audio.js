@@ -1,4 +1,14 @@
 //HANDLES AUDIO PLAYBACK 
+    
+$.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase()); 
+
+if(isChrome = !!window.chrome){
+    console.log('you are running chrome - great');
+}
+else { 
+    alert('You must use Chrome for this website - it uses the HTML5 Audio API.');
+}
+
 
 rifff = {};
 rifff.playstate = '';
