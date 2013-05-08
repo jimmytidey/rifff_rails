@@ -54,6 +54,14 @@ rifff.writeScore = function() {
 				rifff.score[step_key][bank_key]['bank_option'] = bank_option_choice;
 				rifff.score[step_key][bank_key]['time'] = 0;
 				
+				//loop through every step in the furture set it zero for this bank
+				//needed to prevent two voices playing at the same time because a prior one had an overplay
+				var number_of_forward_steps = rifff.data.project_info.steps - step_key;
+				var test_step;
+				for (test_step = 1; test_step<number_of_forward_steps; test_step++) {    				    
+				    rifff.score[step_key+test_step][bank_key] = [];
+				}
+				
 				//programme forward looking overplay
 				if(rifff.data.banks[bank_key].bank_options[bank_option_choice].overplay) {
 				    var id = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_choice+"']").val()
@@ -62,16 +70,16 @@ rifff.writeScore = function() {
                        
                     var sound_duration  = temp_sound.buffer.duration ;
                     var length_of_step = (60/rifff.bpm) * rifff.bpl;
-				    var number_of_forward_steps = (sound_duration/length_of_step)-1;
-				   
-				 
+				    number_of_forward_steps = (sound_duration/length_of_step)-1;
+
     				for (test_step = 0; test_step<number_of_forward_steps; test_step++) {
+    				    
     				    if(step_key+test_step < parseInt(rifff.data.project_info.steps)){
     	
     				        var time_offset = test_step * length_of_step;
     				        rifff.score[step_key+test_step][bank_key]['bank_option'] = bank_option_choice;
                             rifff.score[step_key+test_step][bank_key]['time'] = time_offset;
-                        }    
+                        }
     				}
     			}	
 				
