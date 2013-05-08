@@ -66,21 +66,24 @@ rifff.writeScore = function() {
 				if(rifff.data.banks[bank_key].bank_options[bank_option_choice].overplay) {
 				    var id = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_choice+"']").val()
 				    var temp_sound = context.createBufferSource();
-                    temp_sound.buffer = rifff.audioBuffers[id];
-                       
-                    var sound_duration  = temp_sound.buffer.duration ;
-                    var length_of_step = (60/rifff.bpm) * rifff.bpl;
-				    number_of_forward_steps = (sound_duration/length_of_step)-1;
+				    if (typeof rifff.audioBuffers[id] == 'object') {
+                        temp_sound.buffer = rifff.audioBuffers[id];
+                    
+                    
+                        var sound_duration  = temp_sound.buffer.duration ;
+                        var length_of_step = (60/rifff.bpm) * rifff.bpl;
+    				    number_of_forward_steps = (sound_duration/length_of_step)-1;
 
-    				for (test_step = 0; test_step<number_of_forward_steps; test_step++) {
+        				for (test_step = 0; test_step<number_of_forward_steps; test_step++) {
     				    
-    				    if(step_key+test_step < parseInt(rifff.data.project_info.steps)){
+        				    if(step_key+test_step < parseInt(rifff.data.project_info.steps)){
     	
-    				        var time_offset = test_step * length_of_step;
-    				        rifff.score[step_key+test_step][bank_key]['bank_option'] = bank_option_choice;
-                            rifff.score[step_key+test_step][bank_key]['time'] = time_offset;
-                        }
-    				}
+        				        var time_offset = test_step * length_of_step;
+        				        rifff.score[step_key+test_step][bank_key]['bank_option'] = bank_option_choice;
+                                rifff.score[step_key+test_step][bank_key]['time'] = time_offset;
+                            }
+        				}
+        			}	
     			}	
 				
 			}
