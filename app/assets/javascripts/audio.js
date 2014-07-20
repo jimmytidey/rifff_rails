@@ -142,7 +142,6 @@ rifff.shedule = function() {
     var time_to_play;
     var sample_offset;
     
-    
     rifff.timeOffset = context.currentTime; 
     
     for(step_key=rifff.current_step; step_key< rifff.score.length; step_key++) {
