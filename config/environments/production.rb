@@ -22,6 +22,8 @@ Rifff::Application.configure do
   
   #JIMMY for web workers 
   config.assets.precompile += ["worker.js"]  
+  
+  config.assets.compile = true
 
   # Defaults to nil and saved in location specified by config.assets.prefix
   # config.assets.manifest = YOUR_PATH
