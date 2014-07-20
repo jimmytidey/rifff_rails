@@ -28,7 +28,7 @@ rifff.writeScore = function() {
 	
 	//loop through an make the choices 
 	$.each(rifff.score, function(step_key, step_val) { 
-        console.log('____ step ____' + step_key);
+        
 		$.each(rifff.data.banks, function(bank_key, value){ 
 						
 			option_choice = []; //reset array

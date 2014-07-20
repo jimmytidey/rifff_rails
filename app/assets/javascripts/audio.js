@@ -1,9 +1,9 @@
 //HANDLES AUDIO PLAYBACK 
-    
+console.log('included twice?');
 $.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase()); 
 
 if(isChrome = !!window.chrome){
-    console.log('you are running chrome - great');
+    console.log('you are running chrome - great1');
 }
 else { 
     alert('You must use Chrome for this website - it uses the HTML5 Audio API.');
@@ -46,8 +46,6 @@ rifff.loadSounds = function() {
         }
     }
     
-    console.log('loading sounds...');
-    
     $(document).ready(function(){
         if($('#total_percent_loaded').length === 0) {    
             var html ="<div class='progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
@@ -78,7 +76,15 @@ rifff.loadSounds = function() {
 
 rifff.loadSound = function(location, key) {
 	var request = new XMLHttpRequest();
-	request.open('GET', location, true);
+	
+	console.log('Location in ' + location);
+	
+	//hack to make it use cloudfront 
+	var new_location = location.replace('https://s3.amazonaws.com/rifff_bucket/',  'http://dyq8q1jskzeck.cloudfront.net/');
+	
+	console.log('location out ' + location);
+	
+	request.open('GET', new_location, true);
 	request.responseType = 'arraybuffer';
 	
 	if (typeof rifff.audioBuffers[key] === "undefined") { 
@@ -91,7 +97,7 @@ rifff.loadSound = function(location, key) {
 			
 			rifff.audioBuffers[key] = buffer;
 			
-			//console.log('LOADED------------>URL: ' +  location + " ID: " + key );
+			console.log('LOADED------------>URL: ' +  new_location + " ID: " + key );
 			$('#sound_'+key+' .load_indicator').css('background-color','green');
 			$('#sound_'+key+' .load_indicator').attr('data-loaded','1');
 			$('#sound_'+key+' .load_indicator').html("100%");
@@ -147,7 +153,7 @@ rifff.shedule = function() {
     for(step_key=rifff.current_step; step_key< rifff.score.length; step_key++) {
       
         time_to_play = (steps_into_future * rifff.loop_trigger_interval) + rifff.timeOffset; 
-        console.log('writing schedule for ' + step_key);
+        
         
         for(bank_key=0; bank_key<rifff.data.banks.length; bank_key++) {
             
@@ -155,7 +161,7 @@ rifff.shedule = function() {
                 
                 bank_option_to_play = rifff.score[step_key][bank_key]['bank_option'];
                 sample_offset       = rifff.score[step_key][bank_key]['time'];
-                console.log('Sending to play func ' + bank_key + " bank option " + bank_option_to_play);
+                
                 rifff.playSound(bank_key, bank_option_to_play, step_key, time_to_play, sample_offset);
             }    
         }
@@ -179,7 +185,7 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
     //make source node
     var selector =".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option+"']"; 
     var id = $(selector).val();
-    console.log('Making source node for bank key ' + bank_key + " bank option " + bank_option);
+    
     if(typeof rifff.audioBuffers[id] === 'object') {
         rifff.sounds[bank_key][bank_option][step] = context.createBufferSource();
         rifff.sounds[bank_key][bank_option][step].buffer = rifff.audioBuffers[id];
@@ -226,7 +232,6 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
     	    rifff.sounds[bank_key][bank_option][step].noteOff(parseFloat(rifff.loop_trigger_interval + time));
     	}
     	else {
-            console.log('PLAY: bank_key:' + bank_key + 'bank_option' + bank_option + " at " + time + " with offset " + offset + " with duration "+ duration);   
             rifff.sounds[bank_key][bank_option][step].noteGrainOn(time, offset, duration);
         }
     }    

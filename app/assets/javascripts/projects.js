@@ -98,9 +98,7 @@ rifff.renderControls = function(elem, bank_key, bank_option_key) {
 	if(rifff.data.banks[bank_key].bank_options[bank_option_key]) {
   	var value = rifff.data.banks[bank_key].bank_options[bank_option_key].file_location;
   	var volume = parseInt(rifff.data.banks[bank_key].bank_options[bank_option_key].volume);
-	
-	console.log(value + "for " + bank_key+"-"+bank_option_key)
-	
+
   	$.each(rifff.file_list, function(key, val){ 
   	    
   		if (val.url === value || parseInt(val.id)== parseInt(value)) {

@@ -31,7 +31,6 @@ gem 'deep_cloneable', '~> 1.5.0'
 gem 'jquery-rails'
 gem 'devise'
 gem 'carrierwave'
-gem 'therubyracer'
 gem 'libv8', '~> 3.11.8'
 gem "twitter-bootstrap-rails", "~> 2.1.9"
 gem 'less'
