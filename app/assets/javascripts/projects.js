@@ -17,7 +17,6 @@ $(document).ready(function(){
 	$("#myS3Uploader").S3Uploader();
 	//detect rifff mode
 	rifff.mode = $('#mode').val();
-
     rifff.loadSoundsLocations();
     rifff.getProjectInfo();
 
