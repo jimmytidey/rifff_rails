@@ -184,7 +184,7 @@ rifff.attachClickEvents = function() {
 		var bank_key = $(".dial",this).attr('data-bank');
 		rifff.data.banks[bank_key].bank_options[bank_option_key].volume = volume;
        
-        for (step = 0; step < parseInt(rifff.data.project_info.steps); step++) {
+        for (step = 0; step < parseFloat(rifff.data.project_info.steps); step++) {
             console.log('new volueme = ' + volume + " For bank" + bank_key + " bank option" + bank_option_key + "step" + step);
             if(typeof rifff.gains[bank_key][bank_option_key][step] !== 'undefined') {  
                 rifff.gains[bank_key][bank_option_key][step].gain.value = volume/100;
@@ -206,7 +206,7 @@ rifff.attachClickEvents = function() {
 		//need to change the json to represent this... 
 		$.each(rifff.data.banks, function(bank_key, bank_val){
 			$.each(bank_val.bank_options, function(bank_option_key, bank_option_val){
-				rifff.data.banks[bank_key].bank_options[bank_option_key].sequence.length = parseInt(rifff.data.project_info.steps) +1 ;
+				rifff.data.banks[bank_key].bank_options[bank_option_key].sequence.length = parseFloat(rifff.data.project_info.steps) +1 ;
 				$.each(rifff.data.banks[bank_key].bank_options[bank_option_key].sequence, function(key, val){
 				  
 				   if (val == null) { 

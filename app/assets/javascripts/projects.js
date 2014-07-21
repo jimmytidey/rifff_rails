@@ -44,7 +44,7 @@ rifff.loadSoundsLocations = function() {
 
 rifff.getProjectInfo = function() { 
 	rifff.bpl = parseInt(rifff.data.project_info.bpl);
-	rifff.bpm = parseInt(rifff.data.project_info.bpm);
+	rifff.bpm = parseFloat(rifff.data.project_info.bpm);
 	rifff.loop_trigger_interval = (rifff.bpl / (rifff.bpm / 60));
 }
 
