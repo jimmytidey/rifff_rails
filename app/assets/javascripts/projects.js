@@ -19,8 +19,6 @@ $(document).ready(function(){
 	rifff.mode = $('#mode').val();
     rifff.loadSoundsLocations();
     rifff.getProjectInfo();
-
-  
 })
 
 rifff.loadSoundsLocations = function() {

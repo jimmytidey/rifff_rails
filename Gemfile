@@ -33,10 +33,9 @@ gem 'devise'
 gem 'carrierwave'
 gem 'therubyracer'
 gem 'libv8', '~> 3.11.8'
-gem "twitter-bootstrap-rails", "~> 2.1.9"
-gem 'less'
-gem 'less-rails'
+gem 'less-rails', '~> 2.3.3'
 gem 'haml-rails'
+gem "twitter-bootstrap-rails", "~> 2.1.9"
 gem 's3_direct_upload'
 gem 'underscore-rails'
 gem 'aws-s3', :require => 'aws/s3'

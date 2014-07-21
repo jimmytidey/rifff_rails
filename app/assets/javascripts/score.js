@@ -1,5 +1,5 @@
 
-console.log("SCORE PAGE");
+console.log("SCORE PAGE revised");
 
 $(document).ready(function(){ 
 	$('#randomise').click(function(){
