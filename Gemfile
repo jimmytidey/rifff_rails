@@ -36,7 +36,7 @@ gem 'libv8', '~> 3.11.8'
 gem 'less-rails', '~> 2.3.3'
 gem 'haml-rails'
 gem "twitter-bootstrap-rails", "~> 2.1.9"
-gem 's3_direct_upload', "~> 0.1.6"  
+gem 's3_direct_upload', "0.0.5"  
 gem 'underscore-rails'
 gem 'aws-s3', :require => 'aws/s3'
 

@@ -17,8 +17,8 @@ template.psd: template-5d394049dad7c2f1d719a5435c956d71.psd
 template/index.psd: template-5d394049dad7c2f1d719a5435c956d71.psd
 title.png: title-3bc60dbb760583dafd7ce69660f777bc.png
 title/index.png: title-3bc60dbb760583dafd7ce69660f777bc.png
-application.js: application-22362def129936f3b7f776d127fd5184.js
-application/index.js: application-22362def129936f3b7f776d127fd5184.js
+application.js: application-0d877a3a0f973aefc5c343a1d9aa0e7a.js
+application/index.js: application-0d877a3a0f973aefc5c343a1d9aa0e7a.js
 worker.js: worker-2b393b9c5faaf672ccd82ad39bc5bf23.js
 worker/index.js: worker-2b393b9c5faaf672ccd82ad39bc5bf23.js
 list.json: list-4c816e747fc0b8bd0303c5a54ef227b2.json
