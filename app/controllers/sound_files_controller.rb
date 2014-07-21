@@ -4,8 +4,6 @@ class SoundFilesController < ApplicationController
 
   before_filter :load_parent
   
-  
-  
   def index
     @sound_files = SoundFile.all
     @sound_file = SoundFile.new

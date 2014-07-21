@@ -3,6 +3,4 @@ class SoundFile < ActiveRecord::Base
   belongs_to :project
   mount_uploader :sound, SoundUploader
   include Rails.application.routes.url_helpers
-
-  
 end

@@ -20,7 +20,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem "fog", "~> 1.3.1"
+gem 'fog', '~> 1.23.0'
 
 group :production do
   # gems specifically for Heroku go here
@@ -36,7 +36,7 @@ gem 'libv8', '~> 3.11.8'
 gem 'less-rails', '~> 2.3.3'
 gem 'haml-rails'
 gem "twitter-bootstrap-rails", "~> 2.1.9"
-gem 's3_direct_upload'
+gem 's3_direct_upload', "~> 0.1.6"  
 gem 'underscore-rails'
 gem 'aws-s3', :require => 'aws/s3'
 
