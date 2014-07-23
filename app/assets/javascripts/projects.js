@@ -3,7 +3,8 @@
 rifff.data = list_json; // this declared further up the page...
 rifff.step = 0;
 rifff.file_list = [] //list of the files available for this project.  
-console.log("PROJECTS PAGE");
+console.log("PROJECTS PAGE -hi");
+
 
 //these for when the user wants to add banks 
 rifff.defaults={};

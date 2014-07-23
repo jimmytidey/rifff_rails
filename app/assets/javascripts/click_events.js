@@ -1,6 +1,6 @@
 
 rifff.attachClickEvents = function() {
-  
+  console.log('oh hai');
   //attach click events 
   	$('#play').unbind('click');
 	$('#play').click(function(){
@@ -45,7 +45,10 @@ rifff.attachClickEvents = function() {
 		var bank_option = $(this).attr('data-bank-option');
 		var step = $(this).attr('data-step-no');
 		
-
+        if(isNaN(value)) { 
+            value=0; 
+        }
+        
 		value = value+1;
 		
 		if (value == 1) { 
