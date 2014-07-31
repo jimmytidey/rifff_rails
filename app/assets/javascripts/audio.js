@@ -8,6 +8,13 @@ rifff.audioBuffers = [];
 
 var context;
 
+if (window.webkitAudioContext && !window.AudioContext) { 
+    var i_am_very_old = true;  
+} else { 
+    var i_am_very_old = false; 
+}
+
+
 function initContext() {
   try {
     // Fix up for prefixing
@@ -176,8 +183,11 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
     //stop all other playback on this step 
     for (bank_option_erase=0; bank_option_erase<rifff.data.banks[bank_key].bank_options.length; bank_option_erase++) {                
         if(typeof rifff.sounds[bank_key][bank_option_erase][step] === "object") {
-        
-            rifff.sounds[bank_key][bank_option_erase][step].stop(0);
+            if(i_am_very_old) {
+                rifff.sounds[bank_key][bank_option_erase][step].noteOff(0);
+            } else { 
+                rifff.sounds[bank_key][bank_option_erase][step].stop(0);
+            }
         } 
     }
     
@@ -188,8 +198,11 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
     
     if(typeof rifff.audioBuffers[id] === 'object') {
         rifff.sounds[bank_key][bank_option][step] = context.createBufferSource();
-        rifff.sounds[bank_key][bank_option][step].buffer = rifff.audioBuffers[id];
-    
+        if(i_am_very_old) {
+            rifff.gains[bank_key][bank_option][step] = context.createGainNode();
+        } else {
+            rifff.sounds[bank_key][bank_option][step].buffer = rifff.audioBuffers[id];
+        }
     
         //calculate MP3 delay
         var sample_rate = rifff.sounds[bank_key][bank_option][step].buffer.sampleRate;
@@ -228,11 +241,23 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
     	    rifff.sounds[bank_key][bank_option][step].loopStart= delay_amount;
     	    rifff.sounds[bank_key][bank_option][step].loopEnd= rifff.sounds[bank_key][bank_option][step]['buffer']['duration']-(delay_amount *2);
     	    offset=0;
-    	    rifff.sounds[bank_key][bank_option][step].start(time);
-    	    rifff.sounds[bank_key][bank_option][step].stop(parseFloat(rifff.loop_trigger_interval + time));
+    	    
+    	    if(i_am_very_old) {
+    	        rifff.sounds[bank_key][bank_option][step].noteOn(time);
+                rifff.sounds[bank_key][bank_option][step].noteOff(parseFloat(rifff.loop_trigger_interval + time));
+    	    } 
+    	    else { 
+    	        rifff.sounds[bank_key][bank_option][step].start(time);
+    	        rifff.sounds[bank_key][bank_option][step].stop(parseFloat(rifff.loop_trigger_interval + time));
+    	    }
     	}
     	else {
-            rifff.sounds[bank_key][bank_option][step].start(time, offset, duration);
+    	    if(i_am_very_old) {
+    	        rifff.sounds[bank_key][bank_option][step].noteGrainOn(time, offset, duration);
+            } 
+            else {
+                rifff.sounds[bank_key][bank_option][step].start(time, offset, duration);
+            }
         }
     }    
 }
@@ -247,8 +272,12 @@ rifff.stop = function(){
                     
                     
                     if(typeof rifff.sounds[bank][bank_option][step] === "object") {
-                        
-                        rifff.sounds[bank][bank_option][step].stop(0);
+                        if(i_am_very_old) { 
+                            rifff.sounds[bank][bank_option][step].noteOff(0);
+                        }
+                        else {
+                            rifff.sounds[bank][bank_option][step].stop(0);
+                        }
                     } 
                 }
             }    
