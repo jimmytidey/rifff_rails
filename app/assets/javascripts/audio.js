@@ -163,7 +163,6 @@ rifff.shedule = function() {
       
         time_to_play = (steps_into_future * rifff.loop_trigger_interval) + rifff.timeOffset; 
         
-        
         for(bank_key=0; bank_key<rifff.data.banks.length; bank_key++) {
             
             if(typeof rifff.score[step_key][bank_key]['bank_option'] !== 'undefined' && (rifff.score[step_key][bank_key]['time']===0 || steps_into_future===0 )){
@@ -199,12 +198,17 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
     var id = $(selector).val();
     
     if(typeof rifff.audioBuffers[id] === 'object') {
+        
         rifff.sounds[bank_key][bank_option][step] = context.createBufferSource();
+         rifff.sounds[bank_key][bank_option][step].buffer = rifff.audioBuffers[id];
+        
         if(i_am_very_old) {
             rifff.gains[bank_key][bank_option][step] = context.createGainNode();
         } else {
-            rifff.sounds[bank_key][bank_option][step].buffer = rifff.audioBuffers[id];
+            rifff.gains[bank_key][bank_option][step] = context.createGain();
         }
+        
+       
     
         //calculate MP3 delay
         var sample_rate = rifff.sounds[bank_key][bank_option][step].buffer.sampleRate;
