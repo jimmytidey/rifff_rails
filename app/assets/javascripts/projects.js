@@ -1,10 +1,13 @@
 
 
-rifff.data = list_json; // this declared further up the page...
+ // this declared further up the page...
 rifff.step = 0;
 rifff.file_list = [] //list of the files available for this project.  
-console.log("PROJECTS PAGE -hi");
+console.log("PROJECTS PAGE ");
 
+if(typeof list_json !== 'undefined') {
+    rifff.data = list_json; // this declared further up the page...
+}
 
 //these for when the user wants to add banks 
 rifff.defaults={};
@@ -12,14 +15,15 @@ rifff.defaults.blank_bank        = {"bank_options":[{"sequence":[0,0,0,0,0,0,0,0
 rifff.defaults.blank_bank_option = {"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":50,"loop":false,"overplay":false,"file_location":"","bank_option_name":"1option"};
 
 
-
-
 $(document).ready(function(){ 
 	$("#myS3Uploader").S3Uploader();
 	//detect rifff mode
+	
 	rifff.mode = $('#mode').val();
-    rifff.loadSoundsLocations();
-    rifff.getProjectInfo();
+    if(typeof list_json !== 'undefined') {
+        rifff.loadSoundsLocations();
+        rifff.getProjectInfo();
+    }
 })
 
 rifff.loadSoundsLocations = function() {
