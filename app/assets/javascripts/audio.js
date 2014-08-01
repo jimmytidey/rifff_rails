@@ -9,7 +9,7 @@ rifff.audioBuffers = [];
 var context;
 
 if (webkitAudioContext && !window.AudioContext) { 
-    i_am_very_old = true;  
+    i_am_very_old = true;
 } else {
     i_am_very_old = false;
 }
@@ -198,14 +198,13 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
     if(typeof rifff.audioBuffers[id] === 'object') {
         
         rifff.sounds[bank_key][bank_option][step] = context.createBufferSource();
-         rifff.sounds[bank_key][bank_option][step].buffer = rifff.audioBuffers[id];
+        rifff.sounds[bank_key][bank_option][step].buffer = rifff.audioBuffers[id];
         
         if(i_am_very_old) {
             rifff.gains[bank_key][bank_option][step] = context.createGainNode();
         } else {
             rifff.gains[bank_key][bank_option][step] = context.createGain();
         }
-        
        
     
         //calculate MP3 delay
@@ -215,7 +214,6 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
         offset = parseFloat(offset + delay_amount);
 	 	
     	//set the gain of this node 
-    	rifff.gains[bank_key][bank_option][step] = context.createGain();
         rifff.sounds[bank_key][bank_option][step].connect(rifff.gains[bank_key][bank_option][step]);
         rifff.gains[bank_key][bank_option][step].gain.value = parseFloat(rifff.data.banks[bank_key].bank_options[bank_option].volume /100);
      
@@ -273,8 +271,7 @@ rifff.stop = function(){
         for (bank_option=0; bank_option<rifff.data.banks[bank].bank_options.length; bank_option++) {
             if(typeof rifff.sounds[bank][bank_option] !== 'undefined') {
                 for (step = 0; step < parseInt(rifff.data.project_info.steps); step++) {
-                    
-                    
+            
                     if(typeof rifff.sounds[bank][bank_option][step] === "object") {
                         if(i_am_very_old) { 
                             rifff.sounds[bank][bank_option][step].noteOff(0);
