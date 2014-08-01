@@ -72,6 +72,7 @@ rifff.writeScore = function() {
                     
                         var sound_duration  = temp_sound.buffer.duration ;
                         var length_of_step = (60/rifff.bpm) * rifff.bpl;
+                        console.log('length of step', length_of_step);
     				    number_of_forward_steps = (sound_duration/length_of_step)-1;
 
         				for (test_step = 0; test_step<number_of_forward_steps; test_step++) {

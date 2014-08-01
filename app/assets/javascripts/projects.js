@@ -48,7 +48,7 @@ rifff.loadSoundsLocations = function() {
 
 
 rifff.getProjectInfo = function() { 
-	rifff.bpl = parseInt(rifff.data.project_info.bpl);
+	rifff.bpl = parseFloat(rifff.data.project_info.bpl);
 	rifff.bpm = parseFloat(rifff.data.project_info.bpm);
 	rifff.loop_trigger_interval = (rifff.bpl / (rifff.bpm / 60));
 }
@@ -77,7 +77,6 @@ rifff.renderBanks = function(){ //loop through each bank and render it
 		$.each(bank_val.bank_options, function(bank_option_key, bank_option_val){ 
 			bank_option_element = $("<div data-bank='"+bank_key+"' data-bank-option='"+bank_option_key+"' class='bank_option_container'></div>");
 			$(bank_element).append(bank_option_element);
-			//$(bank_option_element).append("<p class='bank_option_title'>" +bank_option_val.bank_option_name +"</p>");			
 			rifff.renderControls(bank_option_element,bank_key, bank_option_key);
 						
 		});
@@ -166,7 +165,7 @@ rifff.renderSteps = function(elem, bank_key, bank_option_key) {
 }
 
 rifff.initSettings = function() { 
-	var bpm  	  = rifff.data.project_info.bpm;
+	var bpm  	= rifff.data.project_info.bpm;
 	var bpl   	= rifff.data.project_info.bpl;
 	var steps 	= rifff.data.project_info.steps;	
 	

@@ -167,7 +167,7 @@ rifff.shedule = function() {
                 
                 bank_option_to_play = rifff.score[step_key][bank_key]['bank_option'];
                 sample_offset       = rifff.score[step_key][bank_key]['time'];
-                
+                //console.log('sending--', bank_key, bank_option_to_play, step_key, time_to_play, sample_offset);
                 rifff.playSound(bank_key, bank_option_to_play, step_key, time_to_play, sample_offset);
             }    
         }
@@ -178,7 +178,7 @@ rifff.shedule = function() {
 
 
 rifff.playSound = function(bank_key, bank_option, step, time, offset) {
-    
+    //console.log('recieving', bank_key, bank_option, step_key, time, offset);
     //stop all other playback on this step 
     for (bank_option_erase=0; bank_option_erase<rifff.data.banks[bank_key].bank_options.length; bank_option_erase++) {                
         if(typeof rifff.sounds[bank_key][bank_option_erase][step] === "object") {
@@ -219,14 +219,16 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
      
         rifff.gains[bank_key][bank_option][step].connect(context.destination);
 
-        //set the duration
-        var duration
-        if(rifff.loop_trigger_interval- offset < rifff.sounds[bank_key][bank_option][step]['buffer']['duration']) {
+        //set the duration TODO : what was this conditional for? 
+        var duration;
+    //    if(rifff.loop_trigger_interval- offset < rifff.sounds[bank_key][bank_option][step]['buffer']['duration']) {
             duration = rifff.loop_trigger_interval - offset; 
-        }
-        else { 
-            duration = rifff.sounds[bank_key][bank_option][step] - offset;
-        }
+    //        console.log('if');
+    //    }
+    //    else { 
+    //        duration = rifff.sounds[bank_key][bank_option][step] - offset;
+            
+     //   }
     
         //if overplay is on 
         if(rifff.data.banks[bank_key].bank_options[bank_option].overplay) {
