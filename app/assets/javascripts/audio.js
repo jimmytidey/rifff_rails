@@ -8,9 +8,11 @@ rifff.audioBuffers = [];
 
 var context;
 
-if (window.webkitAudioContext && !window.AudioContext) { 
+if (webkitAudioContext && !window.AudioContext) { 
     var i_am_very_old = true;  
-} else { 
+    alert('running old version of HTML5 API')l
+} else {
+    alert('running new version of HTML5 API')l 
     var i_am_very_old = false; 
 }
 
