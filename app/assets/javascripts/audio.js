@@ -7,13 +7,13 @@ rifff.playstate = '';
 rifff.audioBuffers = [];
 
 var context;
-
+alert('testin audio API');
 if (webkitAudioContext && !window.AudioContext) { 
-    var i_am_very_old = true;  
-    alert('running old version of HTML5 API')l
+    i_am_very_old = true;  
+    alert('running old version of HTML5 API');
 } else {
-    alert('running new version of HTML5 API')l 
-    var i_am_very_old = false; 
+    alert('running new version of HTML5 API'); 
+    i_am_very_old = false;
 }
 
 
