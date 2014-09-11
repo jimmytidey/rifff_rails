@@ -9,7 +9,7 @@ rifff.audioBuffers = [];
 var context;
 
 if (webkitAudioContext && !window.AudioContext) { 
-    i_am_very_old = true;  
+    i_am_very_old = true;
 } else {
     i_am_very_old = false;
 }
@@ -167,7 +167,7 @@ rifff.shedule = function() {
                 
                 bank_option_to_play = rifff.score[step_key][bank_key]['bank_option'];
                 sample_offset       = rifff.score[step_key][bank_key]['time'];
-                
+                //console.log('sending--', bank_key, bank_option_to_play, step_key, time_to_play, sample_offset);
                 rifff.playSound(bank_key, bank_option_to_play, step_key, time_to_play, sample_offset);
             }    
         }
@@ -178,7 +178,7 @@ rifff.shedule = function() {
 
 
 rifff.playSound = function(bank_key, bank_option, step, time, offset) {
-    
+    //console.log('recieving', bank_key, bank_option, step_key, time, offset);
     //stop all other playback on this step 
     for (bank_option_erase=0; bank_option_erase<rifff.data.banks[bank_key].bank_options.length; bank_option_erase++) {                
         if(typeof rifff.sounds[bank_key][bank_option_erase][step] === "object") {
@@ -198,14 +198,13 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
     if(typeof rifff.audioBuffers[id] === 'object') {
         
         rifff.sounds[bank_key][bank_option][step] = context.createBufferSource();
-         rifff.sounds[bank_key][bank_option][step].buffer = rifff.audioBuffers[id];
+        rifff.sounds[bank_key][bank_option][step].buffer = rifff.audioBuffers[id];
         
         if(i_am_very_old) {
             rifff.gains[bank_key][bank_option][step] = context.createGainNode();
         } else {
             rifff.gains[bank_key][bank_option][step] = context.createGain();
         }
-        
        
     
         //calculate MP3 delay
@@ -215,20 +214,21 @@ rifff.playSound = function(bank_key, bank_option, step, time, offset) {
         offset = parseFloat(offset + delay_amount);
 	 	
     	//set the gain of this node 
-    	rifff.gains[bank_key][bank_option][step] = context.createGain();
         rifff.sounds[bank_key][bank_option][step].connect(rifff.gains[bank_key][bank_option][step]);
         rifff.gains[bank_key][bank_option][step].gain.value = parseFloat(rifff.data.banks[bank_key].bank_options[bank_option].volume /100);
      
         rifff.gains[bank_key][bank_option][step].connect(context.destination);
 
-        //set the duration
-        var duration
-        if(rifff.loop_trigger_interval- offset < rifff.sounds[bank_key][bank_option][step]['buffer']['duration']) {
+        //set the duration TODO : what was this conditional for? 
+        var duration;
+    //    if(rifff.loop_trigger_interval- offset < rifff.sounds[bank_key][bank_option][step]['buffer']['duration']) {
             duration = rifff.loop_trigger_interval - offset; 
-        }
-        else { 
-            duration = rifff.sounds[bank_key][bank_option][step] - offset;
-        }
+    //        console.log('if');
+    //    }
+    //    else { 
+    //        duration = rifff.sounds[bank_key][bank_option][step] - offset;
+            
+     //   }
     
         //if overplay is on 
         if(rifff.data.banks[bank_key].bank_options[bank_option].overplay) {
@@ -273,8 +273,7 @@ rifff.stop = function(){
         for (bank_option=0; bank_option<rifff.data.banks[bank].bank_options.length; bank_option++) {
             if(typeof rifff.sounds[bank][bank_option] !== 'undefined') {
                 for (step = 0; step < parseInt(rifff.data.project_info.steps); step++) {
-                    
-                    
+            
                     if(typeof rifff.sounds[bank][bank_option][step] === "object") {
                         if(i_am_very_old) { 
                             rifff.sounds[bank][bank_option][step].noteOff(0);
