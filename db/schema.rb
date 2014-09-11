@@ -21,9 +21,9 @@ ActiveRecord::Schema.define(:version => 20130312113150) do
   create_table "projects", :force => true do |t|
     t.integer  "user_id"
     t.string   "name"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-    t.text     "json",       :limit => 255
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.text     "json"
   end
 
   create_table "sound_files", :force => true do |t|

@@ -294,7 +294,7 @@ rifff.stop = function(){
 
 rifff.updateTotalPercent = function() {
     
-    var percent_loaded = ((rifff.files_loaded-1) / rifff.file_list.length) * 100;
+    var percent_loaded = ((rifff.files_loaded) / rifff.file_list.length) * 100;
     
     $('#total_percent_loaded .bar').css('width', percent_loaded + "%");
     
