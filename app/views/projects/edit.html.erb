@@ -9,39 +9,43 @@
 
 
 <div id='controls' class='row'>
+
+
+
+    <button id='play'  class='control span2 btn btn-success'>Play</button>
     
+
     
-    <div class="btn-group span3" >
-        <button id='play'      class='control btn'>Play</button>
-        <button id='stop'      class='control btn' value='stop'>Stop</button>
-        <button id='backwards' class='control btn' >&laquo;</button>
-        <button id='forward'   class='control btn' >&raquo;</button>
-        <button id='rewind'    class='control btn' >&laquo;&laquo;</button>
+    <button id='randomise' class='control btn span2 ' >randomise</button>
+    
+
+    <div class="btn-group span3 transport_navigation" >
+        <button id='backwards' class=' offset1 control btn' >&laquo;</button>
+        <button id='forward'   class=' control btn' >&raquo;</button>
+        <button id='rewind'    class=' control btn' >&laquo;&laquo;</button>
     </div>
+
     
-    <button id='randomise' class='control btn span2' >randomise</button>
-    
-    <form class="navbar-form pull-right" id='settings'>
+    <div class='project_settings'>
+
         <div class='span1'>
             <label for='bpm'>BPM</label>
             <input type="text" id='bpm' class="setting_field  pull-left">
         </div>
-        
+
         <div class='span1'>        
             <label for='bpl'>Beats/loop</label>
             <input type="text" id='bpl' class="setting_field pull-left">
         </div>
-        
+
         <div class='span1'>        
             <label for='steps'>Steps</label>
             <input type="text" id='steps' class="setting_field pull-left">
         </div>
-        
-        <div class='span1'>        
-            
-            <input type="button" id='save_settings' value='Save' class=" setting_field pull-left">
-        </div>
-    </form>
+    </div>
+
+
+
     
 </div>    
 
@@ -52,7 +56,7 @@
 <div class='row'>
     <img id="loop_overplay_label" src='/assets/loop_overplay_label.png' />
     <div id='composer' class='span12'>
-        
+
         <div id='playhead'></div>
         <!-- Javascript builds composer in here  -->
     </div>
@@ -60,21 +64,21 @@
 
 <div class='row'>
     <div id='file_controls' class='span12'>
-    
+
         <div id='file_list'>
             <!--Javascript puts files in here -->
         </div>    
-    
+
         <%= s3_uploader_form post: "#{project_path(@project)}/sound_files", as: "sound_files[sound]", id: "myS3Uploader" do %>
-          <%= file_field_tag :file, multiple: true %>
+        <%= file_field_tag :file, multiple: true %>
         <% end %>
-    
+
         <script id="template-upload" type="text/x-tmpl">
         <div id="file-{%=o.unique_id%}" class="upload">
-          {%=o.name%}
-          <div class="progress"><div class="bar" style="width: 0%"></div></div>
+        {%=o.name%}
+        <div class="progress"><div class="bar" style="width: 0%"></div></div>
         </div>
         </script>
-    
+
     </div>
 </div>    

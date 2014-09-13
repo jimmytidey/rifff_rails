@@ -1,16 +1,12 @@
 
 rifff.attachClickEvents = function() {
+
+	rifff.attachKeyboardEvents();
 	
   //attach click events 
   $('#play').unbind('click');
   $('#play').click(function(){
-  	console.log('playing');
-  	rifff.play();
-  });
-  
-  $('#stop').unbind('click');
-  $('#stop').click(function(){
-  	rifff.stop();
+		rifff.play_helper();
   });
   
   $('#forward').unbind('click');
@@ -36,6 +32,11 @@ rifff.attachClickEvents = function() {
   	rifff.current_step = 0;
   	rifff.updatePlayhead();	
   	rifff.stop();	
+  });
+
+  $('#randomise').unbind('click');
+  $('#randomise').click(function(){
+		rifff.writeScore();
   });
   
   $('.step').click(function(){

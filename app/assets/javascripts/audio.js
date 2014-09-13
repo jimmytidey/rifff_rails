@@ -59,7 +59,7 @@ rifff.loadSounds = function() {
     
     $(document).ready(function(){
         if($('#total_percent_loaded').length === 0) {    
-            var html ="<div class='progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
+            var html ="<div class='span12 progress progress-striped active' id='total_percent_loaded'><div class='bar' style='width: 0%;'></div></div>";
             
             $('#composer').before(html);
         }

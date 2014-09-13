@@ -19,6 +19,8 @@
 //= require score.js
 //= require transport.js
 //= require click_events.js
+//= require view_helpers.js
+//= require keyboard_events.js
 //= require s3_direct_upload
 //= require projects.js
 

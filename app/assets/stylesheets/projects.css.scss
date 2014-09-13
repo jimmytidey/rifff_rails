@@ -1,3 +1,19 @@
 // Place all the styles related to the projects controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+#controls button { 
+	position:relative; 
+	top:2em;
+}
+
+.transport_navigation button{ 
+	width:60px;
+}
+
+
+#controls {
+    z-index:10000;
+    background-color:#fdfdfd;
+    padding-bottom:10px;
+}
+

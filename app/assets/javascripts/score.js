@@ -1,11 +1,4 @@
 
-console.log("SCORE PAGE revised");
-
-$(document).ready(function(){ 
-	$('#randomise').click(function(){
-		rifff.writeScore();
-	});
-});
 
 
 rifff.writeScore = function() { 
