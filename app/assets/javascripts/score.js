@@ -32,17 +32,27 @@ rifff.writeScore = function() {
 			});
 			
 			//now randomise values 
-			$.each(option_choice, function(key, val) { 
-					option_choice[key] = (val * Math.random() * 3) + val ;
+			$.each(option_choice, function(key, val) {
+				if (val === 3) {//black squares are always going to play, add 5 to lift them out of the other noise
+					option_choice[key] = 20 + (Math.random());
+				}
+				
+				if (val === 1) {
+					option_choice[key] = ( 0.25 + Math.random() );
+				}
+
+				if (val === 2) {
+					option_choice[key] = ( 0.5 + Math.random() );
+				}
+
 			});
 			
 			//find highest value 			
 			bank_option_choice = option_choice.max();
 			
 			
-			
 			//if there is a high above 3, this must be the sound to play in this bank
-			if (option_choice[bank_option_choice] > 3){
+			if (option_choice[bank_option_choice] > 1){
 			    //console.log('setting bank ' + bank_key + "to " + bank_option_choice);
 				rifff.score[step_key][bank_key]['bank_option'] = bank_option_choice;
 				rifff.score[step_key][bank_key]['time'] = 0;

@@ -35,7 +35,7 @@ rifff.loadSounds = function() {
             var append_string = "<div class='row audio_file' id='sound_"+file.id+"' data-loaded='1' >";
             append_string +=    "<div class='load_indicator span1'></div>";
             append_string +=    '<div class="name span5">'+file.name+'</div>';
-            append_string +=    '<div class="name span1"><i class="icon-volume-up"></i></div>';
+            append_string +=    '<div class="name span1"><i data-sound-id="'+file.id+'" class="preview_btn icon-volume-up"></i></div>';
             append_string +=    '<div class="actions name span3">';
             append_string +=    '<a rel="nofollow" data-remote="true" data-method="delete" data-confirm="Are you sure?" href="/projects/'+project_id+'/sound_files/'+file.id+'">remove</a>';
             append_string +=    '</div>';

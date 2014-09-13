@@ -1,7 +1,7 @@
 
 rifff.attachClickEvents = function() {
 
-	rifff.attachKeyboardEvents();
+ rifff.attachKeyboardEvents();
 	
   //attach click events 
   $('#play').unbind('click');
@@ -191,8 +191,6 @@ rifff.attachClickEvents = function() {
 		}  
 	});
 	
-	
-	
 	$(".dial").parent().mouseup(function(){
 		var volume = parseInt($(".dial",this).val());
 		var bank_option_key = $(".dial",this).attr('data-bank-option');
@@ -208,34 +206,22 @@ rifff.attachClickEvents = function() {
 		rifff.saveJson();
 	});	
 	
-	//save settings
-	$('#save_settings').unbind('click'); 
-	$('#save_settings').click(function(){	 
-
-		rifff.data.project_info.bpm = $('#bpm').val();
-
-		rifff.data.project_info.bpl = $('#bpl').val();
-
-		rifff.data.project_info.steps = $('#steps').val();
+	$('.preview_btn').click(function(){
+		var elem = $(this);
+		var sound_id = parseInt(elem.attr('data-sound-id'));
 		
-		//need to change the json to represent this... 
-		$.each(rifff.data.banks, function(bank_key, bank_val){
-			$.each(bank_val.bank_options, function(bank_option_key, bank_option_val){
-				rifff.data.banks[bank_key].bank_options[bank_option_key].sequence.length = parseFloat(rifff.data.project_info.steps) +1 ;
-				$.each(rifff.data.banks[bank_key].bank_options[bank_option_key].sequence, function(key, val){
-					
-					if (val == null) { 
-						rifff.data.banks[bank_key].bank_options[bank_option_key].sequence[key] = 0;
-					} 
-				});
+		if(elem.hasClass('icon-volume-up')){	
+			rifff.playSoundById(sound_id);
+			$(this).removeClass('icon-volume-up');
+			$(this).addClass('icon-stop');
+		} 
+		else { 
+			rifff.stopSoundById(sound_id);
+			$(this).removeClass('icon-stop');
+			$(this).addClass('icon-volume-up');
+		}
 
-			});
-		});
-		
-		
-		rifff.saveJson();
-		rifff.renderBanks();
-		rifff.writeScore();
-		rifff.current_step = 0;	
 	});
+
+
 }

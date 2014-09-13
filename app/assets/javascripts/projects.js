@@ -1,5 +1,6 @@
 
 
+
  // this declared further up the page...
 rifff.step = 0;
 rifff.file_list = [] //list of the files available for this project.  
@@ -15,7 +16,8 @@ rifff.defaults.blank_bank        = {"bank_options":[{"sequence":[0,0,0,0,0,0,0,0
 rifff.defaults.blank_bank_option = {"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"volume":50,"loop":false,"overplay":false,"file_location":"","bank_option_name":"1option"};
 
 
-$(document).ready(function(){ 
+$(document).ready(function(){
+ 
 	$("#myS3Uploader").S3Uploader();
 	//detect rifff mode
 	
