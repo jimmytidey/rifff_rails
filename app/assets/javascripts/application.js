@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require audio.js
+//= require loading_audio.js
 //= require twitter/bootstrap.js
 //= require knob.js
 //= require score.js
