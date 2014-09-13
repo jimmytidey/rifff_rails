@@ -128,11 +128,7 @@ footer a, footer a:visited{
 	width:1000px;
 }
 
-#loop_overplay_label { 
-    float:left;
-    margin-left: 304px;
-    margin-bottom:-100px;    
-}
+
 
 #composer { 
 	position:relative;
@@ -172,9 +168,8 @@ footer a, footer a:visited{
 	clear:both;
 	z-index:1000;
 	height:20px;
-	padding-top:20px;
+	padding-top:5px;
 	margin-bottom:4px;
-	margin-left:6px;
 	display:inline;
 }
 
@@ -182,7 +177,7 @@ footer a, footer a:visited{
   clear: left;
   float: left;
   margin-bottom: 10px;
-  margin-top: 24px;
+  margin-top: 4px;
 }
 
 .title_rename { 
@@ -208,12 +203,14 @@ footer a, footer a:visited{
 	border:1px solid black;
 	float:left;
 	position:relative;
-	top:10px;
+	top:5px;
 }
 
 .file_select { 
 	float:left;	
 	margin-left:5px;
+  height:22px;
+  font-size:10px;
 }
 .dial_container{
 	float:left;
@@ -223,20 +220,25 @@ footer a, footer a:visited{
 .checkbox_control { 
 	float:left;
 	position:relative;
-	top:6px;
+	top:0px;
 	left:2px;
 }
 
 .add_bank_option, .add_bank { 
-  float:left;
-  clear:both;
-  margin-top:4px;
+
 }
 
 .remove_bank_option, .remove_bank { 
   color:red;
   margin-left:10px;
   cursor:pointer;
+}
+
+.add_bank_option{ 
+  margin-left:10px;
+  cursor:pointer;
+   font-size:10px;
+
 }
 
 .remove_bank {
@@ -255,19 +257,20 @@ footer a, footer a:visited{
 	margin-left:5px;
 	border:1px solid black;
 	float:left;
-	margin-top:10px;
+	margin-top:5px;
 	z-index:10;
 }
 
 #playhead{ 
   background-color: #DCDCDC;
-  bottom: 30px;
-  left: 303px;
+  bottom: 10px;
+  left: 293px;
   opacity: 0.6;
   position: absolute;
-  top: 10px;
+  top: 25px;
   width: 12px;
   z-index: -4;
+  border-radius:3px;
 }
 
 
@@ -280,7 +283,7 @@ footer a, footer a:visited{
 
 .show #playhead { 
 	left:5px;
-	bottom:10px;
+	bottom:0px;
 }
 
 

@@ -67,7 +67,7 @@ rifff.renderBanks = function(){ //loop through each bank and render it
 		
 		//add the title to the bank
 		if (rifff.mode == 'edit') {
-		    $(bank_element).append("<div class='bank_header'><h4 class='bank_title'>" +bank_val.bank_name +"</h4><span class='remove_bank'>[DELETE]</span></div>");
+		    $(bank_element).append("<div class='bank_header'><h4 class='bank_title'>" +bank_val.bank_name +"</h4><span class='add_bank_option'>[Add new option]</span><span class='remove_bank'>[DELETE WHOLE BANK]</span></div>");
 		}
 		else { 
 		    $(bank_element).append("<div class='bank_header'><h4 class='bank_title'>" +bank_val.bank_name +"</h4></div>");
@@ -80,16 +80,14 @@ rifff.renderBanks = function(){ //loop through each bank and render it
 			rifff.renderControls(bank_option_element,bank_key, bank_option_key);
 						
 		});
-		if (rifff.mode == 'edit') {
-		    //append the button to add more options 
-		    $(bank_element).append("<input type='button' class='btn add_bank_option' value='Add another option' />");
-	    }
+
 	});
 	
-	//append the button to add more options 
+		//append the button to add more options 
 	if (rifff.mode == 'edit') {
 	    $('#composer').append("<br/><input type='button' class='btn add_bank' value='Add a new bank' />");
 	}
+
 	
 	rifff.attachClickEvents();
 }
@@ -131,7 +129,7 @@ rifff.renderControls = function(elem, bank_key, bank_option_key) {
   			$(".loop", elem).attr('checked', 'checked');
   		}
 	
-  		$(".dial", elem).knob({'min':0,'max':70, 'width':30, 'height':30});
+  		$(".dial", elem).knob({'min':0,'max':70, 'width':20, 'height':20});
   	}
   	
   	rifff.renderSteps(elem, bank_key, bank_option_key);
@@ -140,6 +138,8 @@ rifff.renderControls = function(elem, bank_key, bank_option_key) {
   	    $(elem).append("<i class='icon-remove-circle remove_bank_option'></i>");
     }
   }	
+
+
 }
 
 rifff.renderSteps = function(elem, bank_key, bank_option_key) {

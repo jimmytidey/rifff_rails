@@ -6,7 +6,7 @@ rifff.updatePlayhead = function() {
 	var playhead_offset; 
 	
 	if (rifff.mode == 'edit') { 
-		playhead_offset = 303;
+		playhead_offset = 293;
 	}
 	
 	else { 

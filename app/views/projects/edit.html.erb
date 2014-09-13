@@ -1,31 +1,24 @@
 
 <input type='hidden' id='mode' value='edit' />
 
-<h1><%= @project.name %></h1>
-<p><%= link_to 'back to projects', projects_path() %></p>
 
-
-
+<div  class='row'>
+<h2 class='span10'>RIFFF: <%= @project.name %></h2>
+<h5 class='span2'> &laquo;&nbsp;<%= link_to 'back to projects', projects_path() %></h5>
+</div>
 
 
 <div id='controls' class='row'>
-
-
-
     <button id='play'  class='control span2 btn btn-success'>Play</button>
-    
 
-    
     <button id='randomise' class='control btn span2 ' >randomise</button>
     
-
     <div class="btn-group span3 transport_navigation" >
         <button id='backwards' class=' offset1 control btn' >&laquo;</button>
         <button id='forward'   class=' control btn' >&raquo;</button>
         <button id='rewind'    class=' control btn' >&laquo;&laquo;</button>
     </div>
-
-    
+ 
     <div class='project_settings'>
 
         <div class='span1'>
@@ -42,11 +35,7 @@
             <label for='steps'>Steps</label>
             <input type="text" id='steps' class="setting_field pull-left">
         </div>
-    </div>
-
-
-
-    
+    </div>    
 </div>    
 
 
@@ -54,7 +43,7 @@
 
 
 <div class='row'>
-    <img id="loop_overplay_label" src='/assets/loop_overplay_label.png' />
+    
     <div id='composer' class='span12'>
 
         <div id='playhead'></div>
@@ -64,7 +53,7 @@
 
 <div class='row'>
     <div id='file_controls' class='span12'>
-
+        <h4>Samples</h4>
         <div id='file_list'>
             <!--Javascript puts files in here -->
         </div>    

@@ -136,8 +136,9 @@ rifff.attachClickEvents = function() {
 	
 	//add another bank option 
 	$('.add_bank_option').unbind('click');
-	$('.add_bank_option').click(function(){ 
-		var bank = $(this).parent().attr('data-bank');
+	$('.add_bank_option').click(function(){
+
+		var bank = $(this).parents('.bank_container').attr('data-bank');
 		var clone = jQuery.extend(true, {}, rifff.defaults.blank_bank_option);
 		rifff.data.banks[bank].bank_options.push(clone);
 		console.log(rifff.data.banks[bank].bank_options);
@@ -161,14 +162,16 @@ rifff.attachClickEvents = function() {
 	$('.remove_bank_option').click(function(){
 		var bank          = $(this).parent().parent().attr('data-bank');
 		var bank_option   = $(this).parent().attr('data-bank-option');
-		console.log("removing " + bank + " " + bank_option);
-		if (bank_option != 0) { 
-			rifff.data.banks[bank].bank_options.splice(bank_option,1);
-			rifff.saveJson();
-			rifff.renderBanks();
-		}
-		else { 
-			alert('You cannot delete the last option');
+
+		if(confirm("You sure? This bank option will be gone forever")){
+			if (bank_option != 0) { 
+				rifff.data.banks[bank].bank_options.splice(bank_option,1);
+				rifff.saveJson();
+				rifff.renderBanks();
+			}
+			else { 
+				alert('You cannot delete the last option');
+			}
 		}
 	});
 	
@@ -177,9 +180,11 @@ rifff.attachClickEvents = function() {
 	$('.remove_bank').click(function(){ 
 		var bank = $(this).parents('.bank_container').attr('data-bank');
 		if (bank != 0) {
-			rifff.data.banks.splice(bank,1);
-			rifff.saveJson();
-			rifff.renderBanks();
+			if(confirm("You sure? This bank will be gone forever")){
+				rifff.data.banks.splice(bank,1);
+				rifff.saveJson();
+				rifff.renderBanks();
+			}
 		}
 		else { 
 			alert('You cannot delete the last bank');

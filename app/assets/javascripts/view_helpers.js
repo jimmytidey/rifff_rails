@@ -15,9 +15,11 @@ rifff.play_helper = function() {
 }
 
 $(window).scroll(function () {
-	if ($(window).scrollTop() > 200) {
+	if ($(window).scrollTop() > 100) {
+
 		$('#controls').css('position','fixed');
-		$('#controls').css('margin-top','-190px');
+		$('#controls').css('margin-top','-60px');
+
 	}else { 
 		$('#controls').css('position','static');
 		$('#controls').css('margin-top','auto');

@@ -43,7 +43,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     @sound_files = @project.sound_files
     @sound_file = SoundFile.new   
-    render :layout => "audio" 
+    render :layout => "edit_audio" 
   end
   
   def save_json

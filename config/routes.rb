@@ -8,7 +8,6 @@ Rifff::Application.routes.draw do
   
   root :to => "welcome#index"
   
-  
   match 'projects/:id/iframe' => 'projects#iframe'
   match 'projects/:id/show' => 'projects#show'
   match 'projects/:id/save_json' => 'projects#save_json'
