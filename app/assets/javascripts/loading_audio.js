@@ -44,6 +44,7 @@ rifff.loadSounds = function() {
             $('#file_list').append(append_string); 
         }   
 	});
+    rifff.attachPreviewClickEvents();
 };
 
 rifff.loadSound = function(location, key) {

@@ -1,10 +1,8 @@
 
-
-
- // this declared further up the page...
 rifff.step = 0;
-rifff.file_list = [] //list of the files available for this project.  
-console.log("PROJECTS PAGE ");
+
+//list of the files available for this project.  
+rifff.file_list = [] 
 
 if(typeof list_json !== 'undefined') {
     rifff.data = list_json; // this declared further up the page...
@@ -19,8 +17,8 @@ rifff.defaults.blank_bank_option = {"sequence":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 $(document).ready(function(){
  
 	$("#myS3Uploader").S3Uploader();
-	//detect rifff mode
 	
+	//detect rifff mode
 	rifff.mode = $('#mode').val();
     if(typeof list_json !== 'undefined') {
         rifff.loadSoundsLocations();

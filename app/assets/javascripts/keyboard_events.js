@@ -1,4 +1,5 @@
 rifff.attachKeyboardEvents = function(){ 
+	
 	$('body').keyup(function(e){
 		if(e.keyCode == 82){
 			$('#randomise').addClass('active');

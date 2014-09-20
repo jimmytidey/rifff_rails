@@ -11,9 +11,9 @@
 <div id='controls' class='row'>
     <button id='play'  class='control span2 btn btn-success'>Play</button>
 
-    <button id='randomise' class='control btn span2 ' >randomise</button>
+    <button id='randomise' class='control btn span2' >randomise</button>
     
-    <div class="btn-group span3 transport_navigation" >
+    <div class="btn-group span2 transport_navigation" >
         <button id='backwards' class=' offset1 control btn' >&laquo;</button>
         <button id='forward'   class=' control btn' >&raquo;</button>
         <button id='rewind'    class=' control btn' >&laquo;&laquo;</button>
@@ -21,19 +21,23 @@
  
     <div class='project_settings'>
 
-        <div class='span1'>
+        <div class='span1 offset2'>
             <label for='bpm'>BPM</label>
-            <input type="text" id='bpm' class="setting_field  pull-left">
+            <input type="text" id='bpm' class="setting_field  pull-right">
         </div>
 
         <div class='span1'>        
             <label for='bpl'>Beats/loop</label>
-            <input type="text" id='bpl' class="setting_field pull-left">
+            <input type="text" id='bpl' class="setting_field pull-right">
         </div>
 
         <div class='span1'>        
             <label for='steps'>Steps</label>
-            <input type="text" id='steps' class="setting_field pull-left">
+            <input type="text" id='steps' class="setting_field pull-right">
+        </div>
+        <div class='span1'>        
+            
+            <input type="button" id='save_settings' value='Save' class="btn setting_field pull-right">
         </div>
     </div>    
 </div>    

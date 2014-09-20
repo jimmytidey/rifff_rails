@@ -13,7 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
-//= require audio.js
+//= require init.js
+//= require schedule.js
+//= require preview.js
 //= require loading_audio.js
 //= require twitter/bootstrap.js
 //= require knob.js
