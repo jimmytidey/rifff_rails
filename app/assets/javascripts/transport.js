@@ -20,15 +20,11 @@ rifff.stop = function(){
         for (bank_option=0; bank_option<rifff.data.banks[bank].bank_options.length; bank_option++) {
             if(typeof rifff.sounds[bank][bank_option] !== 'undefined') {
                 for (step = 0; step < parseInt(rifff.data.project_info.steps); step++) {
-
-                    if(typeof rifff.sounds[bank][bank_option][step] === "object") {
-                        if(i_am_very_old) { 
-                            rifff.sounds[bank][bank_option][step].noteOff(0);
-                        }
-                        else {
-                            rifff.sounds[bank][bank_option][step].stop(0);
-                        }
-                    } 
+                    try { 
+                        rifff.stopNode(rifff.sounds[bank][bank_option][step]);
+                    } catch(err) { 
+                        console.log('hi');
+                    }
                 }
             }    
             rifff.sounds[bank][bank_option] = [];
@@ -36,6 +32,30 @@ rifff.stop = function(){
         }
     }
     rifff.play_status = 'stopped';
+}
+
+
+rifff.playNode =function(node, when, offset, duration) { 
+    if(i_am_very_old) {
+        node.noteOn(when, offset, duration);
+        node.noteOff(when+duration);
+    } 
+    else {
+        node.start(when, offset, duration);
+        node.stop(when+duration);
+    }
+}
+
+rifff.stopNode =function(node) { 
+    if(typeof node === "object") {
+        if(i_am_very_old) { 
+            node.noteOff(0);
+        }
+        else {
+            
+            node.stop(0);
+        }
+    } 
 }
 
 rifff.stepUpdater = function() {

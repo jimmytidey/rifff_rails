@@ -25,6 +25,10 @@ html, body {
     height: 100%;
 }
 
+#controls { 
+  width:100%;
+}
+
 body { 
   background-color:#fdfdfd!important;
   padding-top:0px!important;

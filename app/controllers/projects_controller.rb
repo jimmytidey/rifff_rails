@@ -12,6 +12,7 @@ class ProjectsController < ApplicationController
 
   def new
     @project = Project.new
+    flash[:notice] = "new project"
   end
   
   def create
@@ -30,7 +31,14 @@ class ProjectsController < ApplicationController
     @sound_files = @project.sound_files
     @sound_file = SoundFile.new    
     render :layout => "bare"
-  end 
+  end
+
+  def duplicate  
+    @project = Project.find(params[:id])
+    @sound_files = @project.sound_files
+    @sound_file = SoundFile.new    
+    render :layout => "bare"
+  end
   
   def show 
     @project = Project.find(params[:id])

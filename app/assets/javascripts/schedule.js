@@ -15,14 +15,13 @@ rifff.schedule = function() {
         
         for(bank_key=0; bank_key<rifff.data.banks.length; bank_key++) {
 
-            console.log('schedule for step ', step_key);
-
             if(typeof rifff.score[step_key][bank_key]['bank_option'] !== 'undefined'){
 
-                bank_option_to_play = rifff.score[step_key][bank_key]['bank_option'];
-                sample_offset       = rifff.score[step_key][bank_key]['time'];
+                var bank_option_to_play = rifff.score[step_key][bank_key]['bank_option'];
+                var sample_offset       = rifff.score[step_key][bank_key]['time'];
+                var duration            = rifff.score[step_key][bank_key]['duration'];
                 
-                rifff.scheduleStep(bank_key, bank_option_to_play, step_key, time_to_play, sample_offset);
+                rifff.scheduleStep(bank_key, bank_option_to_play, step_key, time_to_play, duration, sample_offset);
             }    
         }
         steps_into_future++;
@@ -31,7 +30,7 @@ rifff.schedule = function() {
 
 
 //When the schedule discovers a step that needs to be played, this function writes it into the rifff.sounds array
-rifff.scheduleStep = function(bank_key, bank_option, step, time, offset) {
+rifff.scheduleStep = function(bank_key, bank_option, step, when, duration, offset) {
 
     rifff.eraseExistingScheduleForStep(bank_key);
     
@@ -42,29 +41,26 @@ rifff.scheduleStep = function(bank_key, bank_option, step, time, offset) {
 
         rifff.addToSounds(bank_key, bank_option, step);
 
-
         //add looping to this sample, if it's turned on
         if(rifff.data.banks[bank_key].bank_options[bank_option].loop) {
             rifff.sounds[bank_key][bank_option][step].loop = true;
         }
-        var mp3_delay = rifff.calculateMP3Delay(rifff.sounds[bank_key][bank_option][step].buffer);
-        console.log(mp3_delay);
-        var when = time + mp3_delay; 
-        var duration = rifff.loop_trigger_interval;
         
-        
-        if(i_am_very_old) {
-            rifff.sounds[bank_key][bank_option][step].noteOn(when, offset, duration);
-        } 
-        else {
-            rifff.sounds[bank_key][bank_option][step].start(when, offset, duration);
-            rifff.sounds[bank_key][bank_option][step].info                  = {};
-            rifff.sounds[bank_key][bank_option][step].info.start_time       = when - rifff.timeOffset;
-            rifff.sounds[bank_key][bank_option][step].info.sample_offset    = offset;
-            rifff.sounds[bank_key][bank_option][step].info.duration         = duration; 
+        //only play this sample if it is not an overplay step, or if it the first step of playback and we are in overplay
+        if(!rifff.score[step][bank_key].overplay_step || step == rifff.current_step) {
+            console.log(duration);
+            rifff.playNode(rifff.sounds[bank_key][bank_option][step], when, offset, duration);
         }
+
+        rifff.sounds[bank_key][bank_option][step].info                  = {};
+        rifff.sounds[bank_key][bank_option][step].info.start_time       = when - rifff.timeOffset;
+        rifff.sounds[bank_key][bank_option][step].info.sample_offset    = offset;
+        rifff.sounds[bank_key][bank_option][step].info.duration         = duration; 
+        
     }    
 }
+
+
 
 rifff.eraseExistingScheduleForStep = function (bank_key, step) {
 
@@ -86,16 +82,20 @@ rifff.addToSounds = function(bank_key, bank_option, step){
 
     rifff.sounds[bank_key][bank_option][step] = context.createBufferSource();
     rifff.sounds[bank_key][bank_option][step].buffer = rifff.audioBuffers[id];
+    
+    /*
     rifff.sounds[bank_key][bank_option][step].onended = function() {
-      $('div[data-bank="'+bank_key+'"][data-bank-option="'+bank_option+'"] .play_indicator').css('background-color', 'white');
+        $('div[data-bank="'+bank_key+'"][data-bank-option="'+bank_option+'"] .play_indicator').css('background-color', 'white');
     };
+    */
+
     if(i_am_very_old) {
-      rifff.gains[bank_key][bank_option][step] = context.createGainNode();
+        rifff.gains[bank_key][bank_option][step] = context.createGainNode();
     } else {
-      rifff.gains[bank_key][bank_option][step] = context.createGain();
+        rifff.gains[bank_key][bank_option][step] = context.createGain();
     }
 
-    rifff.sounds[bank_key][bank_option][step].connect(rifff.gains[bank_key][bank_option][step]);
+  rifff.sounds[bank_key][bank_option][step].connect(rifff.gains[bank_key][bank_option][step]);
 
     //set the gain of this node 
     rifff.gains[bank_key][bank_option][step].gain.value = parseFloat(rifff.data.banks[bank_key].bank_options[bank_option].volume /100);

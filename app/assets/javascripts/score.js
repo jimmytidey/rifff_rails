@@ -1,5 +1,20 @@
 
+/* 
 
+How the scoring and playback works
+----------------------------------
+
+Firstly, scoring occurs in two pases. The write score function finds out which steps should play when 
+ignoring loop and overplay.
+
+Secondly fillInOverPlay function goes through and extends any samples that need to be extended, including marking for
+each one the duration and offset for each sample. This is necessary because if the user begins playback in a section
+which should play because of overplay it needs to trigger the sample, however it should not trigger then sample if the
+user is the middle of playback - that sample will already have been triggered earlier. 
+
+Finally, the schedule function creates audioBufferSource objects to actually play back each occasion a sample occurs. 
+
+*/
 
 rifff.writeScore = function() { 
 
@@ -48,6 +63,7 @@ rifff.writeScore = function() {
 				rifff.score[step_key][bank_key]['bank_option'] 		= bank_option_choice;
 				rifff.score[step_key][bank_key]['time'] 			= 0;
 				rifff.score[step_key][bank_key]['overplay_step']	= false;
+				rifff.score[step_key][bank_key].duration 			= rifff.loop_trigger_interval;
 			}
 		});
 	});
@@ -58,27 +74,47 @@ rifff.writeScore = function() {
 rifff.fillInOverPlay = function() { 
 	$.each(rifff.score, function(step_key, step_val) { 
 		$.each(rifff.score[step_key], function(bank_key, bank_value){ 
-			
-			var overplay = rifff.data.banks[bank_key].bank_options[bank_value.bank_option].overplay;
-
 			//If a step is playing, is not the result of another overplay, and overplay is enable on this bank
-			if(typeof bank_value.bank_option !== 'undefined' && !bank_value.overplay_step && overplay){
+			if(typeof bank_value.bank_option !== 'undefined' && !bank_value.overplay_step ){
 				
-				var number_of_forward_steps = rifff.getAudioDurationInSteps(bank_key,bank_value.bank_option);
-				if(step_key+number_of_forward_steps < parseInt(rifff.data.project_info.steps)){
-					number_of_forward_steps = parseInt(rifff.data.project_info.steps) - step_key;
-				}
+				var overplay = rifff.data.banks[bank_key].bank_options[bank_value.bank_option].overplay;
+				var loop = rifff.data.banks[bank_key].bank_options[bank_value.bank_option].loop;
 
-				for (var test_step = 0; test_step<number_of_forward_steps; test_step++) {
-			    				   			
-			    	if(typeof rifff.score[step_key+test_step][bank_key].bank_option === "undefined"){
-			        	rifff.score[step_key+test_step][bank_key]['bank_option'] = bank_value.bank_option;
-                    	rifff.score[step_key+test_step][bank_key]['time'] = test_step * (60/rifff.bpm) * rifff.bpl;
-                    	rifff.score[step_key+test_step][bank_key]['overplay_step'] = true;
-                	} else { 
-                		//console.log('gap');
-                	}
-                }
+				if(overplay) {
+
+					var number_of_forward_steps = parseInt(rifff.data.project_info.steps) - step_key;
+
+					//find out how long this is going to play for 
+					for (var overplay_length = 1; overplay_length<number_of_forward_steps; overplay_length++) {	
+				
+						if(typeof rifff.score[step_key+overplay_length][bank_key].bank_option === "undefined") {
+	         
+						} else { 
+							console.log('search stopped at ', step_key+overplay_length); 
+							break;
+
+						} 
+					}
+					console.log('overplay length discovered ', overplay_length);
+			
+					//now set the duration of the first step
+					rifff.score[step_key][bank_key].duration = (overplay_length)* rifff.loop_trigger_interval
+
+
+					//for each of the steps fill out the data
+					for (var test_step = 1; test_step<overplay_length; test_step++) {	 			
+				    	if(typeof rifff.score[step_key+test_step][bank_key].bank_option === "undefined"){
+				        	rifff.score[step_key+test_step][bank_key].bank_option = bank_value.bank_option;
+	                    	rifff.score[step_key+test_step][bank_key].time = test_step * rifff.loop_trigger_interval;
+	                    	rifff.score[step_key+test_step][bank_key].duration = (overplay_length - test_step)* rifff.loop_trigger_interval;
+	                    	rifff.score[step_key+test_step][bank_key].overplay_step = true;
+		                	
+		                } else {
+	                		break;	         
+	                	}
+	                }
+
+	            }
 			}
 		});
 	});
