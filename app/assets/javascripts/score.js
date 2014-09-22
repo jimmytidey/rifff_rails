@@ -94,9 +94,10 @@ rifff.fillInOverPlay = function() {
 						} 
 					}
 
-					//find out how long this will play for if voice not stolen 
-					var audio_steps_duration = rifff.getAudioDurationInSteps(bank_key, bank_value.bank_option); 
-					
+					if(!loop) {
+						//find out how long this will play for if voice not stolen 
+						var audio_steps_duration = rifff.getAudioDurationInSteps(bank_key, bank_value.bank_option); 
+					}
 					//choose the shortest 
 					if(audio_steps_duration < overplay_length) { 
 						var final_overplay_length = audio_steps_duration;
@@ -162,7 +163,7 @@ rifff.getAudioDurationInSteps = function(bank_key,bank_option_choice) {
         temp_sound.buffer = rifff.audioBuffers[id];
         var sound_duration  = temp_sound.buffer.duration;
         var length_of_step = (60/rifff.bpm) * rifff.bpl;
-	    number_of_forward_steps = parseInt((sound_duration/length_of_step)-1);
+	    number_of_forward_steps = parseInt((sound_duration/length_of_step));
         return number_of_forward_steps;
     }
     else { 
