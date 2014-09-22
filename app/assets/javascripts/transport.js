@@ -23,7 +23,7 @@ rifff.stop = function(){
                     try { 
                         rifff.stopNode(rifff.sounds[bank][bank_option][step]);
                     } catch(err) { 
-                        console.log('hi');
+                        
                     }
                 }
             }    

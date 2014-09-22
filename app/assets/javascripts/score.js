@@ -162,7 +162,7 @@ rifff.getAudioDurationInSteps = function(bank_key,bank_option_choice) {
         temp_sound.buffer = rifff.audioBuffers[id];
         var sound_duration  = temp_sound.buffer.duration;
         var length_of_step = (60/rifff.bpm) * rifff.bpl;
-	    number_of_forward_steps = Math.floor((sound_duration/length_of_step)-1);
+	    number_of_forward_steps = Math.parseInt((sound_duration/length_of_step)-1);
         return number_of_forward_steps;
     }
     else { 
