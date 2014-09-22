@@ -9,6 +9,7 @@ rifff.attachKeyboardEvents = function(){
 			rifff.writeScore();
 		}
 		if(e.keyCode === 32){
+			console.log('triggered');
 			rifff.play_helper();
 		}
 		
@@ -25,14 +26,15 @@ rifff.attachKeyboardEvents = function(){
 
 	$('body').keydown(function(e){
 		if(e.keyCode == 32){
+			console.log('also triggered');
 			return false; 
 		}
 
-		if(e.keyCode === 37) { 
+		if(e.keyCode == 37) { 
 			return false; 
 		}
 
-		if(e.keyCode === 39) { 
+		if(e.keyCode == 39) { 
 			return false; 
 		}
 	});

@@ -16,6 +16,14 @@ rifff.files_loaded = 0;
 var worker = new Worker('/assets/worker.js');
 
 
+
+i_am_very_old = false;
+
+if (typeof window.webkitAudioContext !== 'undefined' && !window.AudioContext) { 
+	i_am_very_old = true;
+} 
+
+
 //shim webkit audio
 try {
     // Fix up for prefixing
@@ -24,6 +32,7 @@ try {
 } catch(e) {
     alert('Web Audio API is not supported in this browser');
 }
+
 
 
 

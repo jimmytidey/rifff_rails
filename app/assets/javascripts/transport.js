@@ -84,11 +84,8 @@ rifff.updatePlayhead = function() {
 	$('#playhead').css('left', left);
 }
 
-
-alert('hi');
 rifff.forward = function() { 
-    console.log('called forward');
-
+  
     if (rifff.current_step < rifff.data.project_info.steps-1) {
         rifff.current_step ++;
         rifff.updatePlayhead();
@@ -97,8 +94,6 @@ rifff.forward = function() {
 }
 
 rifff.backward = function() { 
-    console.log('called backward');
-
     if (rifff.current_step > 0) {
         rifff.current_step--;
         rifff.updatePlayhead();
