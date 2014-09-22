@@ -5,8 +5,14 @@ rifff.playSoundById= function(id){
     rifff.previewAudioNodes[id] = context.createBufferSource();
     rifff.previewAudioNodes[id].buffer = rifff.audioBuffers[id];
     rifff.previewAudioNodes[id].connect(context.destination); 
-    rifff.playNode(rifff.previewAudioNodes[id], 0, 0, 1000);
 
+    if(i_am_very_old) {
+        rifff.previewAudioNodes[id].noteOn(0, 0, 1000);
+    } 
+    else {
+        rifff.previewAudioNodes[id].start(0, 0, 1000);
+
+    }
 }
 
 rifff.stopSoundById= function(id){

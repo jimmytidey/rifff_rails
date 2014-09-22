@@ -48,7 +48,6 @@ rifff.scheduleStep = function(bank_key, bank_option, step, when, duration, offse
         
         //only play this sample if it is not an overplay step, or if it the first step of playback and we are in overplay
         if(!rifff.score[step][bank_key].overplay_step || step == rifff.current_step) {
-            console.log(duration);
             rifff.playNode(rifff.sounds[bank_key][bank_option][step], when, offset, duration);
         }
 

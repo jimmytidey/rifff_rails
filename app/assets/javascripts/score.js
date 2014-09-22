@@ -89,8 +89,7 @@ rifff.fillInOverPlay = function() {
 				
 						if(typeof rifff.score[step_key+overplay_length][bank_key].bank_option === "undefined") {
 	         
-						} else { 
-							console.log('search stopped at ', step_key+overplay_length); 
+						} else { 							
 							break;
 						} 
 					}
@@ -104,11 +103,6 @@ rifff.fillInOverPlay = function() {
 					} else  {
 						var final_overplay_length = overplay_length;
 					}
-
-
-
-
-					console.log('final overplay length discovered ', final_overplay_length);
 			
 					//now set the duration of the first step
 					rifff.score[step_key][bank_key].duration = (final_overplay_length)* rifff.loop_trigger_interval
@@ -168,7 +162,6 @@ rifff.getAudioDurationInSteps = function(bank_key,bank_option_choice) {
         temp_sound.buffer = rifff.audioBuffers[id];
         var sound_duration  = temp_sound.buffer.duration;
         var length_of_step = (60/rifff.bpm) * rifff.bpl;
-        //console.log('length of step', length_of_step);
 	    number_of_forward_steps = Math.floor((sound_duration/length_of_step)-1);
         return number_of_forward_steps;
     }
