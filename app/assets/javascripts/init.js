@@ -15,12 +15,6 @@ rifff.files_loaded = 0;
 //use a web worker to get accurate step timings
 var worker = new Worker('/assets/worker.js');
 
-//test to see if only the webkit audio is available 
-if (webkitAudioContext && !window.AudioContext) { 
-    i_am_very_old = true;
-} else {
-    i_am_very_old = false;
-}
 
 //shim webkit audio
 try {
