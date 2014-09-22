@@ -11,20 +11,12 @@ rifff.attachClickEvents = function() {
   
   $('#forward').unbind('click');
   $('#forward').click(function(){
-  	if (rifff.current_step < rifff.data.project_info.steps-1) {
-  		rifff.current_step ++;
-  		rifff.updatePlayhead();
-  		rifff.stop();
-  	}
+  	rifff.forward();
   });
   
   $('#backwards').unbind('click');
   $('#backwards').click(function(){
-  	if (rifff.current_step > 0) {
-  		rifff.current_step--;
-  		rifff.updatePlayhead();	
-  		rifff.stop();
-  	}		
+  	rifff.backward();
   });
   
   $('#rewind').unbind('click');

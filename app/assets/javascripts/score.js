@@ -84,7 +84,7 @@ rifff.fillInOverPlay = function() {
 
 					var number_of_forward_steps = parseInt(rifff.data.project_info.steps) - step_key;
 
-					//find out how long this is going to play for 
+					//find out how long this is going to play for if voice stolen 
 					for (var overplay_length = 1; overplay_length<number_of_forward_steps; overplay_length++) {	
 				
 						if(typeof rifff.score[step_key+overplay_length][bank_key].bank_option === "undefined") {
@@ -92,21 +92,34 @@ rifff.fillInOverPlay = function() {
 						} else { 
 							console.log('search stopped at ', step_key+overplay_length); 
 							break;
-
 						} 
 					}
-					console.log('overplay length discovered ', overplay_length);
+
+					//find out how long this will play for if voice not stolen 
+					var audio_steps_duration = rifff.getAudioDurationInSteps(bank_key, bank_value.bank_option); 
+					
+					//choose the shortest 
+					if(audio_steps_duration < overplay_length) { 
+						var final_overplay_length = audio_steps_duration;
+					} else  {
+						var final_overplay_length = overplay_length;
+					}
+
+
+
+
+					console.log('final overplay length discovered ', final_overplay_length);
 			
 					//now set the duration of the first step
-					rifff.score[step_key][bank_key].duration = (overplay_length)* rifff.loop_trigger_interval
+					rifff.score[step_key][bank_key].duration = (final_overplay_length)* rifff.loop_trigger_interval
 
 
 					//for each of the steps fill out the data
-					for (var test_step = 1; test_step<overplay_length; test_step++) {	 			
+					for (var test_step = 1; test_step<final_overplay_length; test_step++) {	 			
 				    	if(typeof rifff.score[step_key+test_step][bank_key].bank_option === "undefined"){
 				        	rifff.score[step_key+test_step][bank_key].bank_option = bank_value.bank_option;
 	                    	rifff.score[step_key+test_step][bank_key].time = test_step * rifff.loop_trigger_interval;
-	                    	rifff.score[step_key+test_step][bank_key].duration = (overplay_length - test_step)* rifff.loop_trigger_interval;
+	                    	rifff.score[step_key+test_step][bank_key].duration = (final_overplay_length - test_step)* rifff.loop_trigger_interval;
 	                    	rifff.score[step_key+test_step][bank_key].overplay_step = true;
 		                	
 		                } else {

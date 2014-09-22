@@ -59,9 +59,13 @@ rifff.stopNode =function(node) {
 }
 
 rifff.stepUpdater = function() {
-    rifff.firstStepOfPlayback = false; 
-    rifff.current_step++;   
-    rifff.updatePlayhead();
+    if (rifff.current_step < rifff.data.project_info.steps-1) {
+        rifff.firstStepOfPlayback = false; 
+        rifff.current_step++;   
+        rifff.updatePlayhead();
+    } else { 
+        rifff.stop();
+    }
 }
 
 
@@ -78,4 +82,23 @@ rifff.updatePlayhead = function() {
 	}
 	var left =  (rifff.current_step * 17) + playhead_offset;
 	$('#playhead').css('left', left);
+}
+
+
+rifff.forward = function() { 
+
+    if (rifff.current_step < rifff.data.project_info.steps-1) {
+        rifff.current_step ++;
+        rifff.updatePlayhead();
+        rifff.stop();
+    }
+}
+
+rifff.backward = function() { 
+
+    if (rifff.current_step < rifff.data.project_info.steps-1) {
+        rifff.current_step ++;
+        rifff.updatePlayhead();
+        rifff.stop();
+    }
 }
