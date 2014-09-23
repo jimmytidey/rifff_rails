@@ -17,12 +17,12 @@
 
   </head>
   <body class="<%= controller_name %> <%= action_name %>">
-  
+    
     <div id='wrap'>
         <header>
             <div class="container">
             
-                <h1 id='main_title'><a href='/'><img src='/assets/title.png'></a></h1>
+                <h1 id='main_title'>RIFFF</h1>
             
                 <div id='authentication' >
                     <% if user_signed_in? %>
@@ -42,9 +42,9 @@
             </div>
         </header>
 
-        <div class="container main_container">
-            <%= yield %>
-        </div>
+          <div class="container main_container">
+              <%= yield %>
+          </div>
         
          <div id="push"></div>
     </div>

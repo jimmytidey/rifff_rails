@@ -69,8 +69,11 @@ rifff.renderBanks = function(){ //loop through each bank and render it
 		if (rifff.mode == 'edit') {
 		    $(bank_element).append("<div class='bank_header'><h4 class='bank_title'>" +bank_val.bank_name +"</h4><span class='add_bank_option'>[Add new option]</span><span class='remove_bank'>[DELETE WHOLE BANK]</span></div>");
 		}
-		else { 
-		    $(bank_element).append("<div class='bank_header'><h4 class='bank_title'>" +bank_val.bank_name +"</h4></div>");
+		else { // this to make the steps fit in neatly  
+			var width = $('#composer').width(); 
+			var number_of_steps = rifff.score.length;
+			var step_width = width / number_of_steps;  
+			$('.step').css('width', step_width);
 		}
 		
 		//add the bank options to the bank 

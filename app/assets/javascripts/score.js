@@ -95,16 +95,17 @@ rifff.fillInOverPlay = function() {
 					}
 
 					if(!loop) {
-						//find out how long this will play for if voice not stolen 
+						//find out how long this will play for if voice not stolen (doesn't apply if it's looping)
 						var audio_steps_duration = rifff.getAudioDurationInSteps(bank_key, bank_value.bank_option); 
 					}
+
 					//choose the shortest 
 					if(audio_steps_duration < overplay_length) { 
 						var final_overplay_length = audio_steps_duration;
 					} else  {
 						var final_overplay_length = overplay_length;
 					}
-			
+
 					//now set the duration of the first step
 					rifff.score[step_key][bank_key].duration = (final_overplay_length)* rifff.loop_trigger_interval
 
@@ -116,7 +117,6 @@ rifff.fillInOverPlay = function() {
 	                    	rifff.score[step_key+test_step][bank_key].time = test_step * rifff.loop_trigger_interval;
 	                    	rifff.score[step_key+test_step][bank_key].duration = (final_overplay_length - test_step)* rifff.loop_trigger_interval;
 	                    	rifff.score[step_key+test_step][bank_key].overplay_step = true;
-		                	
 		                } else {
 	                		break;	         
 	                	}
@@ -137,13 +137,13 @@ rifff.renderScore = function() {
 
 	var selector;
 
-	$('.step').css('background-image','none'); 
+	$('.step').removeClass('selected_step'); 
 	
 	$.each(rifff.score, function(step_key, step_val) { 
 		$.each(rifff.data.banks, function(bank_key, value){		 
 			if (rifff.score[step_key][bank_key]['bank_option'] != '-') { 
 				selector = '#step_'+bank_key+'_'+rifff.score[step_key][bank_key]['bank_option']+'_'+step_key;
-				$(selector).css('background-image','url(/assets/selected.png)');          
+				$(selector).addClass('selected_step');          
 			} 
 
 		});
@@ -165,6 +165,19 @@ rifff.getAudioDurationInSteps = function(bank_key,bank_option_choice) {
         var length_of_step = (60/rifff.bpm) * rifff.bpl;
 	    number_of_forward_steps = parseInt((sound_duration/length_of_step));
         return number_of_forward_steps;
+    }
+    else { 
+    	return false
+    }
+}
+
+rifff.getAudioDurationInSeconds = function(bank_key,bank_option_choice) {
+    var id = $(".file_select[data-bank='"+bank_key+"'][data-bank-option='"+bank_option_choice+"']").val()
+    var temp_sound = context.createBufferSource();
+    if (typeof rifff.audioBuffers[id] == 'object') {
+        temp_sound.buffer = rifff.audioBuffers[id];
+        var sound_duration  = temp_sound.buffer.duration;
+        return sound_duration;
     }
     else { 
     	return false

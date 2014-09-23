@@ -30,7 +30,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     @sound_files = @project.sound_files
     @sound_file = SoundFile.new    
-    render :layout => "bare"
+    render :layout => "iframe"
   end
 
   def duplicate  
@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     @sound_files = @project.sound_files
     @sound_file = SoundFile.new    
-    render :layout => "audio"
+    render :layout => "show_audio"
   end
   
   def edit 

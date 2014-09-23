@@ -41,20 +41,27 @@ rifff.scheduleStep = function(bank_key, bank_option, step, when, duration, offse
 
         rifff.addToSounds(bank_key, bank_option, step);
 
+        var mp3_delay = rifff.calculateMP3Delay(rifff.sounds[bank_key][bank_option][step].buffer);
+        console.log(rifff.sounds[bank_key][bank_option][step].buffer);
+        console.log('mp3_delay', mp3_delay); 
         //add looping to this sample, if it's turned on
         if(rifff.data.banks[bank_key].bank_options[bank_option].loop) {
             rifff.sounds[bank_key][bank_option][step].loop = true;
+            rifff.sounds[bank_key][bank_option][step].loopStart = mp3_delay;
+            rifff.sounds[bank_key][bank_option][step].loopEnd = duration -(mp3_delay *2);
         }
         
         //only play this sample if it is not an overplay step, or if it the first step of playback and we are in overplay
         if(!rifff.score[step][bank_key].overplay_step || step == rifff.current_step) {
-            rifff.playNode(rifff.sounds[bank_key][bank_option][step], when, offset, duration);
+            rifff.playNode(rifff.sounds[bank_key][bank_option][step], when, offset + mp3_delay, duration);
         }
 
         rifff.sounds[bank_key][bank_option][step].info                  = {};
         rifff.sounds[bank_key][bank_option][step].info.start_time       = when - rifff.timeOffset;
         rifff.sounds[bank_key][bank_option][step].info.sample_offset    = offset;
         rifff.sounds[bank_key][bank_option][step].info.duration         = duration; 
+
+
         
     }    
 }
